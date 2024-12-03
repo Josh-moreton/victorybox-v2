@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { PhMinus, PhPlus, PhStar, PhStarHalf } from "@phosphor-icons/vue"
+import carTicket from "/images/lottery/car-ticket.png"
+import carTicketBig from "/images/lottery/ticket-big.png"
 
 interface Contest {
   id: string
@@ -8,53 +10,35 @@ interface Contest {
   price: number
   description: string
   image: string
-  soldPercentage: number
-  remaining: number
-  days: number
-  serialNumber: string
 }
 
-const route = useRoute()
-const config = useRuntimeConfig()
-const contest = ref<Contest | null>(null)
+// Initialize contest data with default values
+const contest = ref<Contest>({
+  id: '114',
+  title: 'WIN THIS 520BHP BMW M3 COMPETITION + £1,000 CASH!',
+  price: 10.00,
+  description: 'Win a BMW M3 Competition plus £1,000 cash prize',
+  image: carTicket
+})
+
 const tab = ref(1)
 const ticketNumber = ref(1)
+const ticketSold = ref(227)
+const totalTicket = 400
+const percent = Math.round((ticketSold.value / totalTicket) * 100)
 const selectedAnswer = ref('')
-
-onMounted(async () => {
-  try {
-    const response = await fetch(`${config.public.strapiUrl}/api/products/${route.params.id}?populate=*`)
-    const data = await response.json()
-    
-    contest.value = {
-      id: data.data.id,
-      title: data.data.Title,
-      price: parseFloat(data.data.Price),
-      description: data.data.Description,
-      image: data.data.Image?.formats?.medium?.url 
-        ? `${config.public.strapiUrl}${data.data.Image.formats.medium.url}`
-        : data.data.Image?.url 
-          ? `${config.public.strapiUrl}${data.data.Image.url}`
-          : '/images/placeholder.jpg',
-      soldPercentage: data.data.soldPercentage || 0,
-      remaining: data.data.remaining || 0,
-      days: data.data.days || 0,
-      serialNumber: data.data.serialNumber || ''
-    }
-  } catch (error) {
-    console.error('Error fetching contest:', error)
-  }
-})
 
 const ticketIncrement = () => {
   if (ticketNumber.value < 10) {
     ticketNumber.value++
+    ticketSold.value++
   }
 }
 
 const ticketDecrement = () => {
   if (ticketNumber.value > 1) {
     ticketNumber.value--
+    ticketSold.value--
   }
 }
 
@@ -64,127 +48,118 @@ const toggleTab = (index: number) => {
   }
 }
 </script>
-
 <template>
   <section v-if="contest" class="contest-details pt-120">
     <div class="container">
       <div class="row g-6">
         <div class="col-lg-6">
           <div class="contest-details-leftwrap">
-            <!-- Header -->
             <div class="border-bottom pb-xxl-8 pb-6 mb-xxl-8 mb-6">
-              <h2 class="n4-clr mb-xxl-3 mb-2">{{ contest.title }}</h2>
+              <h2 class="n4-clr mb-xxl-3 mb-2">WIN THIS 520BHP BMW M3 COMPETITION + £1,000 CASH!</h2>
               <div class="d-flex align-items-center gap-2 flex-wrap">
-                <span class="fs-eight n3-clr">Lottery No. {{ contest.serialNumber }}</span>
+                <span class="fs-eight n3-clr">Lottery No. 114</span>
                 <span class="border-con"></span>
-                <span class="fs-eight n3-clr">£{{ contest.price.toFixed(2) }}</span>
+                <span class="fs-eight n3-clr">Drawn: 18 January 2024</span>
               </div>
             </div>
-
-            <!-- Product Details Section -->
-            <div class="ans-qustion-wrap mx-xxl-12 mx-xl-9 mx-lg-7 mx-sm-6 mx-2 mb-xxl-10 mb-6">
-              <span class="ans-title py-xxl-5 py-3 px-3 w-100 text-center">PLEASE ANSWER THE QUESTION</span>
-              <div class="ans-select-qustion border-bottom">
-                <div class="py-xxl-8 py-xl-6 py-5 px-xxl-8 px-xl-6 px-4">
-                  <h4 class="n4-clr mb-xl-3 mb-2">Answer the question?</h4>
-                  <p class="n3-clr">Which of the below is another car manufactured by Cobra?</p>
-                </div>
-                <ul class="question-tag d-flex flex-wrap px-xxl-6 px-sm-4 px-2 pb-xxl-6 pb-4">
-                  <li v-for="option in ['M8 Competition', 'Corsa']" :key="option">
-                    <button 
-                      class="n0-bg radius12 d-center py-xl-3 py-2 px-6 n4-clr fw_600"
-                      :class="{ 'active': selectedAnswer === option }"
-                      @click="selectedAnswer = option"
-                    >
-                      {{ option }}
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <!-- Ticket Counter -->
-              <div class="ans-ticket py-xxl-8 py-xl-6 py-5 px-xxl-8 px-xl-6 px-4">
-                <div class="quantity-basket mb-xxl-15 mb-xl-10 mb-sm-8 mb-6">
-                  <div class="quantity-body">
-                    <p class="qty d-flex align-items-center gap-2 justify-content-between">
-                      <button class="qtyminus" aria-hidden="true" @click="ticketDecrement">
-                        <PhMinus />
-                      </button>
-                      <span class="d-flex align-items-center">
-                        <span class="n3-clr fs18 fw_600">Number of tickets: </span>
-                        <input type="number" name="qty" id="qty" min="1" max="10" step="1" readOnly :value="ticketNumber" />
-                      </span>
-                      <button class="qtyplus" aria-hidden="true" @click="ticketIncrement">
-                        <PhPlus />
-                      </button>
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Add to Cart Button -->
-                <button 
-                  class="snipcart-add-item act4-bg radius12 d-center w-100 nw1-clr fw_700 py-xxl-3 py-2 px-6"
-                  :data-item-id="contest?.id"
-                  :data-item-name="contest?.title"
-                  :data-item-price="contest?.price"
-                  :data-item-url="'/contests/' + contest?.id"
-                  :data-item-description="contest?.description"
-                  :data-item-image="contest?.image"
-                  :data-item-quantity="ticketNumber"
-                  data-item-custom1-name="Car Selection"
-                  :data-item-custom1-value="selectedAnswer"
-                  data-item-custom1-required="true"
-                >
-                  Add {{ ticketNumber }} ticket{{ ticketNumber > 1 ? 's' : '' }} to basket 
-                  (£{{ (contest.price * ticketNumber).toFixed(2) }})
-                </button>
-              </div>
-            </div>
-
-            <!-- Tabs Section (existing code) -->
             <div class="common-tabwrap">
               <div class="singletab">
                 <div class="example-common-button mb-xxl-8 mb-xl-7 mb-6">
                   <ul class="tablinks d-grid gap-sm-0 gap-3 d-sm-flex align-items-center">
                     <li :class="`nav-links ${tab === 1 ? 'active' : ''}`">
-                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" @click="() => toggleTab(1)">
-                        Description
-                      </button>
+                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" @click="() => toggleTab(1)">Description</button>
                     </li>
                     <li :class="`nav-links ${tab === 2 ? 'active' : ''}`">
-                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" @click="() => toggleTab(2)">
-                        Lottery History
-                      </button>
+                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" @click="() => toggleTab(2)">Lottery History</button>
                     </li>
                     <li :class="`nav-links ${tab === 3 ? 'active' : ''}`">
-                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" @click="() => toggleTab(3)">
-                        Reviews (02)
-                      </button>
+                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" @click="() => toggleTab(3)">Reviews (02)</button>
                     </li>
                   </ul>
                 </div>
-
-                <!-- Tab Content -->
                 <div class="tabcontents">
                   <div :class="`tabitem ${tab === 1 ? 'active' : ''}`">
                     <div class="description-body">
                       <p class="n3-clr mb-xxl-8 mb-xl-5 mb-4">
-                        {{ contest.description }}
+                        Embark on an exhilarating journey with Lottovibe where your dream car is just a ticket away. We are more than just a lottery platform; we are your gateway to the thrill of
+                        hitting the jackpot and driving home in style.
+                      </p>
+                      <span class="fs20 n4-clr fw_700 d-block mb-xl-5 mb-4">Why Choose [Lottovibe]</span>
+                      <p class="cmn-textbox n3-clr mb-xl-6 mb-md-4 mb-2">
+                        <span class="fw_700 n1-clr">Diverse Fleet:</span> Explore a fleet of luxurious cars, from sleek sports cars to stylish SUVs. Our lotteries feature an array of coveted
+                        automotive brands to suit every taste.
+                      </p>
+                      <p class="cmn-textbox n3-clr mb-xl-6 mb-md-4 mb-2">
+                        <span class="fw_700 n1-clr">Secure Transactions:</span>
+                        Your security is our priority. With state-of-the-art encryption and secure payment methods, you can trust us with your transactions and personal information.
+                      </p>
+                      <p class="cmn-textbox n3-clr mb-xl-6 mb-md-4 mb-2">
+                        <span class="fw_700 n1-clr">Global Reach:</span>
+                        No matter where you are, our platform brings the excitement of winning a premium car directly to you. Join a community of enthusiasts from around the world.
+                      </p>
+                      <p class="cmn-textbox n3-clr mb-xl-6 mb-md-4 mb-2">
+                        <span class="fw_700 n1-clr">Fair Draws:</span>
+                        Experience transparency and fairness in every draw. Our random selection process ensures that everyone has an equal chance of driving home a winner.
+                      </p>
+                      <p class="cmn-textbox n3-clr">
+                        <span class="fw_700 n1-clr">User-Friendly Interface:</span>
+                        Navigating [Lottovibe] is a breeze. Purchase tickets seamlessly, track lottery results, and manage your account effortlessly.
+                      </p>
+                      <p class="n3-clr mt-xxl-8 mt-6">
+                        At Lottovibe, were not just making dreams come true; were igniting a passion for premium automotive experiences. Join us on the road to extraordinary adventures – where every
+                        ticket holds the promise of a life-changing drive. Get ready to rev up your luck with [Lottovibe]!
                       </p>
                     </div>
                   </div>
-
                   <div :class="`tabitem ${tab === 2 ? 'active' : ''}`">
                     <div class="lottery-history">
                       <p class="n3-clr mb-xl-4 mb-3">
-                        Lottery history content...
+                        Embark on a journey through the rich history of lotteries and discover how the thrill of winning has evolved over time. Lotteries have deep roots, dating back to ancient
+                        civilizations where they were used to fund public projects and infrastructure.
+                      </p>
+                      <p class="n3-clr mb-xl-4 mb-3">
+                        In the Renaissance era, lotteries became a popular means of financing cultural endeavors, including the construction of iconic landmarks and works of art. The allure of the
+                        lottery spread across continents, becoming a global phenomenon with each region adding its unique flavor to the game.
+                      </p>
+                      <p class="n3-clr">
+                        In the Renaissance era, lotteries became a popular means of financing cultural endeavors, including the construction of iconic landmarks and works of art. The allure of the
+                        lottery spread across continents, becoming a global phenomenon with each region adding its unique flavor to the game.
                       </p>
                     </div>
                   </div>
-
                   <div :class="`tabitem ${tab === 3 ? 'active' : ''}`">
                     <div class="cash-setest">
-                      <span class="n3-clr fw_600">There are no reviews yet.</span>
+                      <span class="n3-clr fw_600 mb-xxl-8 mb-xl-6 mb-lg-4 mb-3">There are no reviews yet.</span>
+                      <div class="cash-title mb-xl-8 mb-lg-6 mb-5">
+                        <span class="fs20 fw_700 n2-clr mb-xl-3 mb-2">Be the first to review “Setest”</span>
+                        <p class="n3-clr">Your email address will not be published. Required fields are marked *</p>
+                      </div>
+                      <form class="myrating">
+                        <div class="myrating-title mb-xxl-10 mb-xl-7 mb-lg-6 mb-5">
+                          <span class="n3-clr mb-xl-3 mb-2">Your rating *</span>
+                          <ul class="ratting d-flex align-items-center gap-1">
+                            <li>
+                              <PhStar weight="fill" class="ph-fill ph-star fs-five act4-clr"></PhStar>
+                            </li>
+                            <li>
+                              <PhStar weight="fill" class="ph-fill ph-star fs-five act4-clr"></PhStar>
+                            </li>
+                            <li>
+                              <PhStar weight="fill" class="ph-fill ph-star fs-five act4-clr"></PhStar>
+                            </li>
+                            <li>
+                              <PhStar weight="fill" class="ph-fill ph-star fs-five act4-clr"></PhStar>
+                            </li>
+                            <li>
+                              <PhStarHalf weight="fill" class="ph-fill ph-star-half fs-five act4-clr"></PhStarHalf>
+                            </li>
+                          </ul>
+                        </div>
+                        <input type="text" placeholder="Name*" />
+                        <input type="text" placeholder="Email*" />
+                        <textarea name="your-review" :rows="4" placeholder="Your review*"></textarea>
+                        <button type="submit" class="mt-xxl-3 act4-bg radius12 d-center fw_700 n0-clr py-xxl-3 py-2 px-xxl-10 px-6">Submit Now</button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -262,7 +237,22 @@ const toggleTab = (index: number) => {
                     </p>
                   </div>
                 </div>
-                <button type="button" class="act4-bg radius12 d-center w-100 nw1-clr fw_700 py-xxl-3 py-2 px-6" data-bs-toggle="modal" data-bs-target="#exampleModal">Add ticket to basket</button>
+                <button 
+                  class="snipcart-add-item act4-bg radius12 d-center w-100 nw1-clr fw_700 py-xxl-3 py-2 px-6"
+                  :data-item-id="contest.id"
+                  :data-item-name="contest.title"
+                  :data-item-price="contest.price"
+                  :data-item-url="'/contests/' + contest.id"
+                  :data-item-description="contest.description"
+                  :data-item-image="contest.image"
+                  :data-item-quantity="ticketNumber"
+                  data-item-custom1-name="Question Answer"
+                  :data-item-custom1-value="selectedAnswer"
+                  data-item-custom1-required="true"
+                >
+                  Add {{ ticketNumber }} ticket{{ ticketNumber > 1 ? 's' : '' }} to basket 
+                  (£{{ (contest.price * ticketNumber).toFixed(2) }})
+                </button>
               </div>
             </div>
           </div>
@@ -309,4 +299,23 @@ const toggleTab = (index: number) => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.active {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.thumb {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.question-content {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  padding: 0 20px;
+}
+</style>

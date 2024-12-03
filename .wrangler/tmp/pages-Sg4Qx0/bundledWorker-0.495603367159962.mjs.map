@@ -1,8 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../dist/_worker.js/index.js"],
-  "sourceRoot": "/Users/joshmoreton/GitHub/lottovibe/.wrangler/tmp/pages-Sg4Qx0/bundledWorker-0.495603367159962.mjs",
-  "sourcesContent": ["globalThis._importMeta_={url:\"file:///_entry.js\",env:{}};export{B as default}from\"./chunks/runtime.mjs\";\n//# sourceMappingURL=index.js.map\n"],
-  "mappings": ";AAAyD,SAAY,SAAY;AAAjF,WAAW,eAAa,EAAC,KAAI,qBAAoB,KAAI,CAAC,EAAC;",
-  "names": []
-}

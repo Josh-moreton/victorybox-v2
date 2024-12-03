@@ -94,7 +94,7 @@ const handleDropDown = (id: string) => {
                   <NuxtLink to="/winners">Winners</NuxtLink>
                 </li>
                 <li class="menu-item position-relative">
-                  <NuxtLink to="/contests">Contests</NuxtLink>
+                  <NuxtLink to="/contest">Contests</NuxtLink>
                 </li>
                 <li class="menu-item position-relative">
                   <NuxtLink to="/products">Products</NuxtLink>

@@ -1,0 +1,2 @@
+const r=".cart-button[data-v-000fcb95]{align-items:center;background:none;border:none;color:inherit;cursor:pointer;display:flex;font-family:inherit;font-size:inherit;gap:.5rem;padding:.5rem 1rem}.cart-icon[data-v-000fcb95]{font-size:1.2rem}.snipcart-items-count[data-v-000fcb95]{background:red;border-radius:50%;color:#fff;font-size:.8rem;padding:.2rem .5rem}";export{r as N};
+//# sourceMappingURL=NavbarBlack-styles-1.mjs-CiOYarnu.mjs.map
