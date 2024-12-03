@@ -18,11 +18,7 @@ onMounted(async () => {
   try {
     const response = await fetch('http://localhost:1337/api/products');
     const data = await response.json();
-    console.log('Fetched data:', data); // Log the fetched data
     products.value = data.data;
-    products.value.forEach(product => {
-      console.log('Product:', product); // Log each product
-    });
   } catch (error) {
     console.error('Error fetching products:', error);
   }
