@@ -26,6 +26,9 @@ export default defineNuxtConfig({
     },
   },
   devtools: { enabled: false },
+  nitro: {
+    preset: 'cloudflare-pages',
+  },
   app: {
     head: {
       link: [
@@ -40,6 +43,10 @@ export default defineNuxtConfig({
           async: true
         }
       ]
-    }
+    },
+    baseURL: process.env.NODE_ENV === 'production' 
+      ? 'https://victoryboxes.org' 
+      : '/',
+    buildAssetsDir: '_nuxt/' // Default is '_nuxt/'
   }
 });
