@@ -14,20 +14,21 @@ interface Product {
   serialNumber: string
 }
 
+const config = useRuntimeConfig()
 const products = ref<Product[]>([])
 const totalResults = ref(0)
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:1337/api/products?populate=*')
+    const response = await fetch(`${config.public.strapiUrl}/api/products?populate=*`)
     const data = await response.json()
     console.log('Fetched data:', data)
     
     products.value = data.data.map(product => ({
       image: product.Image?.formats?.medium?.url 
-        ? `http://localhost:1337${product.Image.formats.medium.url}` 
+        ? `${config.public.strapiUrl}${product.Image.formats.medium.url}` 
         : product.Image?.url 
-          ? `http://localhost:1337${product.Image.url}` 
+          ? `${config.public.strapiUrl}${product.Image.url}` 
           : 'path/to/placeholder/image.jpg',
       title: product.Title,
       soldPercentage: product.soldPercentage?.toString() || '0',

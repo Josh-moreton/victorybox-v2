@@ -4,28 +4,27 @@ import { PhArrowUpRight } from "@phosphor-icons/vue";
 import SubTitle from "../SubTitle.vue";
 import CarWinCard from "./CarWinCard.vue";
 
+const config = useRuntimeConfig();
 const products = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await fetch('http://localhost:1337/api/products?populate=*'); // Ensure media fields are populated
+    const response = await fetch(`${config.public.strapiUrl}/api/products?populate=*`);
     const data = await response.json();
-    console.log('Fetched data:', data); // Log the fetched data
     products.value = data.data.map(product => {
-      console.log('Product:', product); // Log each product
       return {
         image: product.Image?.formats?.medium?.url 
-          ? `http://localhost:1337${product.Image.formats.medium.url}` 
+          ? `${config.public.strapiUrl}${product.Image.formats.medium.url}` 
           : product.Image?.url 
-            ? `http://localhost:1337${product.Image.url}` 
-            : 'path/to/placeholder/image.jpg', // Adjust this based on your actual data structure
+            ? `${config.public.strapiUrl}${product.Image.url}` 
+            : '/images/placeholder.jpg',
         title: product.Title,
-        soldPercentage: product.soldPercentage?.toString() || '0', // Convert to string
-        rating: product.rating?.toString() || '0', // Convert to string
-        days: product.days?.toString() || '0', // Convert to string
-        remaining: product.remaining?.toString() || '0', // Convert to string
-        price: product.Price, // Keep price as a number
-        serialNumber: product.serialNumber || '', // Default to empty string if not available
+        soldPercentage: product.soldPercentage?.toString() || '0',
+        rating: product.rating?.toString() || '0',
+        days: product.days?.toString() || '0',
+        remaining: product.remaining?.toString() || '0',
+        price: product.Price,
+        serialNumber: product.serialNumber || '',
       };
     });
   } catch (error) {

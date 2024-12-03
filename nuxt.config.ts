@@ -29,7 +29,21 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'cloudflare-pages',
     routeRules: {
-      '/**': { cors: true }
+      '/**': { cors: true },
+      '/products/**': { static: true }, // This is important for Snipcart validation
+      '/api/**': {
+        cors: true,
+        headers: {
+          'Access-Control-Allow-Origin': 'https://victoryboxes.org',
+          'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE'
+        },
+        proxy: {
+          '/api/': {
+            target: 'https://strapi.medstack.duckdns.org/api/',
+            changeOrigin: true
+          }
+        }
+      }
     }
   },
   app: {
@@ -49,5 +63,15 @@ export default defineNuxtConfig({
     },
     baseURL: '/', // Change this to just '/'
     buildAssetsDir: '_nuxt/' // Default is '_nuxt/'
+  },
+  runtimeConfig: {
+    // Server-side environment variables
+    strapiUrl: process.env.STRAPI_URL || 'https://strapi.medstack.duckdns.org',
+    
+    // Public variables that can be used in frontend
+    public: {
+      strapiUrl: process.env.STRAPI_URL || 'https://strapi.medstack.duckdns.org',
+      siteUrl: process.env.SITE_URL || 'https://victoryboxes.org'
+    }
   }
 });
