@@ -4,6 +4,7 @@ import { contestPageLotteryItems } from "@/../public/data/contestPageData";
 import { PhCaretRight } from "@phosphor-icons/vue"
 
 interface Product {
+  id: string // Add this
   image: string
   title: string
   soldPercentage: string
@@ -25,6 +26,7 @@ onMounted(async () => {
     console.log('Fetched data:', data)
     
     products.value = data.data.map(product => ({
+      id: product.id, // Add this
       image: product.Image?.formats?.medium?.url 
         ? `${config.public.strapiUrl}${product.Image.formats.medium.url}` 
         : product.Image?.url 
@@ -63,18 +65,23 @@ onMounted(async () => {
         </select>
       </div>
       <div class="row g-6">
-        <HomeOneCarWinCard 
+        <NuxtLink 
           v-for="product in products" 
           :key="product.serialNumber"
-          :image="product.image"
-          :title="product.title"
-          :soldPercentage="product.soldPercentage"
-          :rating="product.rating"
-          :days="product.days"
-          :remaining="product.remaining"
-          :price="`£${product.price.toFixed(2)}`"
-          :serialNumber="product.serialNumber"
-        />
+          :to="`/products/${product.id}`"
+          class="text-decoration-none"
+        >
+          <HomeOneCarWinCard
+            :image="product.image"
+            :title="product.title"
+            :soldPercentage="product.soldPercentage"
+            :rating="product.rating"
+            :days="product.days"
+            :remaining="product.remaining"
+            :price="`£${product.price.toFixed(2)}`"
+            :serialNumber="product.serialNumber"
+          />
+        </NuxtLink>
       </div>
       <ul class="custom-pagination pt-xxl-20 pt-xl-15 pt-10 d-flex align-items-center justify-content-center gap-xxl-3 gap-2">
         <li>
