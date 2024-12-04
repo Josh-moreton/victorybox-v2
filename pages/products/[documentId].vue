@@ -5,20 +5,31 @@ const route = useRoute();
 const strapi = useStrapi();
 
 const { data: product, pending, error } = await useAsyncData(
-  `product-${route.params.id}`,
+  `product-${route.params.documentId}`,
   async () => {
     try {
-      const response = await strapi.find('api/products/' + route.params.id + '?populate=*');
+      console.log('Fetching product with documentId:', route.params.documentId);
       
-      if (!response?.data) return null;
+      const response = await strapi.findOne('products', route.params.documentId, {
+        populate: '*'
+      });
+      
+      console.log('API response:', response);
 
+      if (!response?.data) {
+        console.log('No product found');
+        return null;
+      }
+
+      // Updated to match actual API response structure
       return {
         id: response.data.id,
-        title: response.data.attributes.Title,
-        Description: response.data.attributes.Description,
-        price: parseFloat(response.data.attributes.Price).toFixed(2),
-        image: response.data.attributes.Image?.data?.attributes?.url 
-          ? `${useRuntimeConfig().public.strapiUrl}${response.data.attributes.Image.data.attributes.url}`
+        documentId: response.data.documentId,
+        title: response.data.Title,
+        Description: response.data.Description,
+        price: parseFloat(response.data.Price).toFixed(2),
+        image: response.data.Image?.url 
+          ? `${useRuntimeConfig().public.strapiUrl}${response.data.Image.url}`
           : '/images/placeholder.jpg'
       };
     } catch (err) {
@@ -31,7 +42,7 @@ const { data: product, pending, error } = await useAsyncData(
 
 const productUrl = computed(() => {
   const baseUrl = useRuntimeConfig().public.siteUrl?.replace(/\/$/, '') || 'https://victoryboxes.org';
-  return `${baseUrl}/products/${route.params.id}`;
+  return `${baseUrl}/products/${route.params.documentId}`;
 });
 </script>
 
