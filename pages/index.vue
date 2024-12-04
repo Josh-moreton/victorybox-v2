@@ -12,7 +12,6 @@ definePageMeta({
   <NavbarBlack />
   <HomeOneBanner />
   <HomeOneWinLotterySection />
-
   <HomeOneFooter />
 </template>
 

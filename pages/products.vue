@@ -3,10 +3,17 @@
     <h1>Products</h1>
     <div class="products-grid">
       <div v-for="product in products" :key="product.id" class="product-card">
-        <img :src="product.image" :alt="product.title" />
-        <h2>{{ product.title }}</h2>
-        <p>{{ product.Description }}</p>
-        <p>£{{ product.price }}</p>
+        <div class="test-block" @click="handleTestClick(product.id)">
+          CLICK ME - Product ID: {{ product.id }}
+        </div>
+        <NuxtLink :to="`/products/${product.documentId}`" class="product-link">
+          <div class="product-content">
+            <img :src="product.image" :alt="product.title" />
+            <h2>{{ product.title }}</h2>
+            <p>{{ product.Description }}</p>
+            <p>£{{ product.price }}</p>
+          </div>
+        </NuxtLink>
         
         <button 
           class="snipcart-add-item"
@@ -26,6 +33,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useRuntimeConfig } from '#imports';
+import { NuxtLink } from '#components';
 
 const config = useRuntimeConfig();
 const products = ref([]);
@@ -44,6 +53,7 @@ onMounted(async () => {
     
     products.value = data.data.map(product => ({
       id: product.id,
+      documentId: product.documentId, // Add this line
       title: product.Title,
       Description: product.Description,
       // Ensure price is a number and format it correctly
@@ -62,6 +72,10 @@ onMounted(async () => {
     console.error('Error fetching products:', error);
   }
 });
+
+const handleTestClick = (id: string) => {
+  console.log('Test block clicked for product:', id);
+};
 </script>
 
 <style scoped>
@@ -78,9 +92,35 @@ onMounted(async () => {
   border-radius: 8px;
 }
 
+.product-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-content {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.product-content:hover {
+  opacity: 0.8;
+}
+
 .product-card img {
   width: 100%;
   height: auto;
   object-fit: cover;
+}
+
+.test-block {
+  background-color: red;
+  color: white;
+  padding: 20px;
+  margin: 10px 0;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border: 3px solid black;
 }
 </style>

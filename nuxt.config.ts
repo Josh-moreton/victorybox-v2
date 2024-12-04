@@ -2,12 +2,29 @@
 export default defineNuxtConfig({
   css: ["~/assets/scss/style.scss"],
   compatibilityDate: "2024-04-03",
-  modules: ["nuxt-swiper", "@nuxt/image", "@nuxtjs/google-fonts", "@vueuse/nuxt", "@oku-ui/motion-nuxt", "nuxt-aos", "floating-vue/nuxt"],
+  modules: [
+    "nuxt-swiper",
+    "@nuxt/image",
+    "@nuxtjs/google-fonts",
+    "@vueuse/nuxt",
+    "@oku-ui/motion-nuxt",
+    "nuxt-aos",
+    "floating-vue/nuxt",
+    "@nuxtjs/strapi"],
   swiper: {
     prefix: "Swiper",
     styleLang: "css",
     modules: ["autoplay", "navigation", "pagination", "thumbs"],
   },
+  strapi: {
+    url: process.env.STRAPI_URL || 'https://strapi.medstack.duckdns.org',
+    prefix: '/api',
+    admin: '/admin',
+    version: 'v5',
+    cookie: {},
+    cookieName: 'strapi_jwt'
+  },
+  
   googleFonts: {
     families: {
       "Nunito Sans": [400, 500, 600, 700, 800, 900],
@@ -44,7 +61,8 @@ export default defineNuxtConfig({
           }
         }
       }
-    }
+    },
+    serveStatic: true
   },
   app: {
     head: {
@@ -73,5 +91,9 @@ export default defineNuxtConfig({
       strapiUrl: process.env.STRAPI_URL || 'https://strapi.medstack.duckdns.org',
       siteUrl: process.env.SITE_URL || 'https://victoryboxes.org'
     }
+  },
+  ssr: true,
+  experimental: {
+    payloadExtraction: false
   }
 });

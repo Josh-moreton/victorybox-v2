@@ -12,7 +12,6 @@ definePageMeta({
   <Breadcrumbs pageName="Contest Details" />
   <ContestDetailsSlider />
   <ContestDetailsContent />
-  <ContestDetailsRelatedContest />
 </template>
 
 <style scoped></style>

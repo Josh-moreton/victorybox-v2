@@ -13,6 +13,7 @@
     "@emailjs/browser": "^4.4.1",
     "@nuxt/image": "^1.7.0",
     "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/strapi": "^2.0.0",
     "@oku-ui/motion-nuxt": "^0.2.1",
     "@phosphor-icons/vue": "^2.2.1",
     "@types/matter-js": "^0.19.6",
