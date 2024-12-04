@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
 useHead({
-  title: "Home - Lottery & Giveaway NuxtJs Template",
-  meta: [{ name: "description", content: "Lottery & Giveaway NuxtJs Template" }],
+  title: "Victorybox",
+  meta: [{ name: "description", content: "Victory Awaits the Bold." }],
 });
 
 definePageMeta({
@@ -11,7 +11,6 @@ definePageMeta({
 <template>
   <NavbarBlack />
   <HomeOneBanner />
-  <HomeOneHowItSectionV1 />
   <HomeOneWinLotterySection />
 
   <HomeOneFooter />
