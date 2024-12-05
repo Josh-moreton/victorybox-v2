@@ -2,7 +2,7 @@
   <v-container class="py-16">
     <v-row>
       <v-col cols="12">
-        <h2 class="text-h4 mb-6">Available Products</h2>
+        <h2 class="text-h4 mb-6">Available Contests</h2>
       </v-col>
     </v-row>
 
@@ -17,7 +17,7 @@
       >
         <v-card
           class="mx-auto h-100"
-          :to="`/products/${product.documentId}`"
+          :to="`/contests/${product.documentId}`"
         >
           <v-img
             :src="product.image"
