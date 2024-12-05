@@ -12,7 +12,7 @@ definePageMeta({
   <Navbar />
   <Competitioncarousel />
   <HomeOneWinLotterySection />
-  <HomeOneFooter />
+  <Footer />
 </template>
 
 <style scoped></style>
