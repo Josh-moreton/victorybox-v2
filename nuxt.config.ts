@@ -10,7 +10,10 @@ export default defineNuxtConfig({
     "@oku-ui/motion-nuxt",
     "nuxt-aos",
     "floating-vue/nuxt",
-    "@nuxtjs/strapi"],
+    "@nuxtjs/strapi",
+    '@nuxt/ui',
+    'vuetify-nuxt-module'
+  ],
   swiper: {
     prefix: "Swiper",
     styleLang: "css",
@@ -24,7 +27,7 @@ export default defineNuxtConfig({
     cookie: {},
     cookieName: 'strapi_jwt'
   },
-  
+
   googleFonts: {
     families: {
       "Nunito Sans": [400, 500, 600, 700, 800, 900],

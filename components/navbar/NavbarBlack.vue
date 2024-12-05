@@ -4,7 +4,7 @@ import globalNft from "/images/global/global-nft.png";
 import globalNft2 from "/images/global/global-nft2.png";
 import logoWhite from "/images/logo/logo-white.png";
 
-import { PhArrowRight, PhCaretDown, PhShoppingCartSimple, PhUser } from "@phosphor-icons/vue";
+import { PhArrowRight, PhCaretDown, PhShoppingCartSimple, PhUser, PhShoppingCart } from "@phosphor-icons/vue";
 import AllHomePage from "./AllHomePage.vue";
 
 const scrollHeight = ref(0);
@@ -63,61 +63,90 @@ const handleDropDown = (id: string) => {
 //   ];
 </script>
 <template>
-  <header :class="`header-section-v1 custom-fixed header-position ${scrollHeight > 50 ? 'animated fadeInDown header-fixed' : ''}`">
-    <!-- desktop header  -->
+  <header :class="`header-section-v1 custom-fixed header-position ${scrollHeight > 50 ? 'header-fixed' : ''}`">
     <div class="container-header">
       <div class="main-navbar main-navbar-white">
         <nav class="navbar-custom">
-          <div class="d-flex align-items-center justify-content-between">
+          <div class="navbar-content d-flex align-items-center justify-content-between">
+            <!-- Logo -->
             <NuxtLink to="/" class="nav-brand d-xl-none">
               <NuxtImg class="w-100" :src="logoWhite" width="{243}" alt="logo" />
             </NuxtLink>
-            <div class="d-flex gap-6">
-              <button :class="`navbar-toggle-btn d-block d-xl-none ${isNavOpen ? 'open' : ''}`" type="button" @click="handleNavToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </button>
-            </div>
-          </div>
-          <div :class="`navbar-toggle-item ${isNavOpen ? 'navbar-toggle-item-active' : ''}`">
-            <div class="d-flex gap-5 flex-column flex-lg-row align-items-start align-items-xl-center justify-content-between mt-2 mt-xl-0">
-              <NuxtLink to="/" class="nav-brand d-none d-xl-block">
-                <NuxtImg class="w-100" :src="logoWhite" width="{243}" alt="logo" />
-              </NuxtLink>
-              <ul class="custom-nav d-xl-flex d-grid gap-4 gap-xl-5 gap-xxl-10">
-                <li class="menu-item position-relative">
-                  <NuxtLink to="/">Home</NuxtLink>
-                </li>
-                <li class="menu-item position-relative">
-                  <NuxtLink to="/winners">Winners</NuxtLink>
-                </li>
-                <li class="menu-item position-relative">
-                  <NuxtLink to="/contest">Contests</NuxtLink>
-                </li>
-                <li class="menu-item position-relative">
-                  <NuxtLink to="/products">Products</NuxtLink>
-                </li>
-                <!-- Add Snipcart Cart Button -->
-                <li class="menu-item position-relative">
-                  <button class="snipcart-checkout cart-button">
-                    <span class="cart-icon">🛒</span>
-                    <span class="snipcart-items-count">0</span>
-                    <span class="snipcart-total-price">£0.00</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
+            
+            <!-- Menu Items -->
+            <ul class="custom-nav d-xl-flex align-items-center gap-4 gap-xl-5 gap-xxl-10 mb-0">
+              <li class="menu-item">
+                <NuxtLink to="/">Home</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/winners">Winners</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/contest">Contests</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <NuxtLink to="/products">Products</NuxtLink>
+              </li>
+              <li class="menu-item">
+                <button class="cart-button snipcart-checkout">
+                  <PhShoppingCart size="24" />  <!-- Phosphor shopping cart icon -->
+                  <span class="snipcart-items-count">0</span>
+                  <span class="snipcart-total-price">£0.00</span>
+                </button>
+              </li>
+            </ul>
           </div>
         </nav>
       </div>
     </div>
-    <!--  mobile header  -->
   </header>
 </template>
 
 <style scoped>
+.header-section-v1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.95);
+  transition: background 0.3s ease;
+}
+
+.header-fixed {
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.custom-nav .menu-item a {
+  color: #333;
+  font-weight: 600;
+}
+
+.cart-button {
+  align-items: center;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: inherit;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.snipcart-items-count {
+  background: var(--act4);  /* Using your theme color */
+  color: white;
+  border-radius: 50%;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.navbar-toggle-btn span {
+  background: #333;
+}
 .cart-button {
   background: none;
   border: none;
@@ -142,4 +171,96 @@ const handleDropDown = (id: string) => {
   padding: 0.2rem 0.5rem;
   font-size: 0.8rem;
 }
+
+.navbar-custom {
+  padding: 0.5rem 0; /* Reduced from 1rem */
+}
+
+.navbar-content {
+  height: 100%;
+}
+
+.custom-nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.menu-item a,
+.cart-button {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0.25rem 1rem; /* Reduced from 0.5rem */
+  text-decoration: none;
+  color: inherit;
+}
+
+.cart-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.container-header {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.navbar-custom {
+  padding: 0.5rem 0; /* Reduced from 1rem */
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.nav-brand {
+  display: block !important; /* Override d-xl-none */
+  align-items: center;
+  height: 100%;
+}
+
+.nav-brand img {
+  height: 100px;
+  width: auto;
+  vertical-align: middle; /* Ensure image aligns */
+}
+
+.custom-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Slightly reduced */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-item a,
+.cart-button {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 1rem; /* Reduced from 0.5rem */
+  color: #333;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cart-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 0.5rem;
+}
+
+/* Rest of your existing styles... */
 </style>

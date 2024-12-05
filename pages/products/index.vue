@@ -1,60 +1,77 @@
 <template>
-  <section class="current-lottery pt-120 pb-120">
-    <div class="container">
-      <h2 class="display-four d-block n4-clr mb-xxl-15 mb-xl-10 mb-8">
-        Available Products
-      </h2>
+  <v-container class="py-16">
+    <v-row>
+      <v-col cols="12">
+        <h2 class="text-h4 mb-6">Available Products</h2>
+      </v-col>
+    </v-row>
 
-      <div class="row g-6">
-        <div v-for="product in products" :key="product.id" class="col-lg-4 col-md-6">
-          <div class="current-lottery-item cmn-cartborder current-bg position-relative radius24">
-            <!-- Draw Date -->
-            <div class="current-l-badge position-relative cus-z1 mb-xxl-10 mb-xl-8 mb-lg-6 mb-4">
-              <span class="draw-badge n4-clr">
-                <span class="n4-clr position-relative fw_700 fs-eight">
-                  Due {{ product.closingDate || 'TBA' }}
-                </span>
-              </span>
-            </div>
+    <v-row>
+      <v-col
+        v-for="product in products"
+        :key="product.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="3"
+      >
+        <v-card
+          class="mx-auto h-100"
+          :to="`/products/${product.documentId}`"
+        >
+          <v-img
+            :src="product.image"
+            :alt="product.title"
+            height="200"
+            cover
+          ></v-img>
 
-            <!-- Product Image -->
-            <NuxtLink :to="`/products/${product.documentId}`" class="product-link">
-              <div class="thumb position-relative px-3 mb-xxl-10 mb-xl-8 mb-lg-6 mb-4">
-                <img :src="product.image" :alt="product.title" class="w-100 rounded" />
-              </div>
-            </NuxtLink>
+          <v-card-item>
+            <v-card-title>{{ product.title }}</v-card-title>
+            
+            <!-- Due Date Badge -->
+            <v-chip
+              color="primary"
+              class="mt-2"
+            >
+              Due {{ product.closingDate || 'TBA' }}
+            </v-chip>
+          </v-card-item>
 
+          <v-card-text>
             <!-- Progress Bar -->
-            <div class="cmn-prrice-range px-xxl-6 px-xl-5 px-lg-4 px-3">
-              <div class="range-custom position-relative">
-                <span class="curs-range" :style="{ width: product.soldPercentage + '%' }"></span>
-              </div>
-              <div class="d-flex align-items-center justify-content-between mt-2">
-                <span class="fs-eight n3-clr">Tickets Sold</span>
-                <span class="n4-clr soldout fw_700 fs-eight">{{ product.soldPercentage }}%</span>
-              </div>
-            </div>
+            <v-progress-linear
+              :model-value="product.soldPercentage"
+              color="primary"
+              height="20"
+            >
+              <template v-slot:default="{ value }">
+                <strong>{{ Math.ceil(value) }}% Sold</strong>
+              </template>
+            </v-progress-linear>
 
-            <!-- Product Details -->
-            <div class="product-details px-xxl-6 px-xl-5 px-lg-4 px-3 py-xxl-5 py-4">
-              <h3 class="title fw_700 n4-clr mb-2">{{ product.title }}</h3>
-              <p class="desc n3-clr mb-3">{{ product.Description }}</p>
-              
-              <ul class="remaining-info d-flex align-items-center gap-xxl-5 gap-lg-3 gap-2 mb-4">
-                <li class="d-flex align-items-center gap-2">
-                  <span class="n3-clr fw_600">{{ product.days }} Days</span>
-                </li>
-                <li class="vline-remaing"></li>
-                <li class="d-flex align-items-center gap-2">
-                  <span class="n3-clr fw_600">{{ product.remaining }} Remaining</span>
-                </li>
-              </ul>
+            <div class="mt-4">{{ product.Description }}</div>
 
-              <!-- Price and Cart -->
-              <div class="d-flex align-items-center justify-content-between">
-                <h4 class="price fw_700 n4-clr mb-0">£{{ product.price }}</h4>
-                <button 
-                  class="snipcart-add-item cmn-btn"
+            <v-row class="mt-4" no-gutters>
+              <v-col class="text-caption">
+                {{ product.days }} Days
+              </v-col>
+              <v-divider vertical class="mx-2"></v-divider>
+              <v-col class="text-caption">
+                {{ product.remaining }} Remaining
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-row align="center" no-gutters>
+              <v-col>
+                <span class="text-h6">£{{ product.price }}</span>
+              </v-col>
+              <v-col class="text-right">
+                <v-btn
+                  color="primary"
+                  class="snipcart-add-item"
                   :data-item-id="product.id"
                   :data-item-name="product.title"
                   :data-item-price="product.price"
@@ -63,14 +80,14 @@
                   :data-item-image="product.image"
                 >
                   Add to cart
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -122,55 +139,11 @@ const handleTestClick = (id: string) => {
 </script>
 
 <style scoped>
-.current-lottery-item {
-  background: #fff;
-  border: 1px solid #eee;
-  transition: all 0.3s ease;
+.v-card {
+  transition: transform 0.2s;
 }
 
-.current-lottery-item:hover {
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-.range-custom {
-  height: 6px;
-  background: rgba(244, 244, 244, 0.5);
-  border-radius: 12px;
-  width: 100%;
-}
-
-.curs-range {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  background: var(--act4-color, #4CAF50);
-  border-radius: 12px;
-  transition: width 0.3s ease;
-}
-
-.vline-remaing {
-  width: 1px;
-  height: 20px;
-  background: var(--n3-color, #666);
-}
-
-.cmn-btn {
-  background: var(--act4-color, #4CAF50);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: opacity 0.2s;
-}
-
-.cmn-btn:hover {
-  opacity: 0.9;
-}
-
-.thumb img {
-  aspect-ratio: 16/9;
-  object-fit: cover;
+.v-card:hover {
+  transform: translateY(-4px);
 }
 </style>

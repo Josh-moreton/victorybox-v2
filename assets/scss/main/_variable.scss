@@ -7,7 +7,7 @@
   --transition: all 0.5s ease-in-out;
 
   /* Color styles */
-  --p1: rgba(64, 224, 208, 1);      // Cyan primary
+  --p1: rgba(240, 120, 112, 1);      // Cyan primary
   --p1-border: rgba(64, 224, 208, 0.3); // Cyan border
 
   --s1: rgba(255, 179, 128, 1);     // Pastel orange secondary
@@ -22,11 +22,11 @@
   --nw3: rgba(245, 242, 238, 1);    // Warmer light gray
   --nw4: rgba(230, 225, 220, 1);    // Warm medium gray
 
-  --n0: #ffffff;                     // Pure white
-  --n1: rgba(45, 42, 38, 1);        // Warm dark gray
-  --n2: rgba(35, 32, 28, 1);        // Warmer darker gray
+  --n0: #ffffff;                    // Pure white
+  --n1: rgb(184, 219, 233);         // Warm dark gray
+  --n2: rgb(184, 219, 233);         // Warmer darker gray
   --n3: rgba(90, 85, 80, 1);        // Warm medium gray
-  --n4: rgba(25, 22, 18, 1);        // Warm near-black
+  --n4: rgb(184, 219, 233);         // Warm near-black
   --n5: #201E1B;                    // Warm black
 
   --bg1: #F5F5F3;                   // Light warm background

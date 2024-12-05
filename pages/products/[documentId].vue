@@ -2,6 +2,14 @@
 import { useStrapi } from '#imports';
 import { PhStar, PhStarHalf } from "@phosphor-icons/vue";
 
+useHead({
+  title: "Contest Details - Lottery & Giveaway NuxtJs Template {{ product.title }}",
+  meta: [{ name: "description", content: "Lottery & Giveaway NuxtJs Template" }],
+});
+
+definePageMeta({
+  layout: "inner-pages",
+});
 const route = useRoute();
 const strapi = useStrapi();
 const tab = ref(1);
@@ -52,9 +60,17 @@ const toggleTab = (index: number) => {
     tab.value = index;
   }
 };
+
+// Add computed property for breadcrumb name
+const breadcrumbName = computed(() => {
+  return product.value?.title || 'Loading Product...';
+});
 </script>
 
 <template>
+  <Breadcrumbs :pageName="breadcrumbName" />
+  <ContestDetailsSlider />
+
   <section v-if="product" class="contest-details pt-120">
     <div class="container">
       <div class="row g-6">

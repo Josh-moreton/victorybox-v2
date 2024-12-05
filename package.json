@@ -12,6 +12,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@nuxt/image": "^1.7.0",
+    "@nuxt/ui": "^2.19.2",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/strapi": "^2.0.0",
     "@oku-ui/motion-nuxt": "^0.2.1",
@@ -29,7 +30,8 @@
     "nuxt-swiper": "^1.2.2",
     "vue": "latest",
     "vue-animate-height": "^1.1.2",
-    "vue-countup-v3": "^1.4.2"
+    "vue-countup-v3": "^1.4.2",
+    "vuetify-nuxt-module": "^0.18.3"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
