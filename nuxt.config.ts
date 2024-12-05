@@ -30,7 +30,7 @@ export default defineNuxtConfig({
 
   googleFonts: {
     families: {
-      "Nunito Sans": [400, 500, 600, 700, 800, 900],
+      "Parkinsans": [400, 500, 600, 700, 800],
     },
   },
   build: {
@@ -112,6 +112,20 @@ export default defineNuxtConfig({
             background: '#fdf0d5', // Papaya whip
           }
         }
+      }
+    },
+    defaults: {
+      global: {
+        font: {
+          family: 'Parkinsans'
+        }
+      }
+    },
+    customVariables: ['~/assets/scss/variables.scss'],
+    treeShake: true,
+    defaultAssets: {
+      font: {
+        family: 'Parkinsans'
       }
     }
   }

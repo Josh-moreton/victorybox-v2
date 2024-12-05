@@ -3,7 +3,7 @@
   <v-container class="py-16">
     <v-row>
       <v-col cols="12">
-        <h2 class="text-h4 mb-6">Available Contests</h2>
+        <h2 class="text-h4 mb-6 text-center text-bold">Competitions</h2>
       </v-col>
     </v-row>
 
@@ -154,5 +154,11 @@ const handleTestClick = (id: string) => {
 
 .v-card:hover {
   transform: translateY(-4px);
+}
+
+.text-h4,
+.text-h5,
+.v-card-title {
+  font-family: var(--body-font) !important;
 }
 </style>

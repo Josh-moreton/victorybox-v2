@@ -1,9 +1,18 @@
-// default font family
-// @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500;6..12,600;6..12,700;6..12,800;6..12,900&display=swap");
 
+@use 'vuetify/settings' with (
+  $body-font-family: 'Parkinsans, sans-serif',
+  $heading-font-family: 'Parkinsans, sans-serif'
+);
+// First, define the font face
+@font-face {
+  font-family: 'Parkinsans';
+  src: url('/fonts/Parkinsans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
 // default root
 :root {
-  --body-font: "Nunito Sans", sans-serif;
+  --body-font: "Parkinsans", sans-serif;
   --transition: all 0.5s ease-in-out;
 
   /* New Color Palette */
@@ -28,4 +37,17 @@
   --borderd: #d4d4d4; // Border color
 
   --box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.05);
+}
+
+.v-application {
+  [class*='text-'] {
+    font-family: 'Parkinsans, sans-serif' !important;
+  }
+  
+  .v-card-title,
+  .v-card-text,
+  .text-h4,
+  .text-h5 {
+    font-family: "Parkinsans", sans-serif !important;
+  }
 }

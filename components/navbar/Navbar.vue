@@ -53,7 +53,7 @@ onUnmounted(() => {
 
       <v-btn 
         variant="text"
-        to="/products"
+        to="/contests"
         class="text-none font-weight-medium"
       >
         Competitions
