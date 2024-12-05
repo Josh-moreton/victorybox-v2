@@ -98,5 +98,21 @@ export default defineNuxtConfig({
   ssr: true,
   experimental: {
     payloadExtraction: false
+  },
+  vuetify: {
+    theme: {
+      themes: {
+        light: {
+          dark: false,
+          colors: {
+            primary: '#669bbc',    // Air superiority blue
+            secondary: '#003049',  // Prussian blue
+            accent: '#c1121f',    // Fire brick
+            error: '#780000',     // Barn red
+            background: '#fdf0d5', // Papaya whip
+          }
+        }
+      }
+    }
   }
 });

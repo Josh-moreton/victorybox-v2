@@ -6,33 +6,26 @@
   --body-font: "Nunito Sans", sans-serif;
   --transition: all 0.5s ease-in-out;
 
-  /* Color styles */
-  --p1: rgba(240, 120, 112, 1);      // Cyan primary
-  --p1-border: rgba(64, 224, 208, 0.3); // Cyan border
+  /* New Color Palette */
+  --p1: #669bbc;      // Air superiority blue - Primary
+  --s1: #003049;      // Prussian blue - Secondary
+  --act1: #c1121f;    // Fire brick - Accent
+  --act2: #780000;    // Barn red - Dark accent
+  --act3: #fdf0d5;    // Papaya whip - Light accent/background
 
-  --s1: rgba(255, 179, 128, 1);     // Pastel orange secondary
-  --act1: rgba(255, 150, 102, 1);   // Warmer orange accent
-  --act2: rgba(45, 45, 45, 1);      // Softer black
-  --act3: rgba(255, 218, 185, 1);   // Peach accent
-  --act4: rgba(255, 127, 80, 1);    // Coral accent
-  --act5: rgba(35, 35, 35, 1);      // Softer dark
+  /* Base colors */
+  --n0: #ffffff;      // White
+  --n1: #669bbc;      // Air superiority blue
+  --n2: #003049;      // Prussian blue
+  --n3: #780000;      // Barn red
+  --n4: #c1121f;      // Fire brick
 
-  --nw1: rgba(255, 255, 255, 1);    // Pure white
-  --nw2: rgba(250, 248, 246, 1);    // Warm off-white
-  --nw3: rgba(245, 242, 238, 1);    // Warmer light gray
-  --nw4: rgba(230, 225, 220, 1);    // Warm medium gray
+  /* Background colors */
+  --bg1: #fdf0d5;     // Papaya whip
+  --bg2: #f5e6c9;     // Slightly darker Papaya whip
 
-  --n0: #ffffff;                    // Pure white
-  --n1: rgb(184, 219, 233);         // Warm dark gray
-  --n2: rgb(184, 219, 233);         // Warmer darker gray
-  --n3: rgba(90, 85, 80, 1);        // Warm medium gray
-  --n4: rgb(184, 219, 233);         // Warm near-black
-  --n5: #201E1B;                    // Warm black
-
-  --bg1: #F5F5F3;                   // Light warm background
-  --bg2: #ECEAE7;                   // Slightly darker warm background
-
-  --borderd: #E5E0DA;               // Warm border color
+  /* Border colors */
+  --borderd: #d4d4d4; // Border color
 
   --box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.05);
 }

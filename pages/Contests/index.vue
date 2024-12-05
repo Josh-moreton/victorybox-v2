@@ -1,4 +1,6 @@
 <template>
+  <Breadcrumbs pageName="All Contests"/>
+
   <v-container class="py-16">
     <v-row>
       <v-col cols="12">
@@ -15,74 +17,68 @@
         md="4"
         lg="3"
       >
-        <v-card
-          class="mx-auto h-100"
-          :to="`/contests/${product.documentId}`"
-        >
-          <v-img
-            :src="product.image"
-            :alt="product.title"
-            height="200"
-            cover
-          ></v-img>
+        <v-card class="mx-auto d-flex flex-column" height="100%" hover>
+          <div class="image-container">
+            <v-img
+              :src="product.image"
+              :alt="product.title"
+              class="product-image"
+              width="100%"
+              height="250"
+              cover
+            ></v-img>
+          </div>
 
           <v-card-item>
-            <v-card-title>{{ product.title }}</v-card-title>
-            
-            <!-- Due Date Badge -->
-            <v-chip
-              color="primary"
-              class="mt-2"
-            >
-              Due {{ product.closingDate || 'TBA' }}
-            </v-chip>
+            <div class="d-flex flex-column align-center">
+              <v-card-title class="text-center text-h5 font-weight-bold text-wrap">{{ product.title }}</v-card-title>
+              <v-chip color="primary" class="mt-2">
+                Draw {{ product.closingDate || 'TBA' }}
+              </v-chip>
+            </div>
           </v-card-item>
 
-          <v-card-text>
-            <!-- Progress Bar -->
+
+            <!-- Centered Price -->
+            <div class="text-center my-4">
+              <span class="text-h4 font-weight-black">£{{ product.price }}</span>
+            </div>
+
+          <v-card-actions class="mt-auto flex-column">
+            <div class="text-caption text-grey text-left w-100">
+              {{ Math.ceil(product.soldPercentage) }}% Sold
+            </div>
+            
             <v-progress-linear
               :model-value="product.soldPercentage"
-              color="primary"
-              height="20"
+              :color="product.soldPercentage > 75 ? 'deep-orange' : 
+                      product.soldPercentage > 50 ? 'lime' : 
+                      product.soldPercentage > 25 ? 'light-green-darken-4' : 
+                      'light-blue'"
+              height="10"
+              class="w-100 mb-4"
+              striped
+              rounded
             >
-              <template v-slot:default="{ value }">
-                <strong>{{ Math.ceil(value) }}% Sold</strong>
-              </template>
             </v-progress-linear>
 
-            <div class="mt-4">{{ product.Description }}</div>
-
-            <v-row class="mt-4" no-gutters>
-              <v-col class="text-caption">
-                {{ product.days }} Days
-              </v-col>
-              <v-divider vertical class="mx-2"></v-divider>
-              <v-col class="text-caption">
-                {{ product.remaining }} Remaining
-              </v-col>
-            </v-row>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-row align="center" no-gutters>
-              <v-col>
-                <span class="text-h6">£{{ product.price }}</span>
-              </v-col>
-              <v-col class="text-right">
-                <v-btn
-                  color="primary"
-                  class="snipcart-add-item"
-                  :data-item-id="product.id"
-                  :data-item-name="product.title"
-                  :data-item-price="product.price"
-                  :data-item-url="productUrl(product.id)"
-                  :data-item-description="product.Description"
-                  :data-item-image="product.image"
-                >
-                  Add to cart
-                </v-btn>
-              </v-col>
-            </v-row>
+            <v-btn
+              variant="elevated"
+              color="primary"
+              class="snipcart-add-item w-100"
+              :data-item-id="product.id"
+              :data-item-name="product.title"
+              :data-item-price="product.price"
+              :data-item-url="productUrl(product.id)"
+              :data-item-description="product.Description"
+              :data-item-image="product.image"
+              prepend-icon="mdi-ticket"
+            >
+              <template v-slot:prepend>
+                <v-icon color="white"></v-icon>
+              </template>
+  <span class="font-weight-bold">Enter now!</span>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -90,7 +86,13 @@
   </v-container>
 </template>
 
+
 <script setup lang="ts">
+
+definePageMeta({
+  layout: "inner-pages",
+});
+
 import { ref, onMounted } from 'vue';
 import { useRuntimeConfig } from '#imports';
 import { NuxtLink } from '#components';
@@ -139,6 +141,18 @@ const handleTestClick = (id: string) => {
 </script>
 
 <style scoped>
+.image-container {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .v-card {
   transition: transform 0.2s;
 }

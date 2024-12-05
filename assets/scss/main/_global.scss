@@ -1,3 +1,17 @@
+// Add this at the top of your global styles
+body {
+  background-color: var(--bg1) !important; // Papaya whip
+}
+
+html {
+  background-color: var(--bg1) !important;
+}
+
+// For Vuetify layouts
+.v-application {
+  background-color: var(--bg1) !important;
+}
+
 //global html smooth behavior
 html {
   scroll-behavior: smooth;

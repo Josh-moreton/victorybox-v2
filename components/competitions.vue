@@ -1,6 +1,5 @@
 <template>
-
-  <v-container class="py-16">
+   <v-container class="py-16">
     <v-row>
       <v-col cols="12">
         <h2 class="text-h4 mb-6">Available Contests</h2>

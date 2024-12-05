@@ -9,8 +9,8 @@ definePageMeta({
   layout: "landing-pages",
 });</script>
 <template>
-  <NavbarBlack />
-  <HomeOneBanner />
+  <Navbar />
+  <Competitioncarousel />
   <HomeOneWinLotterySection />
   <HomeOneFooter />
 </template>
