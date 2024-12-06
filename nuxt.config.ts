@@ -68,12 +68,18 @@ export default defineNuxtConfig({
           },
         },
       },
-      "/competitions/**": { static: true },
+      "/competitions/**": {
+        static: true,
+        swr: false, // Disable stale-while-revalidate
+      },
     },
     serveStatic: true,
     prerender: {
-      routes: ["/competitions", "/competitions/[documentId]"], // Updated to match route parameter
-      crawlLinks: true,
+      routes: ["/", "/competitions"],
+      ignore: [
+        "/competitions/[documentId]", // Ignore dynamic route during prerendering
+      ],
+      crawlLinks: false, // Disable automatic crawling
     },
   },
   hooks: {

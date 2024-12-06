@@ -9,16 +9,9 @@ definePageMeta({
   layout: "inner-pages",
   static: true,
   async getStaticPaths() {
-    const strapi = useStrapi();
-    try {
-      const { data } = await strapi.find("products");
-      return data.map((product) => ({
-        params: { documentId: product.documentId || product.id.toString() },
-      }));
-    } catch (error) {
-      console.error("Error generating static paths:", error);
-      return [];
-    }
+    // Define your static paths here
+    // For example, if you want to pre-generate specific documentIds:
+    return [{ params: { documentId: "default" } }];
   },
 });
 
