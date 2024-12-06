@@ -1,37 +1,30 @@
-
-@use 'vuetify/settings' with (
-  $body-font-family: 'Parkinsans, sans-serif',
-  $heading-font-family: 'Parkinsans, sans-serif'
+@use "vuetify/settings" with (
+  $body-font-family: "Parkinsans, sans-serif",
+  $heading-font-family: "Parkinsans, sans-serif"
 );
-// First, define the font face
-@font-face {
-  font-family: 'Parkinsans';
-  src: url('/fonts/Parkinsans-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-}
+
 // default root
 :root {
   --body-font: "Parkinsans", sans-serif;
   --transition: all 0.5s ease-in-out;
 
   /* New Color Palette */
-  --p1: #669bbc;      // Air superiority blue - Primary
-  --s1: #003049;      // Prussian blue - Secondary
-  --act1: #c1121f;    // Fire brick - Accent
-  --act2: #780000;    // Barn red - Dark accent
-  --act3: #fdf0d5;    // Papaya whip - Light accent/background
+  --p1: #669bbc; // Air superiority blue - Primary
+  --s1: #003049; // Prussian blue - Secondary
+  --act1: #c1121f; // Fire brick - Accent
+  --act2: #780000; // Barn red - Dark accent
+  --act3: #fdf0d5; // Papaya whip - Light accent/background
 
   /* Base colors */
-  --n0: #ffffff;      // White
-  --n1: #669bbc;      // Air superiority blue
-  --n2: #003049;      // Prussian blue
-  --n3: #780000;      // Barn red
-  --n4: #c1121f;      // Fire brick
+  --n0: #ffffff; // White
+  --n1: #669bbc; // Air superiority blue
+  --n2: #003049; // Prussian blue
+  --n3: #780000; // Barn red
+  --n4: #c1121f; // Fire brick
 
   /* Background colors */
-  --bg1: #fdf0d5;     // Papaya whip
-  --bg2: #f5e6c9;     // Slightly darker Papaya whip
+  --bg1: #fdf0d5; // Papaya whip
+  --bg2: #f5e6c9; // Slightly darker Papaya whip
 
   /* Border colors */
   --borderd: #d4d4d4; // Border color
@@ -40,10 +33,10 @@
 }
 
 .v-application {
-  [class*='text-'] {
-    font-family: 'Parkinsans, sans-serif' !important;
+  [class*="text-"] {
+    font-family: "Parkinsans, sans-serif" !important;
   }
-  
+
   .v-card-title,
   .v-card-text,
   .text-h4,
