@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { PhShoppingCart, PhUser } from "@phosphor-icons/vue"
-import logo from "/public/images/logo/logo.png"
 
-// Add debug logging
-console.log('Logo path:', logo)
+// Correctly reference the logo image from the public directory
+const logo = '/images/logo/logo.png'
 
 const scrollHeight = ref(0)
 
@@ -23,64 +22,33 @@ onUnmounted(() => {
 
 <template>
   <v-layout>
-    <v-app-bar
-      :elevation="scrollHeight > 50 ? 4 : 0"
-      color="white"
-      height="64"
-      class="px-4"
-    >
+    <v-app-bar :elevation="scrollHeight > 50 ? 4 : 0" color="white" height="64" class="px-4">
       <!-- Logo -->
-      <NuxtLink to="/" class="text-decoration-none">
-        <v-img
-          :src="logo"
-          alt="Victory Box"
-          max-height="80"
-          contain
-          class="mx-4"
-        />
-      </NuxtLink>
+
+      <v-img :src="logo" alt="Victory Box" max-height="80" contain class="mx-4" />
 
       <v-spacer></v-spacer>
 
       <!-- Navigation Links -->
-      <v-btn 
-        variant="text"
-        to="/"
-        class="text-none font-weight-medium"
-      >
+      <v-btn variant="text" to="/" class="text-none font-weight-medium">
         Home
       </v-btn>
 
-      <v-btn 
-        variant="text"
-        to="/contests"
-        class="text-none font-weight-medium"
-      >
+      <v-btn variant="text" to="/contests" class="text-none font-weight-medium">
         Competitions
       </v-btn>
 
+      <v-spacer></v-spacer>
+
       <!-- User Account -->
-      <v-btn
-        icon
-        variant="text"
-        to="/account"
-        class="ml-2"
-      >
+      <v-btn icon variant="text" to="/account" class="ml-2">
         <PhUser size="24" />
       </v-btn>
 
       <!-- Shopping Cart -->
-      <v-btn
-        icon
-        variant="text"
-        class="snipcart-checkout ml-2"
-      >
+      <v-btn icon variant="text" class="snipcart-checkout ml-2">
         <PhShoppingCart size="24" />
-        <v-badge
-          :content="0"
-          color="primary"
-          floating
-        >
+        <v-badge :content="0" color="primary" floating>
           <span class="snipcart-items-count hidden">0</span>
           <span class="snipcart-total-price hidden">£0.00</span>
         </v-badge>
