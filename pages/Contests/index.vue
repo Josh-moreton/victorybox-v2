@@ -31,7 +31,16 @@
 
           <v-card-item>
             <div class="d-flex flex-column align-center">
-              <v-card-title class="text-center text-h5 font-weight-bold text-wrap">{{ product.title }}</v-card-title>
+              <v-card-title>
+                <NuxtLink 
+                  :to="`/contests/${product.documentId}`" 
+                  class="text-decoration-none"
+                >
+                  <span class="text-center text-h5 font-weight-bold text-wrap">
+                    {{ product.title }}
+                  </span>
+                </NuxtLink>
+              </v-card-title>
               <v-chip color="primary" class="mt-2">
                 Draw {{ product.closingDate || 'TBA' }}
               </v-chip>
@@ -104,7 +113,7 @@ const products = ref([]);
 const productUrl = (id: string) => {
   // Remove any trailing slashes from the base URL
   const baseUrl = config.public.siteUrl?.replace(/\/$/, '') || 'https://victoryboxes.org';
-  return `${baseUrl}/products/${id}`;
+  return `${baseUrl}/contests/${id}`;
 };
 
 onMounted(async () => {
@@ -159,5 +168,12 @@ const handleTestClick = (id: string) => {
 
 .v-card:hover {
   transform: translateY(-4px);
+}
+
+.text-decoration-none {
+  color: inherit;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 </style>

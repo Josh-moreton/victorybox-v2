@@ -1,15 +1,25 @@
 <script setup lang="ts">
-import { useStrapi } from '#imports';
+import { useStrapi, useRoute, useRuntimeConfig, useAsyncData } from '#imports';
 import { PhStar, PhStarHalf } from "@phosphor-icons/vue";
-
-useHead({
-  title: "Contest Details - Lottery & Giveaway NuxtJs Template {{ product.title }}",
-  meta: [{ name: "description", content: "Lottery & Giveaway NuxtJs Template" }],
-});
+import { ref, computed } from 'vue';
 
 definePageMeta({
   layout: "inner-pages",
+  static: true,
+  async getStaticPaths() {
+    const strapi = useStrapi();
+    try {
+      const { data } = await strapi.find('products');
+      return data.map(product => ({
+        params: { documentId: product.documentId || product.id.toString() }
+      }));
+    } catch (error) {
+      console.error('Error generating static paths:', error);
+      return [];
+    }
+  }
 });
+
 const route = useRoute();
 const strapi = useStrapi();
 const tab = ref(1);
@@ -19,11 +29,11 @@ const { data: product, pending, error } = await useAsyncData(
   async () => {
     try {
       console.log('Fetching product with documentId:', route.params.documentId);
-      
+
       const response = await strapi.findOne('products', route.params.documentId, {
         populate: '*'
       });
-      
+
       console.log('API response:', response);
 
       if (!response?.data) {
@@ -38,7 +48,7 @@ const { data: product, pending, error } = await useAsyncData(
         title: response.data.Title,
         Description: response.data.Description,
         price: parseFloat(response.data.Price).toFixed(2),
-        image: response.data.Image?.url 
+        image: response.data.Image?.url
           ? `${useRuntimeConfig().public.strapiUrl}${response.data.Image.url}`
           : '/images/placeholder.jpg'
       };
@@ -46,9 +56,16 @@ const { data: product, pending, error } = await useAsyncData(
       console.error('Error fetching product:', err);
       throw new Error('Failed to load product');
     }
-  },
-  { server: true }
+  }
 );
+
+useHead({
+  title: computed(() => `${product.value?.title || 'Contest Details'} - Victory Boxes`),
+  meta: [{
+    name: "description",
+    content: computed(() => product.value?.Description || 'Loading contest details...')
+  }]
+});
 
 const productUrl = computed(() => {
   const baseUrl = useRuntimeConfig().public.siteUrl?.replace(/\/$/, '') || 'https://victoryboxes.org';
@@ -65,103 +82,85 @@ const toggleTab = (index: number) => {
 const breadcrumbName = computed(() => {
   return product.value?.title || 'Loading Product...';
 });
+
+const loading = ref(false)
+const selection = ref(1)
+
+const reserve = () => {
+  loading.value = true
+  setTimeout(() => (loading.value = false), 2000)
+}
 </script>
 
 <template>
-  <Breadcrumbs :pageName="breadcrumbName" />
   <ContestDetailsSlider />
+  <v-container>
+    <v-row>
+      <!-- Left Column -->
+      <v-col cols="12" md="6">
+        <v-card class="mx-auto" elevation="2" height="100%">
+          <!-- Left card content to come later -->
+        </v-card>
+      </v-col>
 
-  <section v-if="product" class="contest-details pt-120">
-    <div class="container">
-      <div class="row g-6">
-        <!-- Left Column -->
-        <div class="col-lg-6">
-          <div class="contest-details-leftwrap">
-            <div class="border-bottom pb-xxl-8 pb-6 mb-xxl-8 mb-6">
-              <h2 class="n4-clr mb-xxl-3 mb-2">{{ product.title }}</h2>
-              <div class="d-flex align-items-center gap-2 flex-wrap">
-                <span class="fs-eight n3-clr">Product ID: {{ product.id }}</span>
-              </div>
-            </div>
-            
-            <!-- Tabs Navigation -->
-            <div class="common-tabwrap">
-              <div class="singletab">
-                <div class="example-common-button mb-xxl-8 mb-xl-7 mb-6">
-                  <ul class="tablinks d-grid gap-sm-0 gap-3 d-sm-flex align-items-center">
-                    <li :class="`nav-links ${tab === 1 ? 'active' : ''}`">
-                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" 
-                              @click="() => toggleTab(1)">Description</button>
-                    </li>
-                    <li :class="`nav-links ${tab === 2 ? 'active' : ''}`">
-                      <button class="tablink n3-clr d-center border p-xxl-3 p-2 w-100" 
-                              @click="() => toggleTab(2)">Details</button>
-                    </li>
-                  </ul>
-                </div>
+      <!-- Right Column -->
+      <v-col cols="12" md="6">
+        <v-card :disabled="loading" :loading="loading" class="mx-auto my-12" max-width="374">
+          <template v-slot:loader="{ isActive }">
+            <v-progress-linear :active="isActive" color="deep-purple" height="4" indeterminate></v-progress-linear>
+          </template>
 
-                <!-- Tab Contents -->
-                <div class="tabcontents">
-                  <div :class="`tabitem ${tab === 1 ? 'active' : ''}`">
-                    <div class="description-body">
-                      <p class="n3-clr mb-xxl-8 mb-xl-5 mb-4">
-                        {{ product.Description }}
-                      </p>
-                    </div>
-                  </div>
-                  <div :class="`tabitem ${tab === 2 ? 'active' : ''}`">
-                    <div class="product-details">
-                      <p class="n3-clr mb-xl-4 mb-3">
-                        Additional product details and specifications.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+          <v-img height="250" :src="product.image" cover></v-img>
+
+          <v-card-item>
+            <v-card-title>{{ product.title }}</v-card-title>
+            <v-card-subtitle>
+              <span class="me-1">Featured Product</span>
+              <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
+            </v-card-subtitle>
+          </v-card-item>
+
+          <v-card-text>
+            <v-row align="center" class="mx-0">
+              <v-rating :model-value="4.5" color="amber" density="compact" size="small" half-increments
+                readonly></v-rating>
+
+              <div class="text-grey ms-4">
+                4.5 (413)
               </div>
+            </v-row>
+
+            <div class="my-4 text-subtitle-1">
+              £{{ product.price }}
             </div>
+
+            <div>{{ product.Description }}</div>
+          </v-card-text>
+
+          <v-divider class="mx-4 mb-1"></v-divider>
+
+          <v-card-title>Ticket Options</v-card-title>
+
+          <div class="px-4 mb-2">
+            <v-chip-group v-model="selection" selected-class="bg-deep-purple-lighten-2">
+              <v-chip>1 Ticket</v-chip>
+              <v-chip>3 Tickets</v-chip>
+              <v-chip>5 Tickets</v-chip>
+              <v-chip>10 Tickets</v-chip>
+            </v-chip-group>
           </div>
-        </div>
 
-        <!-- Right Column -->
-        <div class="col-lg-6">
-          <div class="competition-ending border radius24">
-            <div class="product-image-wrap py-xxl-10 py-xl-7 py-6 px-xxl-8 px-xl-6 px-4">
-              <img :src="product.image" :alt="product.title" class="w-100 rounded" />
-            </div>
-            <div class="pricing-section py-xxl-10 py-8 px-xxl-12 px-xl-9 px-sm-7 px-5">
-              <div class="d-flex align-items-center justify-content-between mb-4">
-                <h3 class="price-display">£{{ product.price }}</h3>
-              </div>
-              
-              <button 
-                class="snipcart-add-item buy-button w-100"
-                :data-item-id="product.id"
-                :data-item-name="product.title"
-                :data-item-price="product.price"
-                :data-item-url="productUrl"
-                :data-item-description="product.Description"
-                :data-item-image="product.image"
-              >
-                Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div v-else-if="pending" class="loading-section">
-    <h2>Loading product...</h2>
-  </div>
-
-  <div v-else-if="error" class="error-section">
-    <h2>Error loading product</h2>
-    <p>{{ error.message }}</p>
-    <NuxtLink to="/products" class="back-link">
-      Return to products
-    </NuxtLink>
-  </div>
+          <v-card-actions>
+            <v-btn color="deep-purple-lighten-2" block border class="snipcart-add-item" :data-item-id="product.id"
+              :data-item-name="product.title" :data-item-price="product.price" :data-item-url="productUrl"
+              :data-item-description="product.Description" :data-item-image="product.image" @click="reserve">
+              Buy Now
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <style scoped>

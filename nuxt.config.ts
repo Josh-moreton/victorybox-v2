@@ -12,7 +12,8 @@ export default defineNuxtConfig({
     "floating-vue/nuxt",
     "@nuxtjs/strapi",
     '@nuxt/ui',
-    'vuetify-nuxt-module'
+    'vuetify-nuxt-module',
+    '@nuxtjs/snipcart'
   ],
   swiper: {
     prefix: "Swiper",
@@ -27,7 +28,6 @@ export default defineNuxtConfig({
     cookie: {},
     cookieName: 'strapi_jwt'
   },
-
   googleFonts: {
     families: {
       "Parkinsans": [400, 500, 600, 700, 800],
@@ -39,7 +39,9 @@ export default defineNuxtConfig({
   alias: {
     "@": "public",
   },
-
+  snipcart: {
+    publicApiKey: process.env.SNIP_PUBLIC_KEY || "ZTVmZDI0ZWQtMDZjNy00Y2IyLWJlMzMtMzhhY2Q5ZjFjMzk5NjM4Njg4MjA1ODI2NzE1MDEw"
+  },
   vite: {
     esbuild: {
       drop: ["console", "debugger"],
@@ -50,7 +52,7 @@ export default defineNuxtConfig({
     preset: 'cloudflare-pages',
     routeRules: {
       '/**': { cors: true },
-      '/products/**': { static: true }, // This is important for Snipcart validation
+      '/products/**': { static: true },
       '/api/**': {
         cors: true,
         headers: {
@@ -63,9 +65,21 @@ export default defineNuxtConfig({
             changeOrigin: true
           }
         }
-      }
+      },
+      '/contests/**': { static: true }
     },
-    serveStatic: true
+    serveStatic: true,
+    prerender: {
+      routes: ['/contests', '/contests/[documentId]'],
+      crawlLinks: true
+    }
+  },
+  hooks: {
+    'nitro:config': (nitroConfig) => {
+      if (nitroConfig.prerender?.routes) {
+        nitroConfig.prerender.routes.push('/contests')
+      }
+    }
   },
   app: {
     head: {
@@ -82,17 +96,17 @@ export default defineNuxtConfig({
         }
       ]
     },
-    baseURL: '/', // Change this to just '/'
-    buildAssetsDir: '_nuxt/' // Default is '_nuxt/'
+    baseURL: '/',
+    buildAssetsDir: '_nuxt/'
   },
   runtimeConfig: {
-    // Server-side environment variables
     strapiUrl: process.env.STRAPI_URL || 'https://strapi.medstack.duckdns.org',
-    
-    // Public variables that can be used in frontend
     public: {
       strapiUrl: process.env.STRAPI_URL || 'https://strapi.medstack.duckdns.org',
-      siteUrl: process.env.SITE_URL || 'https://victoryboxes.org'
+      siteUrl: process.env.SITE_URL || 'https://victoryboxes.org',
+      snipcart: {
+        publicApiKey: process.env.SNIP_PUBLIC_KEY || "ZTVmZDI0ZWQtMDZjNy00Y2IyLWJlMzMtMzhhY2Q5ZjFjMzk5NjM4Njg4MjA1ODI2NzE1MDEw"
+      }
     }
   },
   ssr: true,

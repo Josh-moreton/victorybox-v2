@@ -1,8 +1,8 @@
 <script setup lang="ts"></script>
 <template>
-  <NavbarBlack />
+  <Navbar />
   <slot />
-  <HomeOneFooter />
+  <Footer />
 </template>
 
 <style scoped></style>
