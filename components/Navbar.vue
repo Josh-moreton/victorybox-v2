@@ -34,42 +34,31 @@ onUnmounted(() => {
 
 <template>
   <v-layout>
-    <v-app-bar :elevation="scrollHeight > 50 ? 4 : 0" :color="theme.global.current.value.dark ? 'surface' : 'white'"
-      height="64" class="px-4">
+    <v-app-bar>
       <!-- Logo -->
       <v-img :src="logo" alt="Victory Box" max-height="80" contain class="mx-4" />
-
       <v-spacer></v-spacer>
-
       <!-- Navigation Links -->
-      <v-btn variant="text" to="/" class="text-none font-weight-medium"
-        :color="theme.global.current.value.dark ? 'white' : 'black'">
-        Home
-      </v-btn>
-
-      <v-btn variant="text" to="/contests" class="text-none font-weight-medium"
-        :color="theme.global.current.value.dark ? 'white' : 'black'">
-        Competitions
-      </v-btn>
-
+      <v-btn>Home</v-btn>
+      <v-btn>Competitions</v-btn>
       <v-spacer></v-spacer>
 
       <!-- Theme Toggle -->
       <v-btn icon variant="text" @click="toggleTheme" class="ml-2"
-        :color="theme.global.current.value.dark ? 'white' : 'black'">
+        :text-color="theme.global.current.value.dark ? 'white' : 'black'">
         <PhMoon v-if="theme.global.current.value.dark" size="24" />
         <PhSun v-else size="24" />
       </v-btn>
 
       <!-- User Account -->
       <v-btn icon variant="text" to="/account" class="ml-2"
-        :color="theme.global.current.value.dark ? 'white' : 'black'">
+        :text-color="theme.global.current.value.dark ? 'white' : 'black'">
         <PhUser size="24" />
       </v-btn>
 
       <!-- Shopping Cart -->
       <v-btn icon variant="text" class="snipcart-checkout ml-2"
-        :color="theme.global.current.value.dark ? 'white' : 'black'">
+        :color="theme.global.current.value.dark ? 'on-surface' : 'on-background'">
         <PhShoppingCart size="24" />
         <v-badge :content="0" color="primary" floating>
           <span class="snipcart-items-count hidden">0</span>

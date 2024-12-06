@@ -1,17 +1,3 @@
-// Add this at the top of your global styles
-body {
-  background-color: var(--bg1) !important; // Papaya whip
-}
-
-html {
-  background-color: var(--bg1) !important;
-}
-
-// For Vuetify layouts
-.v-application {
-  background-color: var(--bg1) !important;
-}
-
 //global html smooth behavior
 html {
   scroll-behavior: smooth;
@@ -20,8 +6,6 @@ html {
 
 //global body
 body {
-  background-color: var(--nw1);
-  color: var(--n2);
   font-size: 18px;
   line-height: 150%;
   padding: 0;
@@ -49,7 +33,6 @@ label,
 li {
   margin: 0;
   font-family: var(--body-font);
-  color: var(--n2);
   font-weight: 400;
   .ph-light {
     font-weight: 400;
@@ -606,7 +589,8 @@ input[type="checkbox"] {
   box-shadow: 0px 5.12694px 25.6347px 0px rgba(0, 0, 0, 0.08);
   transition: var(--transition);
   &:hover {
-    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
+      rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
   }
 }
 .box-shadow2 {
@@ -2628,7 +2612,11 @@ iframe {
         height: 68px;
         content: "";
         border-radius: var(--number-token-0, 0px);
-        background: linear-gradient(59deg, rgba(85, 74, 255, 0) 0%, #fefeff 100.14%);
+        background: linear-gradient(
+          59deg,
+          rgba(85, 74, 255, 0) 0%,
+          #fefeff 100.14%
+        );
       }
     }
     .program-plan-inner {

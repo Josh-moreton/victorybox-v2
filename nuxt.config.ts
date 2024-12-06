@@ -124,7 +124,9 @@ export default defineNuxtConfig({
             accent: '#c1121f',    // Fire brick
             error: '#780000',     // Barn red
             background: '#fdf0d5', // Papaya whip
-          },
+            'on-background': '#003049', // Text color for light theme
+          }
+        },
         dark: {
           dark: true,
           colors: {
@@ -134,7 +136,8 @@ export default defineNuxtConfig({
             error: '#fb5607',      // Orange
             background: '#121212',  // Dark background
             surface: '#1E1E1E',
-            'on-surface': '#ffffff'
+            'on-surface': '#fdf0d5', // Papaya whip for text on surface
+            'on-background': '#fdf0d5', // Papaya whip for text on background
           }
         }
       }
