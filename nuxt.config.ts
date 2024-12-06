@@ -124,6 +124,17 @@ export default defineNuxtConfig({
             accent: '#c1121f',    // Fire brick
             error: '#780000',     // Barn red
             background: '#fdf0d5', // Papaya whip
+          },
+        dark: {
+          dark: true,
+          colors: {
+            primary: '#3a86ff',    // Azure
+            secondary: '#8338ec',   // Blue Violet
+            accent: '#ff006e',     // Rose
+            error: '#fb5607',      // Orange
+            background: '#121212',  // Dark background
+            surface: '#1E1E1E',
+            'on-surface': '#ffffff'
           }
         }
       }
