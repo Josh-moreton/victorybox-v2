@@ -39,8 +39,8 @@ onUnmounted(() => {
       <v-img :src="logo" alt="Victory Box" max-height="80" contain class="mx-4" />
       <v-spacer></v-spacer>
       <!-- Navigation Links -->
-      <v-btn>Home</v-btn>
-      <v-btn>Competitions</v-btn>
+      <v-btn to="/" variant="text">Home</v-btn>
+      <v-btn to="/competitions" variant="text">Competitions</v-btn>
       <v-spacer></v-spacer>
 
       <!-- Theme Toggle -->
