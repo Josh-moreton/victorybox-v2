@@ -1,10 +1,20 @@
 <template>
   <v-container
-    class="py-16"
-    :class="$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background'">
+    fluid
+    class="pa-0 font-parkinsans"
+    :class="
+      $vuetify.theme.current.dark ? 'bg-surface' : 'bg-background'
+    "></v-container>
+  <v-container fluid class="py-16 px-4" style="max-width: 1000px">
     <v-row>
       <v-col cols="12">
-        <h2 class="text-h4 mb-6 text-center text-bold">Competitions</h2>
+        <h2
+          class="text-h4 mb-6 text-center text-bold font-parkinsans"
+          :class="
+            $vuetify.theme.current.dark ? 'text-primary' : 'text-primary'
+          ">
+          {{ title }}
+        </h2>
       </v-col>
     </v-row>
 
@@ -17,11 +27,11 @@
         md="4"
         lg="3">
         <v-card
-          class="mx-auto d-flex flex-column"
+          class="mx-auto d-flex flex-column font-parkinsans"
           height="100%"
+          max-width="300px"
           hover
-          :theme="theme.global.name.value"
-          :color="theme.global.current.value.dark ? 'surface' : 'background'">
+          :color="$vuetify.theme.current.dark ? 'surface' : 'background'">
           <div class="image-container">
             <v-img
               :src="product.image"
@@ -37,13 +47,14 @@
               <v-card-title>
                 <NuxtLink
                   :to="`/competitions/${product.documentId}`"
-                  class="text-decoration-none">
-                  <span class="text-center text-h5 font-weight-bold text-wrap">
+                  class="text-decoration-none font-parkinsans">
+                  <span
+                    class="text-center text-h5 font-weight-bold text-wrap font-parkinsans">
                     {{ product.title }}
                   </span>
                 </NuxtLink>
               </v-card-title>
-              <v-chip color="primary" class="mt-2">
+              <v-chip color="primary" class="mt-2 font-parkinsans">
                 Draw {{ product.closingDate || "TBA" }}
               </v-chip>
             </div>
@@ -187,5 +198,10 @@ onMounted(async () => {
   &:hover {
     opacity: 0.8;
   }
+}
+
+/* Add global font class */
+:deep(.font-parkinsans) {
+  font-family: "Parkinsans", sans-serif !important;
 }
 </style>
