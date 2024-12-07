@@ -20,57 +20,81 @@ const route = useRoute();
 const strapi = useStrapi();
 const tab = ref(1);
 
+// Add interface for product data
+interface Product {
+  id: string;
+  documentId: string;
+  title: string;
+  Description: string;
+  price: string;
+  images: Array<{ url: string; alt: string }>;
+  question: string;
+  answer: string;
+  soldPercentage: number;
+  closingDate?: string;
+}
+
+// Update API response processing in [documentId].vue
 const {
   data: product,
   pending,
   error,
-} = await useAsyncData(`product-${route.params.documentId}`, async () => {
-  try {
-    console.log("Fetching product with documentId:", route.params.documentId);
+} = await useAsyncData<Product>(
+  `product-${route.params.documentId}`,
+  async () => {
+    try {
+      console.log("Fetching product with documentId:", route.params.documentId);
 
-    const response = await strapi.findOne("products", route.params.documentId, {
-      populate: "*",
-    });
+      const response = await strapi.findOne(
+        "products",
+        route.params.documentId,
+        {
+          populate: "*",
+        }
+      );
 
-    console.log("API response:", response);
+      console.log("API response:", response);
 
-    if (!response?.data) {
-      console.log("No product found");
-      return null;
+      if (!response?.data) {
+        console.log("No product found");
+        return null;
+      }
+
+      // Process multiple images from the API
+      const images =
+        response.data.Images?.map((img) => ({
+          url: img.url
+            ? `${config.public.strapiUrl}${img.url}`
+            : "/images/placeholder.jpg",
+          alt: img.alternativeText || "Product image",
+        })) || [];
+
+      // Add main image to images array if it exists
+      if (response.data.Image?.url) {
+        images.unshift({
+          url: `${config.public.strapiUrl}${response.data.Image.url}`,
+          alt: response.data.Image.alternativeText || "Main product image",
+        });
+      }
+
+      return {
+        id: response.data.id,
+        documentId: response.data.documentId,
+        title: response.data.Title,
+        Description: response.data.Description,
+        price: parseFloat(response.data.Price).toFixed(2),
+        images: images,
+        question: response.data.question || "A question",
+        answer: response.data.answer || "Question responses",
+        soldPercentage: Math.ceil(Number(response.data.soldPercentage) || 0),
+        closingDate: response.data.closingDate || "TBA",
+      };
+    } catch (err) {
+      console.error("Error fetching product:", err);
+      throw new Error("Failed to load product");
     }
-
-    // Process multiple images from the API
-    const images =
-      response.data.Images?.map((img) => ({
-        url: img.url
-          ? `${config.public.strapiUrl}${img.url}`
-          : "/images/placeholder.jpg",
-        alt: img.alternativeText || "Product image",
-      })) || [];
-
-    // Add main image to images array if it exists
-    if (response.data.Image?.url) {
-      images.unshift({
-        url: `${config.public.strapiUrl}${response.data.Image.url}`,
-        alt: response.data.Image.alternativeText || "Main product image",
-      });
-    }
-
-    return {
-      id: response.data.id,
-      documentId: response.data.documentId,
-      title: response.data.Title,
-      Description: response.data.Description,
-      price: parseFloat(response.data.Price).toFixed(2),
-      images: images,
-      question: response.data.question || "A question",
-      answer: response.data.answer || "Question responses",
-    };
-  } catch (err) {
-    console.error("Error fetching product:", err);
-    throw new Error("Failed to load product");
   }
-});
+);
 
 useHead({
   title: computed(
@@ -128,64 +152,72 @@ const quantity = ref(1);
     <v-row class="equal-height-row">
       <!-- Left Column -->
       <v-col cols="12" md="6">
-        <v-card class="h-100 mx-auto font-parkinsans" elevation="2">
-          <v-carousel
-            v-if="product?.images?.length"
-            cycle
-            height="400"
-            hide-delimiter-background
-            show-arrows="hover"
-          >
-            <v-carousel-item
-              v-for="(image, i) in product.images"
-              :key="i"
-              :src="image.url"
-              :alt="image.alt"
-              cover
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular
-                    indeterminate
-                    color="primary"
-                  ></v-progress-circular>
-                </v-row>
-              </template>
-            </v-carousel-item>
-          </v-carousel>
-
-          <!-- Fallback for no images -->
-          <v-img
-            v-else
-            src="/images/placeholder.jpg"
-            height="400"
+        <v-carousel
+          v-if="product?.images?.length"
+          cycle
+          height="400"
+          hide-delimiter-background
+          show-arrows="hover"
+        >
+          <v-carousel-item
+            v-for="(image, i) in product.images"
+            :key="i"
+            :src="image.url"
+            :alt="image.alt"
             cover
-          ></v-img>
-        </v-card>
+          >
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+          </v-carousel-item>
+        </v-carousel>
+
+        <!-- Fallback for no images -->
+        <v-img v-else src="/images/placeholder.jpg" height="400" cover></v-img>
       </v-col>
 
       <!-- Right Column -->
       <v-col cols="12" md="6">
         <!-- Add content above v-card -->
-        <div class="text-center mb-6 font-parkinsans">
-          <h1 class="text-h3 font-weight-bold mb-4">
+        <div class="text-center mb-8 mt-8 font-parkinsans">
+          <h1 class="text-h3 font-weight-bold mb-6 mt-6">
             {{ product?.title }}
           </h1>
-          <p class="text-body-1 mb-4">
+          <p class="text-body-1 mb-6 mt-6">
             {{ product?.Description }}
           </p>
-          <v-chip
-            color="success"
-            text-color="white"
-            size="large"
-            rounded="pill"
-            class="mb-4 font-parkinsans"
-          >
+          <v-chip color="green" variant="flat" rounded="pill" class="mb-6 mt-6">
             Draw {{ product?.closingDate || "TBA" }}
           </v-chip>
-          <div class="text-h4 font-weight-bold primary--text">
+          <div class="text-h4 font-weight-bold primary--text mb-6 mt-6">
             £{{ product?.price }}
           </div>
+
+          <!-- Add percentage sold section -->
+          <div class="text-left text-caption mb-2">
+            Sold: {{ product?.soldPercentage }}%
+          </div>
+          <v-progress-linear
+            :model-value="product?.soldPercentage"
+            :color="
+              product?.soldPercentage > 75
+                ? 'deep-orange'
+                : product?.soldPercentage > 50
+                ? 'lime'
+                : product?.soldPercentage > 25
+                ? 'light-green-darken-4'
+                : 'light-blue'
+            "
+            height="10"
+            class="mb-6"
+            striped
+            rounded
+          ></v-progress-linear>
         </div>
 
         <v-card
@@ -202,35 +234,57 @@ const quantity = ref(1);
             ></v-progress-linear>
           </template>
 
-          <v-card-title class="text-center mt-4">{{
+          <v-card-title class="text-center mt-4"
+            >Answer the question</v-card-title
+          >
+
+          <v-card-subtitle class="text-center mt-4">{{
             product.question
-          }}</v-card-title>
+          }}</v-card-subtitle>
 
           <div class="px-4 mb-2">
-            <v-chip-group
-              v-model="selection"
-              selected-class="bg-deep-purple-lighten-2"
-              mandatory
-            >
-              <v-chip v-for="answer in answers" :key="answer" :value="answer">
+            <v-chip-group v-model="selection" mandatory>
+              <v-chip
+                v-for="answer in answers"
+                :key="answer"
+                :value="answer"
+                color="secondary"
+              >
                 {{ answer }}
               </v-chip>
             </v-chip-group>
 
             <!-- Add quantity slider -->
-            <v-card-title class="mt-4">Quantity</v-card-title>
+            <v-card-title class="text-center mt-4 mb-10"
+              >How many tickets?</v-card-title
+            >
             <v-slider
               v-model="quantity"
               class="mx-4"
               :min="1"
-              :max="100"
+              :max="1000"
               :step="1"
-              thumb-label
-              color="deep-purple-lighten-2"
+              thumb-label="always"
+            >
+              <template v-slot:thumb-label="{ modelValue }">
+                <div
+                  :style="{
+                    whiteSpace: 'nowrap',
+                    minWidth: `${Math.max(
+                      20,
+                      String(modelValue).length * 12
+                    )}px`,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }"
+                >
+                  <span class="font-weight-bold">{{ modelValue }} </span>
+                  <v-icon size="small" icon="mdi-ticket"></v-icon>
+                </div> </template
             ></v-slider>
           </div>
 
-          <v-card-actions>
+          <v-card-actions class="px-20 pb-4">
             <v-btn
               v-bind="useCompetitionButtonStyle()"
               block

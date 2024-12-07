@@ -37,6 +37,7 @@
             height="100%"
             max-width="300px"
             hover
+            href="`/competitions/${product.documentId}`"
             :color="$vuetify.theme.current.dark ? 'surface' : 'background'"
           >
             <div class="image-container">
@@ -103,13 +104,7 @@
               <v-btn
                 v-bind="useCompetitionButtonStyle()"
                 block
-                class="snipcart-add-item"
-                :data-item-id="product.id"
-                :data-item-price="product.price"
-                :data-item-url="productUrl(product.documentId)"
-                :data-item-name="product.title"
-                :data-item-description="product.Description"
-                :data-item-image="product.image"
+                :to="`/competitions/${product.documentId}`"
                 prepend-icon="mdi-ticket"
               >
                 <template v-slot:prepend>
