@@ -1,5 +1,4 @@
 <template>
-  <Breadcrumbs pageName="All competitions" />
   <CompetitionsComponent />
 </template>
 
