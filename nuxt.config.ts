@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  css: ["~/assets/scss/style.scss"],
+  css: ["~/assets/scss/style.scss", "vuetify/lib/styles/main.sass"],
   compatibilityDate: "2024-04-03",
   modules: [
     "nuxt-swiper",
@@ -34,7 +34,7 @@ export default defineNuxtConfig({
     },
   },
   build: {
-    transpile: ["vue-countup-v3"],
+    transpile: ["vue-countup-v3", "vuetify"],
   },
   alias: {
     "@": "public",
@@ -125,47 +125,6 @@ export default defineNuxtConfig({
     payloadExtraction: false,
   },
   vuetify: {
-    theme: {
-      themes: {
-        light: {
-          dark: false,
-          colors: {
-            primary: "#669bbc", // Air superiority blue
-            secondary: "#003049", // Prussian blue
-            accent: "#c1121f", // Fire brick
-            error: "#780000", // Barn red
-            background: "#fdf0d5", // Papaya whip
-            "on-background": "#003049", // Text color for light theme
-          },
-        },
-        dark: {
-          dark: true,
-          colors: {
-            primary: "#3a86ff", // Azure
-            secondary: "#8338ec", // Blue Violet
-            accent: "#ff006e", // Rose
-            error: "#fb5607", // Orange
-            background: "#121212", // Dark background
-            surface: "#1E1E1E",
-            "on-surface": "#fdf0d5", // Papaya whip for text on surface
-            "on-background": "#fdf0d5", // Papaya whip for text on background
-          },
-        },
-      },
-    },
-    defaults: {
-      global: {
-        font: {
-          family: "Parkinsans",
-        },
-      },
-    },
-    customVariables: ["~/assets/scss/variables.scss"],
-    treeShake: true,
-    defaultAssets: {
-      font: {
-        family: "Parkinsans",
-      },
-    },
+    vuetifyOptions: "./vuetify.config.ts",
   },
 });

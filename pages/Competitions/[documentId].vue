@@ -2,6 +2,7 @@
 import { useStrapi, useRoute, useRuntimeConfig, useAsyncData } from "#imports";
 import { PhStar, PhStarHalf } from "@phosphor-icons/vue";
 import { ref, computed } from "vue";
+import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
 
 const config = useRuntimeConfig(); // Move this here, at the top of setup
 
@@ -48,6 +49,8 @@ const {
       image: response.data.Image?.url
         ? `${config.public.strapiUrl}${response.data.Image.url}` // Use config here
         : "/images/placeholder.jpg",
+      question: response.data.question || "A question", // Add question
+      answer: response.data.answer || "Question responses", // Add answer
     };
   } catch (err) {
     console.error("Error fetching product:", err);
@@ -87,12 +90,23 @@ const breadcrumbName = computed(() => {
 });
 
 const loading = ref(false);
-const selection = ref(1);
+const selection = ref(null); // Add ref for selected answer
+
+// Split answers string into array if needed
+const answers = computed(() => {
+  if (!product.value?.answer) return [];
+  return typeof product.value.answer === "string"
+    ? product.value.answer.split("|")
+    : product.value.answer;
+});
 
 const reserve = () => {
   loading.value = true;
   setTimeout(() => (loading.value = false), 2000);
 };
+
+// Add quantity ref
+const quantity = ref(1);
 </script>
 
 <template>
@@ -111,13 +125,15 @@ const reserve = () => {
           :disabled="loading"
           :loading="loading"
           class="mx-auto my-12"
-          max-width="374">
+          max-width="374"
+        >
           <template v-slot:loader="{ isActive }">
             <v-progress-linear
               :active="isActive"
               color="deep-purple"
               height="4"
-              indeterminate></v-progress-linear>
+              indeterminate
+            ></v-progress-linear>
           </template>
 
           <v-img height="250" :src="product.image" cover></v-img>
@@ -129,7 +145,8 @@ const reserve = () => {
               <v-icon
                 color="error"
                 icon="mdi-fire-circle"
-                size="small"></v-icon>
+                size="small"
+              ></v-icon>
             </v-card-subtitle>
           </v-card-item>
 
@@ -141,7 +158,8 @@ const reserve = () => {
                 density="compact"
                 size="small"
                 half-increments
-                readonly></v-rating>
+                readonly
+              ></v-rating>
 
               <div class="text-grey ms-4">4.5 (413)</div>
             </v-row>
@@ -153,33 +171,52 @@ const reserve = () => {
 
           <v-divider class="mx-4 mb-1"></v-divider>
 
-          <v-card-title>Ticket Options</v-card-title>
+          <v-card-title>{{ product.question }}</v-card-title>
 
           <div class="px-4 mb-2">
             <v-chip-group
               v-model="selection"
-              selected-class="bg-deep-purple-lighten-2">
-              <v-chip>1 Ticket</v-chip>
-              <v-chip>3 Tickets</v-chip>
-              <v-chip>5 Tickets</v-chip>
-              <v-chip>10 Tickets</v-chip>
+              selected-class="bg-deep-purple-lighten-2"
+              mandatory
+            >
+              <v-chip v-for="answer in answers" :key="answer" :value="answer">
+                {{ answer }}
+              </v-chip>
             </v-chip-group>
+
+            <!-- Add quantity slider -->
+            <v-card-title class="mt-4">Quantity</v-card-title>
+            <v-slider
+              v-model="quantity"
+              class="mx-4"
+              :min="1"
+              :max="100"
+              :step="1"
+              thumb-label
+              color="deep-purple-lighten-2"
+            ></v-slider>
           </div>
 
           <v-card-actions>
             <v-btn
-              color="deep-purple-lighten-2"
+              v-bind="useCompetitionButtonStyle()"
               block
-              border
               class="snipcart-add-item"
+              :disabled="!selection"
               :data-item-id="product.id"
               :data-item-name="product.title"
               :data-item-price="product.price"
               :data-item-url="productUrl"
               :data-item-description="product.Description"
               :data-item-image="product.image"
-              @click="reserve">
-              Buy Now
+              :data-item-custom1-name="product.question"
+              :data-item-custom1-value="selection"
+              :data-item-custom1-options="product.answer"
+              :data-item-quantity="quantity"
+              @click="reserve"
+            >
+              <v-icon start icon="mdi-ticket"></v-icon>
+              Buy {{ quantity }} Now
             </v-btn>
           </v-card-actions>
         </v-card>

@@ -101,8 +101,8 @@
               </v-progress-linear>
 
               <v-btn
+                v-bind="useCompetitionButtonStyle()"
                 block
-                color="primary"
                 class="snipcart-add-item"
                 :data-item-id="product.id"
                 :data-item-price="product.price"
