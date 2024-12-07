@@ -2,8 +2,8 @@
 export const useCompetitionButtonStyle = () => {
   return {
     color: "primary",
-    variant: "flat",
+    variant: "elevated",
     rounded: "lg", // Changed from LG to 'lg'
-    elevation: 2,
+    elevation: 4,
   };
 };

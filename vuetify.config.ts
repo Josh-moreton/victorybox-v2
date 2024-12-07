@@ -38,4 +38,14 @@ export default defineVuetifyConfiguration({
       },
     },
   },
+  defaults: {
+    global: {
+      font: {
+        family: "Parkinsans",
+      },
+    },
+    VBtn: {
+      // ... your button defaults
+    },
+  },
 });

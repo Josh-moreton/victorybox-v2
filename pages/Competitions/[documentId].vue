@@ -39,18 +39,32 @@ const {
       return null;
     }
 
-    // Updated to match actual API response structure
+    // Process multiple images from the API
+    const images =
+      response.data.Images?.map((img) => ({
+        url: img.url
+          ? `${config.public.strapiUrl}${img.url}`
+          : "/images/placeholder.jpg",
+        alt: img.alternativeText || "Product image",
+      })) || [];
+
+    // Add main image to images array if it exists
+    if (response.data.Image?.url) {
+      images.unshift({
+        url: `${config.public.strapiUrl}${response.data.Image.url}`,
+        alt: response.data.Image.alternativeText || "Main product image",
+      });
+    }
+
     return {
       id: response.data.id,
       documentId: response.data.documentId,
       title: response.data.Title,
       Description: response.data.Description,
       price: parseFloat(response.data.Price).toFixed(2),
-      image: response.data.Image?.url
-        ? `${config.public.strapiUrl}${response.data.Image.url}` // Use config here
-        : "/images/placeholder.jpg",
-      question: response.data.question || "A question", // Add question
-      answer: response.data.answer || "Question responses", // Add answer
+      images: images,
+      question: response.data.question || "A question",
+      answer: response.data.answer || "Question responses",
     };
   } catch (err) {
     console.error("Error fetching product:", err);
@@ -110,68 +124,87 @@ const quantity = ref(1);
 </script>
 
 <template>
-  <v-container>
-    <v-row>
+  <v-container class="font-parkinsans">
+    <v-row class="equal-height-row">
       <!-- Left Column -->
       <v-col cols="12" md="6">
-        <v-card class="mx-auto" elevation="2" height="100%">
-          <!-- Left card content to come later -->
+        <v-card class="h-100 mx-auto font-parkinsans" elevation="2">
+          <v-carousel
+            v-if="product?.images?.length"
+            cycle
+            height="400"
+            hide-delimiter-background
+            show-arrows="hover"
+          >
+            <v-carousel-item
+              v-for="(image, i) in product.images"
+              :key="i"
+              :src="image.url"
+              :alt="image.alt"
+              cover
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="primary"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-carousel-item>
+          </v-carousel>
+
+          <!-- Fallback for no images -->
+          <v-img
+            v-else
+            src="/images/placeholder.jpg"
+            height="400"
+            cover
+          ></v-img>
         </v-card>
       </v-col>
 
       <!-- Right Column -->
       <v-col cols="12" md="6">
+        <!-- Add content above v-card -->
+        <div class="text-center mb-6 font-parkinsans">
+          <h1 class="text-h3 font-weight-bold mb-4">
+            {{ product?.title }}
+          </h1>
+          <p class="text-body-1 mb-4">
+            {{ product?.Description }}
+          </p>
+          <v-chip
+            color="success"
+            text-color="white"
+            size="large"
+            rounded="pill"
+            class="mb-4 font-parkinsans"
+          >
+            Draw {{ product?.closingDate || "TBA" }}
+          </v-chip>
+          <div class="text-h4 font-weight-bold primary--text">
+            £{{ product?.price }}
+          </div>
+        </div>
+
         <v-card
           :disabled="loading"
           :loading="loading"
-          class="mx-auto my-12"
-          max-width="374"
+          class="h-100 mx-auto font-parkinsans"
+          elevation="2"
         >
           <template v-slot:loader="{ isActive }">
             <v-progress-linear
               :active="isActive"
-              color="deep-purple"
               height="4"
               indeterminate
             ></v-progress-linear>
           </template>
 
-          <v-img height="250" :src="product.image" cover></v-img>
-
-          <v-card-item>
-            <v-card-title>{{ product.title }}</v-card-title>
-            <v-card-subtitle>
-              <span class="me-1">Featured Product</span>
-              <v-icon
-                color="error"
-                icon="mdi-fire-circle"
-                size="small"
-              ></v-icon>
-            </v-card-subtitle>
-          </v-card-item>
-
-          <v-card-text>
-            <v-row align="center" class="mx-0">
-              <v-rating
-                :model-value="4.5"
-                color="amber"
-                density="compact"
-                size="small"
-                half-increments
-                readonly
-              ></v-rating>
-
-              <div class="text-grey ms-4">4.5 (413)</div>
-            </v-row>
-
-            <div class="my-4 text-subtitle-1">£{{ product.price }}</div>
-
-            <div>{{ product.Description }}</div>
-          </v-card-text>
-
-          <v-divider class="mx-4 mb-1"></v-divider>
-
-          <v-card-title>{{ product.question }}</v-card-title>
+          <v-card-title class="text-center mt-4">{{
+            product.question
+          }}</v-card-title>
 
           <div class="px-4 mb-2">
             <v-chip-group
@@ -277,5 +310,23 @@ const quantity = ref(1);
 .nav-links.active .tablink {
   background: var(--act4-color, #4caf50);
   color: white;
+}
+
+.v-carousel {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.equal-height-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+:deep(.font-parkinsans) {
+  font-family: "Parkinsans", sans-serif !important;
 }
 </style>
