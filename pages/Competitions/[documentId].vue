@@ -96,7 +96,6 @@ const reserve = () => {
 </script>
 
 <template>
-  <ContestDetailsSlider />
   <v-container>
     <v-row>
       <!-- Left Column -->

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 useHead({
   title: "Victorybox",
   meta: [{ name: "description", content: "Victory Awaits the Bold." }],
@@ -7,11 +6,12 @@ useHead({
 
 definePageMeta({
   layout: "landing-pages",
-});</script>
+});
+</script>
 <template>
   <Navbar />
   <Competitioncarousel />
-  <HomeOneWinLotterySection />
+  <CompetitionsComponent />
   <Footer />
 </template>
 
