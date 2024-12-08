@@ -246,7 +246,9 @@ const quantity = ref(1);
           <div class="div-answers">
             <v-chip-group
               selected-class="text-primary"
+              v-model="selection"
               column
+              class="chip-container"
               style="max-width: 300px; margin: 0 auto"
             >
               <v-chip
@@ -254,6 +256,7 @@ const quantity = ref(1);
                 :key="answer"
                 :value="answer"
                 v-bind="useCompetitionChipStyle()"
+                class="equal-width-chip"
               >
                 {{ answer }}
               </v-chip>
@@ -387,6 +390,16 @@ const quantity = ref(1);
   max-width: 200px;
   justify-content: center;
   align-items: center;
+}
+.chip-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.equal-width-chip {
+  flex: 0 0 40% !important;
+  text-align: center;
 }
 
 :deep(.font-parkinsans) {
