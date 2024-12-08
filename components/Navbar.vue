@@ -19,6 +19,16 @@ const toggleTheme = () => {
   theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
 };
 
+const toggleCart = () => {
+  if (window.Snipcart) {
+    if (window.Snipcart.store.getState().cart.opened) {
+      window.Snipcart.api.theme.close();
+    } else {
+      window.Snipcart.api.theme.open();
+    }
+  }
+};
+
 const scrollHeight = ref(0);
 
 const handleScroll = () => {
@@ -108,7 +118,8 @@ const drawer = ref(false);
         class="snipcart-checkout ms-2 me-2"
         :color="
           theme.global.current.value.dark ? 'on-surface' : 'on-background'
-        ">
+        "
+        @click.prevent="toggleCart">
         <PhShoppingCart size="24" />
         <v-badge :content="0" color="teal" floating>
           <span class="snipcart-items-count hidden">0</span>

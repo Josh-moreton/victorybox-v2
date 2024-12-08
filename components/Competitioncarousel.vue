@@ -4,7 +4,7 @@
       <v-carousel
         cycle
         interval="5000"
-        height="600"
+        height="500"
         hide-delimiter-background
         :show-arrows="false"
         class="carousel-override">
