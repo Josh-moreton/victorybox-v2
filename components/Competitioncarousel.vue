@@ -13,7 +13,7 @@
           :key="product.id"
           class="carousel-item-override">
           <NuxtLink
-            :to="`/contests/${product.documentId}`"
+            :to="`/Competitions/${product.documentId}`"
             class="carousel-link">
             <div class="carousel-content">
               <h2 class="text-h3 font-weight-bold mb-4">{{ product.title }}</h2>

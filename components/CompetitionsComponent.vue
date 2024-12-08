@@ -11,7 +11,7 @@
       <v-row>
         <v-col cols="12">
           <h2
-            class="text-h4 mb-6 text-center text-bold font-parkinsans"
+            class="text-h4 mb-6 text-center text-teal font-parkinsans"
             :class="
               $vuetify.theme.current.dark ? 'text-primary' : 'text-primary'
             ">
