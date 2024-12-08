@@ -2,6 +2,7 @@
 import { useStrapi, useRoute, useRuntimeConfig, useAsyncData } from "#imports";
 import { PhStar, PhStarHalf } from "@phosphor-icons/vue";
 import { ref, computed } from "vue";
+import { useCompetitionChipStyle } from "~/composables/useCompetitionChipStyle";
 import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
 
 const config = useRuntimeConfig(); // Move this here, at the top of setup
@@ -242,47 +243,48 @@ const quantity = ref(1);
             product.question
           }}</v-card-subtitle>
 
-          <div class="px-4 mb-2">
-            <v-chip-group v-model="selection" mandatory>
+          <div class="div-answers">
+            <v-chip-group
+              selected-class="text-primary"
+              column
+              style="max-width: 300px; margin: 0 auto"
+            >
               <v-chip
                 v-for="answer in answers"
                 :key="answer"
                 :value="answer"
-                color="secondary"
+                v-bind="useCompetitionChipStyle()"
               >
                 {{ answer }}
               </v-chip>
             </v-chip-group>
-
-            <!-- Add quantity slider -->
-            <v-card-title class="text-center mt-4 mb-10"
-              >How many tickets?</v-card-title
-            >
-            <v-slider
-              v-model="quantity"
-              class="mx-4"
-              :min="1"
-              :max="1000"
-              :step="1"
-              thumb-label="always"
-            >
-              <template v-slot:thumb-label="{ modelValue }">
-                <div
-                  :style="{
-                    whiteSpace: 'nowrap',
-                    minWidth: `${Math.max(
-                      20,
-                      String(modelValue).length * 12
-                    )}px`,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }"
-                >
-                  <span class="font-weight-bold">{{ modelValue }} </span>
-                  <v-icon size="small" icon="mdi-ticket"></v-icon>
-                </div> </template
-            ></v-slider>
           </div>
+
+          <!-- Add quantity slider -->
+          <v-card-title class="text-center mt-4 mb-10"
+            >How many tickets?</v-card-title
+          >
+          <v-slider
+            v-model="quantity"
+            class="mx-4"
+            :min="1"
+            :max="1000"
+            :step="1"
+            thumb-label="always"
+          >
+            <template v-slot:thumb-label="{ modelValue }">
+              <div
+                :style="{
+                  whiteSpace: 'nowrap',
+                  minWidth: `${Math.max(20, String(modelValue).length * 12)}px`,
+                  display: 'flex',
+                  alignItems: 'center',
+                }"
+              >
+                <span class="font-weight-bold">{{ modelValue }} </span>
+                <v-icon size="small" icon="mdi-ticket"></v-icon>
+              </div> </template
+          ></v-slider>
 
           <v-card-actions class="px-20 pb-4">
             <v-btn
@@ -378,6 +380,13 @@ const quantity = ref(1);
 
 .h-100 {
   height: 100%;
+}
+
+.div-answwers {
+  display: flex;
+  max-width: 200px;
+  justify-content: center;
+  align-items: center;
 }
 
 :deep(.font-parkinsans) {

@@ -1,8 +1,10 @@
 // composables/useCompetitionChipStyle.ts
 export const useCompetitionChipStyle = () => {
   return {
-    color: "blue",
-    variant: "outlined",
-    elevation: 0,
+    color: "primary",
+    variant: "tonal", // Change from flat to elevated
+    elevation: 2,
+    rounded: "sm",
+    size: "x-large",
   };
 };

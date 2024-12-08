@@ -8,32 +8,31 @@ export default defineVuetifyConfiguration({
       light: {
         dark: false,
         colors: {
-          primary: "#219ebcff", // blue-green as primary
-          secondary: "#023047ff", // prussian-blue as secondary
-          accent: "#fb8500ff", // ut-orange as accent
-          error: "#fb8500ff", // ut-orange for errors
-          warning: "#ffb703ff", // selective-yellow for warnings
-          info: "#8ecae6ff", // sky-blue for info
-          success: "#219ebcff", // blue-green for success
-          background: "#ffffff",
-          surface: "#f8f9fa",
-          "on-background": "#023047ff", // prussian-blue for text
+          background: "#FFFFFF",
+          surface: "#FFFFFF",
+          primary: "#6200EE",
+          "primary-darken-1": "#3700B3",
+          secondary: "#03DAC6",
+          "secondary-darken-1": "#018786",
+          error: "#B00020",
+          info: "#2196F3",
+          success: "#4CAF50",
+          warning: "#FB8C00",
         },
       },
       dark: {
         dark: true,
         colors: {
-          primary: "#8ecae6ff", // sky-blue in dark mode
-          secondary: "#219ebcff", // blue-green in dark mode
-          accent: "#ffb703ff", // selective-yellow in dark mode
-          error: "#fb8500ff", // ut-orange in dark mode
-          warning: "#ffb703ff", // selective-yellow in dark mode
-          info: "#8ecae6ff", // sky-blue in dark mode
-          success: "#219ebcff", // blue-green in dark mode
           background: "#121212",
-          surface: "#1E1E1E",
-          "on-surface": "#8ecae6ff", // sky-blue for text on surface
-          "on-background": "#8ecae6ff", // sky-blue for text on background
+          surface: "#212121",
+          primary: "#BB86FC",
+          "primary-darken-1": "#3700B3",
+          secondary: "#03DAC6",
+          "secondary-darken-1": "#018786",
+          error: "#CF6679",
+          info: "#2196F3",
+          success: "#4CAF50",
+          warning: "#FB8C00",
         },
       },
     },
