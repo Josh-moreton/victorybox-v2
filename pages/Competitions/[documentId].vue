@@ -239,17 +239,15 @@ const quantity = ref(1);
             >Answer the question</v-card-title
           >
 
-          <v-card-subtitle class="text-center mt-4">{{
+          <v-card-subtitle class="text-center mt-4 mb-4">{{
             product.question
-          }}</v-card-subtitle>
-
+          }}<br></v-card-subtitle>
           <div class="div-answers">
             <v-chip-group
               selected-class="text-primary"
               v-model="selection"
               column
               class="chip-container"
-              style="max-width: 300px; margin: 0 auto"
             >
               <v-chip
                 v-for="answer in answers"
@@ -264,30 +262,22 @@ const quantity = ref(1);
           </div>
 
           <!-- Add quantity slider -->
-          <v-card-title class="text-center mt-4 mb-10"
-            >How many tickets?</v-card-title
-          >
-          <v-slider
-            v-model="quantity"
-            class="mx-4"
-            :min="1"
-            :max="1000"
-            :step="1"
-            thumb-label="always"
-          >
-            <template v-slot:thumb-label="{ modelValue }">
-              <div
-                :style="{
-                  whiteSpace: 'nowrap',
-                  minWidth: `${Math.max(20, String(modelValue).length * 12)}px`,
-                  display: 'flex',
-                  alignItems: 'center',
-                }"
-              >
-                <span class="font-weight-bold">{{ modelValue }} </span>
-                <v-icon size="small" icon="mdi-ticket"></v-icon>
-              </div> </template
-          ></v-slider>
+          <v-card-title class="text-center mt-4 mb-10">How many tickets?</v-card-title>
+
+          <div class="px-8"> <!-- Added padding container -->
+            <v-slider
+              v-model="quantity"
+              class="mx-4"
+              :min="1"
+              :max="1000"
+              :step="1"
+              thumb-label="always"
+            >
+              <template v-slot:thumb-label="{ modelValue }">
+                {{ modelValue }}
+              </template>
+            </v-slider>
+          </div>
 
           <v-card-actions class="px-20 pb-4">
             <v-btn
@@ -385,21 +375,22 @@ const quantity = ref(1);
   height: 100%;
 }
 
-.div-answwers {
-  display: flex;
-  max-width: 200px;
-  justify-content: center;
-  align-items: center;
+.div-answers {
+  width: 100%;
+  padding: 0 32px; /* Match padding with slider container */
 }
+
 .chip-container {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin: 1 auto;
 }
 
 .equal-width-chip {
-  flex: 0 0 40% !important;
-  text-align: center;
+  flex: 1 1 40% !important;
+  margin: 6px 6px !important;
+  justify-content: center;
 }
 
 :deep(.font-parkinsans) {

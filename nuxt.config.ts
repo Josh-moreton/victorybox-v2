@@ -31,6 +31,7 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       Parkinsans: [400, 500, 600, 700, 800],
+      Roboto: [100, 300, 400, 500, 700, 900], // Add Roboto with desired weights
     },
   },
   build: {

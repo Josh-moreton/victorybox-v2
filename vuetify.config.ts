@@ -40,11 +40,14 @@ export default defineVuetifyConfiguration({
   defaults: {
     global: {
       font: {
-        family: "Parkinsans",
+        family: 'Parkinsans, Roboto' // Add Roboto as fallback
       },
     },
-    VBtn: {
-      // ... your button defaults
+    VCardSubtitle: { // Add specific component overrides
+      class: 'font-roboto'
     },
+    VCardText: {
+      class: 'font-roboto'
+    }
   },
 });
