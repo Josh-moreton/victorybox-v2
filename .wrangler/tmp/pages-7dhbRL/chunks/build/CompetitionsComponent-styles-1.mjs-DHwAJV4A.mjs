@@ -1,2 +1,0 @@
-const a=".image-container[data-v-daeca3f8]{height:250px;overflow:hidden;width:100%}.product-image[data-v-daeca3f8]{height:100%;-o-object-fit:cover;object-fit:cover;width:100%}.v-card[data-v-daeca3f8]{transition:transform .2s}.v-card[data-v-daeca3f8]:hover{transform:translateY(-4px)}.text-decoration-none[data-v-daeca3f8]{color:inherit}.text-decoration-none[data-v-daeca3f8]:hover{opacity:.8}[data-v-daeca3f8] .font-parkinsans{font-family:Parkinsans,sans-serif!important}";export{a as C};
-//# sourceMappingURL=CompetitionsComponent-styles-1.mjs-DHwAJV4A.mjs.map

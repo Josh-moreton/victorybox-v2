@@ -2,22 +2,19 @@
   <v-container
     fluid
     class="pa-0 font-parkinsans"
-    :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']"
-  >
+    :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']">
     <v-container
       fluid
       class="py-16 px-4"
       :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']"
-      style="max-width: 1000px"
-    >
+      style="max-width: 1000px">
       <v-row>
         <v-col cols="12">
           <h2
             class="text-h4 mb-6 text-center text-bold font-parkinsans"
             :class="
               $vuetify.theme.current.dark ? 'text-primary' : 'text-primary'
-            "
-          >
+            ">
             {{ title }}
           </h2>
         </v-col>
@@ -30,16 +27,16 @@
           cols="12"
           sm="6"
           md="4"
-          lg="4"
-        >
+          lg="4">
           <v-card
             class="mx-auto d-flex flex-column font-parkinsans"
             height="100%"
             max-width="300px"
             hover
             href="`/competitions/${product.documentId}`"
-            :color="$vuetify.theme.current.dark ? 'surface' : 'background'"
-          >
+            :color="
+              $vuetify.theme.current.dark ? 'grey-darken-3' : 'background'
+            ">
             <div class="image-container">
               <v-img
                 :src="product.image"
@@ -47,8 +44,7 @@
                 class="product-image"
                 width="100%"
                 height="250"
-                cover
-              ></v-img>
+                cover></v-img>
             </div>
 
             <v-card-item>
@@ -56,11 +52,9 @@
                 <v-card-title>
                   <NuxtLink
                     :to="`/competitions/${product.documentId}`"
-                    class="text-decoration-none font-parkinsans"
-                  >
+                    class="text-decoration-none font-parkinsans">
                     <span
-                      class="text-center text-h5 font-weight-bold text-wrap font-parkinsans"
-                    >
+                      class="text-center text-h5 font-weight-bold text-wrap font-parkinsans">
                       {{ product.title }}
                     </span>
                   </NuxtLink>
@@ -97,16 +91,14 @@
                 height="10"
                 class="w-100 mb-4"
                 striped
-                rounded
-              >
+                rounded>
               </v-progress-linear>
 
               <v-btn
                 v-bind="useCompetitionButtonStyle()"
                 block
                 :to="`/competitions/${product.documentId}`"
-                prepend-icon="mdi-ticket"
-              >
+                prepend-icon="mdi-ticket">
                 <template v-slot:prepend>
                   <v-icon color="white"></v-icon>
                 </template>

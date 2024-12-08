@@ -1,2 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-1tPrXgE0.mjs";import{aj as s,y as t}from"../routes/renderer.mjs";import"../runtime.mjs";const o={};const r=o.setup;o.setup=(e,s)=>{const o=t();return(o.modules||(o.modules=new Set)).add("layouts/landing-pages.vue"),r?r(e,s):void 0};const n=e(o,[["ssrRender",function(e,t,o,r){s(e.$slots,"default",{},null,t,o)}]]);export{n as default};
-//# sourceMappingURL=landing-pages-OHOaQXhH.mjs.map

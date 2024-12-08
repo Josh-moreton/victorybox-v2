@@ -11,6 +11,7 @@ definePageMeta({
 <template>
   <Navbar />
   <Competitioncarousel />
+  <Charities />
   <CompetitionsComponent />
   <Footer />
 </template>
