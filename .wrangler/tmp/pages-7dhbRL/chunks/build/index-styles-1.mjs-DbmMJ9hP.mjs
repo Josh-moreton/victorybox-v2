@@ -1,0 +1,2 @@
+const a=".image-container[data-v-2e25dab8]{height:250px;overflow:hidden;width:100%}.product-image[data-v-2e25dab8]{height:100%;-o-object-fit:cover;object-fit:cover;width:100%}.v-card[data-v-2e25dab8]{transition:transform .2s}.v-card[data-v-2e25dab8]:hover{transform:translateY(-4px)}.text-decoration-none[data-v-2e25dab8]{color:inherit}.text-decoration-none[data-v-2e25dab8]:hover{opacity:.8}";export{a as i};
+//# sourceMappingURL=index-styles-1.mjs-DbmMJ9hP.mjs.map

@@ -46,6 +46,7 @@ const drawer = ref(false)
     app
     scroll-behavior="elevate"
     class="px-4 px-md-8"
+    :height="$vuetify.display.smAndDown ? 64 : 100"
   >
     <!-- Mobile Menu Icon -->
     <template #prepend>
@@ -60,7 +61,9 @@ const drawer = ref(false)
     <v-img
       :src="logo"
       alt="Victory Box"
-      max-height="80"
+      :max-height="$vuetify.display.smAndDown ? '60' : '80'"
+      :max-width="$vuetify.display.smAndDown ? '120' : '160'"
+      :min-width="$vuetify.display.smAndDown ? '100' : '120'"
       contain
       class="me-4 me-sm-8"
     />
@@ -123,8 +126,17 @@ const drawer = ref(false)
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
+/* Adjust logo size for taller navbar */
 .v-img {
   display: flex;
   align-items: center;
+  height: auto;
+}
+
+@media (max-width: 600px) {
+  .v-img {
+    min-width: 100px;
+    max-width: 120px;
+  }
 }
 </style>

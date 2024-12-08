@@ -1,0 +1,2 @@
+import{_ as e}from"./_plugin-vue_export-helper-1tPrXgE0.mjs";import{B as t,D as s,aj as o,y as r}from"../routes/renderer.mjs";import"../runtime.mjs";const u={};const l=u.setup;u.setup=(e,t)=>{const s=r();return(s.modules||(s.modules=new Set)).add("layouts/multiproduct.vue"),l?l(e,t):void 0};const n=e(u,[["ssrRender",function(e,r,u,l){const n=t("NavbarBlack"),a=t("HomeOneFooter");r("\x3c!--[--\x3e"),r(s(n,null,null,u)),o(e.$slots,"default",{},null,r,u),r(s(a,null,null,u)),r("\x3c!--]--\x3e")}]]);export{n as default};
+//# sourceMappingURL=multiproduct-BHrPK_cR.mjs.map
