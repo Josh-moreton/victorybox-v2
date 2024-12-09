@@ -50,7 +50,13 @@ export default defineNuxtConfig({
       drop: ["console", "debugger"],
     },
   },
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true,
+    },
+  },
   nitro: {
     preset: "cloudflare-pages",
     routeRules: {
