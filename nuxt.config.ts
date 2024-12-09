@@ -44,6 +44,10 @@ export default defineNuxtConfig({
     publicApiKey:
       process.env.SNIP_PUBLIC_KEY ||
       "ZTVmZDI0ZWQtMDZjNy00Y2IyLWJlMzMtMzhhY2Q5ZjFjMzk5NjM4Njg4MjA1ODI2NzE1MDEw",
+    loadStrategy: "on:visible", // Add this
+    version: "3.0",
+    currency: "GBP", // Add this
+    domain: process.env.SITE_URL || "https://victoryboxes.org",
   },
   vite: {
     esbuild: {
