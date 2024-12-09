@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 font-parkinsans"
+  <v-container fluid class="pa-0 font-parkinsans font-weight-black"
     :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']">
     <v-container fluid class="py-16 px-4" :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']"
       style="max-width: 1000px">
@@ -15,8 +15,9 @@
       <v-row>
         <v-col v-for="product in products" :key="product.id" cols="12" sm="6" md="4" lg="4">
           <NuxtLink :to="`/competitions/${product.documentId}`" class="text-decoration-none">
-            <v-card class="mx-auto d-flex flex-column font-parkinsans" height="100%" max-width="300px" hover :color="$vuetify.theme.current.dark ? 'grey-darken-3' : 'background'
-              ">
+            <v-card class="mx-auto d-flex flex-column font-parkinsans" height="100%" max-width="300px" hover rounded="l"
+              :color="$vuetify.theme.current.dark ? 'grey-darken-3' : 'white'
+                ">
               <div class="image-container">
                 <v-img :src="product.image" :alt="product.title" class="product-image" width="100%" height="250"
                   cover></v-img>
@@ -48,12 +49,12 @@
                 </div>
 
                 <v-progress-linear :model-value="product.soldPercentage" :color="product.soldPercentage > 75
-                    ? 'deep-orange'
-                    : product.soldPercentage > 50
-                      ? 'lime'
-                      : product.soldPercentage > 25
-                        ? 'light-green-darken-4'
-                        : 'light-blue'
+                  ? 'deep-orange'
+                  : product.soldPercentage > 50
+                    ? 'lime'
+                    : product.soldPercentage > 25
+                      ? 'light-green-darken-4'
+                      : 'light-blue'
                   " height="10" class="w-100 mb-4" striped rounded>
                 </v-progress-linear>
 

@@ -54,29 +54,17 @@ const drawer = ref(false);
     </v-list>
   </v-navigation-drawer>
 
-  <v-app-bar
-    app
-    scroll-behavior="elevate"
-    class="px-4 px-md-8"
-    :height="$vuetify.display.smAndDown ? 64 : 100">
+  <v-app-bar app scroll-behavior="elevate" class="px-4 px-md-8" :height="$vuetify.display.smAndDown ? 64 : 100">
     <!-- Mobile Menu Icon -->
     <template #prepend>
-      <v-app-bar-nav-icon
-        v-if="$vuetify.display.smAndDown"
-        @click="drawer = !drawer"
-        class="me-2" />
+      <v-app-bar-nav-icon v-if="$vuetify.display.smAndDown" @click="drawer = !drawer" class="me-2" />
     </template>
 
     <!-- Logo -->
     <NuxtLink to="/">
-      <v-img
-        :src="logo"
-        alt="Victory Box"
-        :max-height="$vuetify.display.smAndDown ? '60' : '80'"
-        :max-width="$vuetify.display.smAndDown ? '120' : '160'"
-        :min-width="$vuetify.display.smAndDown ? '100' : '120'"
-        contain
-        class="me-4 me-sm-8" />
+      <v-img :src="logo" alt="Victory Box" :max-height="$vuetify.display.smAndDown ? '60' : '80'"
+        :max-width="$vuetify.display.smAndDown ? '120' : '160'" :min-width="$vuetify.display.smAndDown ? '100' : '120'"
+        contain class="me-4 me-sm-8" />
     </NuxtLink>
     <v-spacer />
 
@@ -92,34 +80,20 @@ const drawer = ref(false);
 
     <!-- Theme and User Controls -->
     <template #append>
-      <v-btn
-        icon
-        variant="text"
-        @click="toggleTheme"
-        class="ms-2"
+      <v-btn icon variant="text" @click="toggleTheme" class="ms-2"
         :text-color="theme.global.current.value.dark ? 'white' : 'black'">
         <PhMoon v-if="theme.global.current.value.dark" size="24" />
         <PhSun v-else size="24" />
       </v-btn>
 
-      <v-btn
-        icon
-        variant="text"
-        to="/account"
-        class="ms-2"
+      <v-btn icon variant="text" to="/account" class="ms-2"
         :text-color="theme.global.current.value.dark ? 'white' : 'black'">
         <PhUser size="24" />
       </v-btn>
 
       <!-- Shopping Cart -->
-      <v-btn
-        icon
-        variant="text"
-        class="snipcart-checkout ms-2 me-2"
-        :color="
-          theme.global.current.value.dark ? 'on-surface' : 'on-background'
-        "
-        @click.prevent="toggleCart">
+      <v-btn icon variant="text" class="snipcart-checkout ms-2 me-2" :color="theme.global.current.value.dark ? 'on-surface' : 'on-background'
+        " @click.prevent="toggleCart">
         <PhShoppingCart size="24" />
         <v-badge :content="0" color="teal" floating>
           <span class="snipcart-items-count hidden">0</span>

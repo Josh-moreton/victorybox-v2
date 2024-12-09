@@ -8,7 +8,7 @@ export default defineVuetifyConfiguration({
       light: {
         dark: false,
         colors: {
-          background: "#FFFFFF",
+          background: "#F5F5F5",
           surface: "#FFFFFF",
           primary: "#6200EE",
           "primary-darken-1": "#3700B3",
@@ -40,14 +40,15 @@ export default defineVuetifyConfiguration({
   defaults: {
     global: {
       font: {
-        family: 'Parkinsans, Roboto' // Add Roboto as fallback
+        family: "Parkinsans, Roboto", // Add Roboto as fallback
       },
     },
-    VCardSubtitle: { // Add specific component overrides
-      class: 'font-roboto'
+    VCardSubtitle: {
+      // Add specific component overrides
+      class: "font-roboto",
     },
     VCardText: {
-      class: 'font-roboto'
-    }
+      class: "font-roboto",
+    },
   },
 });
