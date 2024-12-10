@@ -7,12 +7,13 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
-    "@vueuse/nuxt",
+    "@nuxtjs/strapi",
+    "@nuxtjs/snipcart",
+    // "@vueuse/nuxt",
     // "@oku-ui/motion-nuxt",
     // "nuxt-aos",
     // "floating-vue/nuxt",
-    "@nuxtjs/strapi",
-    "@nuxtjs/snipcart",
+
   ],
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
