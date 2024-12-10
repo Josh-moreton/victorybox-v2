@@ -1,9 +1,7 @@
-// CSS Plugin import
-
-@import "./bootstrap.min.css";
-// Scss main
-@import "main/variable";
-@import "main/mixins";
-@import "main/typography";
-@import "main/global";
-@import "main/banner";
+// assets/scss/style.scss
+@import "vuetify/lib/styles/main.sass";
+@import "~/assets/scss/main/variable";
+@import "~/assets/scss/main/mixins";
+@import "~/assets/scss/main/typography";
+@import "~/assets/scss/main/banner";
+// @import "~/assets/scss/main/global";
