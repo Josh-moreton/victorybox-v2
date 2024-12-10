@@ -40,7 +40,7 @@ export default defineVuetifyConfiguration({
   defaults: {
     global: {
       font: {
-        family: "Parkinsans, Roboto", // Add Roboto as fallback
+        family: "Parkinsans, Roboto, sans-serif", // Add Roboto as fallback
       },
     },
     VCardSubtitle: {
@@ -48,6 +48,12 @@ export default defineVuetifyConfiguration({
       class: "font-roboto",
     },
     VCardText: {
+      class: "font-roboto",
+    },
+    VCard: {
+      class: "font-parkinsans",
+    },
+    VBtn: {
       class: "font-roboto",
     },
   },

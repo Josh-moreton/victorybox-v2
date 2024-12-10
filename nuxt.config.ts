@@ -1,19 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  css: ["~/assets/scss/style.scss", "vuetify/lib/styles/main.sass"],
+  css: ["~/assets/scss/style.scss"],
   compatibilityDate: "2024-04-03",
   modules: [
-    "@nuxt/ui",
     "vuetify-nuxt-module",
     "nuxt-swiper",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
-    "@vueuse/nuxt",
-    "@oku-ui/motion-nuxt",
-    "nuxt-aos",
-    "floating-vue/nuxt",
     "@nuxtjs/strapi",
     "@nuxtjs/snipcart",
+    // "@vueuse/nuxt",
+    // "@oku-ui/motion-nuxt",
+    // "nuxt-aos",
+    // "floating-vue/nuxt",
   ],
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
@@ -57,11 +56,7 @@ export default defineNuxtConfig({
     currency: "GBP", // Add this
     domain: process.env.SITE_URL || "https://victoryboxes.org",
   },
-  vite: {
-    esbuild: {
-      drop: ["console", "debugger"],
-    },
-  },
+
   devtools: {
     enabled: true,
 
