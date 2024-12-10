@@ -148,7 +148,7 @@ const quantity = ref(1);
 </script>
 
 <template>
-  <v-container class="font-parkinsans">
+  <v-container class="font-parkinsans py-8">
     <v-row class="equal-height-row">
       <!-- Left Column -->
       <v-col cols="12" md="6">
@@ -182,9 +182,9 @@ const quantity = ref(1);
       </v-col>
 
       <!-- Right Column -->
-      <v-col cols="12" md="6">
-        <!-- Add content above v-card -->
-        <div class="text-center mb-8 mt-8 font-parkinsans">
+      <v-col cols="12" md="6" class="d-flex flex-column">
+        <!-- Product info section -->
+        <div class="text-center mb-6">
           <h1 class="text-h3 font-weight-bold mb-6 mt-6">
             {{ product?.title }}
           </h1>
@@ -220,10 +220,11 @@ const quantity = ref(1);
           ></v-progress-linear>
         </div>
 
+        <!-- Question card with fixed height -->
         <v-card
           :disabled="loading"
           :loading="loading"
-          class="h-100 mx-auto font-parkinsans"
+          class="mx-auto font-parkinsans flex-grow-0"
           elevation="2"
         >
           <template v-slot:loader="{ isActive }">
@@ -314,69 +315,6 @@ const quantity = ref(1);
   padding-top: 2rem;
 }
 
-.product-image-wrap img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.buy-button {
-  background: var(--act4-color, #4caf50);
-  color: white;
-  border: none;
-  padding: 1rem;
-  border-radius: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.buy-button:hover {
-  opacity: 0.9;
-}
-
-.price-display {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--n4-color, #333);
-}
-
-.loading-section,
-.error-section {
-  text-align: center;
-  padding: 4rem 2rem;
-}
-
-.back-link {
-  color: var(--act4-color, #4caf50);
-  text-decoration: none;
-}
-
-.tablink {
-  background: none;
-  border: 1px solid #eee;
-  cursor: pointer;
-}
-
-.nav-links.active .tablink {
-  background: var(--act4-color, #4caf50);
-  color: white;
-}
-
-.v-carousel {
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.equal-height-row {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.h-100 {
-  height: 100%;
-}
-
 .div-answers {
   width: 100%;
   padding: 0 32px;
@@ -396,7 +334,7 @@ const quantity = ref(1);
   justify-content: center;
 }
 
-:deep(.font-parkinsans) {
-  font-family: "Parkinsans", sans-serif !important;
+.equal-height-row {
+  align-items: start;
 }
 </style>
