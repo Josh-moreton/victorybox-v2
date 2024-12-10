@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     "nuxt-swiper",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
+    "@pinia/nuxt",
     "@nuxtjs/strapi",
     "@nuxtjs/snipcart",
   ],

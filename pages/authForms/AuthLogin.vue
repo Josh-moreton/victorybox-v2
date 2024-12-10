@@ -1,42 +1,70 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Google from '@/assets/images/auth/social-google.svg';
-import { useAuthStore } from '@/stores/auth';
-import { Form } from 'vee-validate';
+import { ref } from "vue";
+import Google from "@/assets/images/auth/social-google.svg";
+import { useAuthStore } from "@/stores/auth";
 
-const checkbox = ref(false);
+const form = ref();
 const valid = ref(false);
+const loading = ref(false);
 const show1 = ref(false);
-//const logform = ref();
-const password = ref('admin123');
-const username = ref('info@codedthemes.com');
-const passwordRules = ref([
-  (v: string) => !!v || 'Password is required',
-  (v: string) => (v && v.length <= 10) || 'Password must be less than 10 characters'
-]);
-const emailRules = ref([(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid']);
+const checkbox = ref(false);
+const password = ref("");
+const username = ref("");
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-function validate(values: any, { setErrors }: any) {
-  const authStore = useAuthStore();
-  return authStore.login(username.value, password.value).catch((error) => setErrors({ apiError: error }));
+const emailRules = [
+  (v: string) => !!v || "Email is required",
+  (v: string) => /.+@.+\..+/.test(v) || "Email must be valid",
+];
+
+const passwordRules = [
+  (v: string) => !!v || "Password is required",
+  (v: string) =>
+    (v && v.length >= 6) || "Password must be at least 6 characters",
+];
+
+async function validate() {
+  const { valid } = await form.value.validate();
+  if (valid) {
+    loading.value = true;
+    try {
+      const authStore = useAuthStore();
+      await authStore.login(username.value, password.value);
+      // Handle successful login
+    } catch (error) {
+      // Handle login error
+    } finally {
+      loading.value = false;
+    }
+  }
 }
 </script>
 
 <template>
-  <v-btn block color="primary" variant="outlined" class="text-lightText googleBtn">
+  <v-btn
+    block
+    color="primary"
+    variant="outlined"
+    class="text-lightText googleBtn"
+  >
     <img :src="Google" alt="google" />
     <span class="ml-2">Sign in with Google</span></v-btn
   >
   <v-row>
     <v-col class="d-flex align-center">
       <v-divider class="custom-devider" />
-      <v-btn variant="outlined" class="orbtn" rounded="md" size="small">OR</v-btn>
+      <v-btn variant="outlined" class="orbtn" rounded="md" size="small"
+        >OR</v-btn
+      >
       <v-divider class="custom-devider" />
     </v-col>
   </v-row>
   <h5 class="text-h5 text-center my-4 mb-8">Sign in with Email address</h5>
-  <Form @submit="validate" class="mt-7 loginForm" v-slot="{ errors, isSubmitting }">
+  <v-form
+    ref="form"
+    v-model="valid"
+    @submit.prevent="validate"
+    class="mt-7 loginForm"
+  >
     <v-text-field
       v-model="username"
       :rules="emailRules"
@@ -57,7 +85,7 @@ function validate(values: any, { setErrors }: any) {
       variant="outlined"
       color="primary"
       hide-details="auto"
-      :append-icon="show1 ? '$eye' : '$eyeOff'"
+      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
       :type="show1 ? 'text' : 'password'"
       @click:append="show1 = !show1"
       class="pwdInput"
@@ -74,19 +102,35 @@ function validate(values: any, { setErrors }: any) {
         hide-details
       ></v-checkbox>
       <div class="ml-auto">
-        <a href="javascript:void(0)" class="text-primary text-decoration-none">Forgot password?</a>
+        <a href="javascript:void(0)" class="text-primary text-decoration-none"
+          >Forgot password?</a
+        >
       </div>
     </div>
-    <v-btn color="secondary" :loading="isSubmitting" block class="mt-2" variant="flat" size="large" :disabled="valid" type="submit">
+    <v-btn
+      color="secondary"
+      :loading="loading"
+      block
+      class="mt-2"
+      variant="flat"
+      size="large"
+      :disabled="!valid"
+      type="submit"
+    >
       Sign In</v-btn
     >
     <div v-if="errors.apiError" class="mt-2">
       <v-alert color="error">{{ errors.apiError }}</v-alert>
     </div>
-  </Form>
+  </v-form>
   <div class="mt-5 text-right">
     <v-divider />
-    <v-btn variant="plain" to="/auth/register" class="mt-2 text-capitalize mr-n2">Don't Have an account?</v-btn>
+    <v-btn
+      variant="plain"
+      to="/auth/register"
+      class="mt-2 text-capitalize mr-n2"
+      >Don't Have an account?</v-btn
+    >
   </div>
 </template>
 <style lang="scss">
