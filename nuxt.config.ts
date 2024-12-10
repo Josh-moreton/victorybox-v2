@@ -48,6 +48,9 @@ export default defineNuxtConfig({
   alias: {
     "@": "public",
   },
+  ui: {
+    global: true,
+  },
   snipcart: {
     publicApiKey:
       process.env.SNIP_PUBLIC_KEY ||
