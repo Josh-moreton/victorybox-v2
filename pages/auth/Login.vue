@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Logo from "@/layouts/full/logo/LogoDark.vue";
 import AuthLogin from "../authForms/AuthLogin.vue";
 import { ref, computed } from "vue";
 import { useAuthStore } from "~/stores/auth";
@@ -124,6 +123,17 @@ async function handleSubmit() {
             </div>
           </v-card-text>
         </v-card>
+        <div class="text-center mt-4">
+          <v-btn
+            to="/"
+            variant="text"
+            color="primary"
+            prepend-icon="mdi-arrow-left"
+            class="text-body-1"
+          >
+            Back to Home
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
   </v-container>

@@ -1,129 +1,205 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Google from '@/assets/images/auth/social-google.svg';
-const checkbox = ref(false);
-const show1 = ref(false);
-const password = ref('');
-const email = ref('');
-const Regform = ref();
-const firstname = ref('');
-const lastname = ref('');
-const passwordRules = ref([
-  (v: string) => !!v || 'Password is required',
-  (v: string) => (v && v.length <= 10) || 'Password must be less than 10 characters'
-]);
-const emailRules = ref([(v: string) => !!v || 'E-mail is required', (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid']);
+import { ref, computed } from "vue";
+import { useAuthStore } from "~/stores/auth";
+import { useTheme } from "vuetify";
 
-function validate() {
-  Regform.value.validate();
+const theme = useTheme();
+const authStore = useAuthStore();
+
+// Form refs
+const form = ref();
+const loading = ref(false);
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const firstName = ref("");
+const lastName = ref("");
+const showPassword = ref(false);
+const showConfirmPassword = ref(false);
+const valid = ref(false);
+
+// Logo paths
+const logoLight = "/images/logos/black.png";
+const logoDark = "/images/logos/white.png";
+const currentLogo = computed(() =>
+  theme.global.current.value.dark ? logoDark : logoLight
+);
+
+// Validation rules
+const emailRules = [
+  (v: string) => !!v || "Email is required",
+  (v: string) => /.+@.+\..+/.test(v) || "Email must be valid",
+];
+
+const nameRules = [
+  (v: string) => !!v || "Name is required",
+  (v: string) => v.length >= 2 || "Name must be at least 2 characters",
+];
+
+const passwordRules = [
+  (v: string) => !!v || "Password is required",
+  (v: string) => v.length >= 6 || "Password must be at least 6 characters",
+];
+
+const confirmPasswordRules = [
+  (v: string) => !!v || "Please confirm your password",
+  (v: string) => v === password.value || "Passwords must match",
+];
+
+async function handleSubmit() {
+  const { valid } = await form.value.validate();
+  if (valid) {
+    loading.value = true;
+    try {
+      await authStore.register({
+        email: email.value,
+        password: password.value,
+        firstName: firstName.value,
+        lastName: lastName.value,
+      });
+      navigateTo("/auth/login");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.value = false;
+    }
+  }
 }
+
+definePageMeta({
+  layout: "auth",
+});
 </script>
 
 <template>
-  <v-btn block color="primary" variant="outlined" class="text-lightText googleBtn">
-    <img :src="Google" alt="google" />
-    <span class="ml-2">Sign up with Google</span></v-btn
-  >
-  <v-row>
-    <v-col class="d-flex align-center">
-      <v-divider class="custom-devider" />
-      <v-btn variant="outlined" class="orbtn" rounded="md" size="small">OR</v-btn>
-      <v-divider class="custom-devider" />
-    </v-col>
-  </v-row>
-  <h5 class="text-h5 text-center my-4 mb-8">Sign up with Email address</h5>
-  <v-form ref="Regform" lazy-validation action="/dashboards/analytical" class="mt-7 loginForm">
-    <v-row>
-      <v-col cols="12" sm="6">
-        <v-text-field
-          v-model="firstname"
-          density="comfortable"
-          hide-details="auto"
-          variant="outlined"
-          color="primary"
-          label="Firstname"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6">
-        <v-text-field
-          v-model="lastname"
-          density="comfortable"
-          hide-details="auto"
-          variant="outlined"
-          color="primary"
-          label="Lastname"
-        ></v-text-field>
+  <v-container fluid class="fill-height bg-surface">
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="8" md="6" lg="4">
+        <v-card class="elevation-2 rounded-lg">
+          <v-card-text class="pa-6">
+            <!-- Logo -->
+            <div class="text-center mb-6">
+              <v-img
+                :src="currentLogo"
+                alt="Victory Box"
+                height="80"
+                contain
+                class="mx-auto"
+              />
+              <h2 class="text-h4 font-weight-bold mt-4">Create Account</h2>
+              <p class="text-body-1 text-medium-emphasis mt-2">
+                Sign up to get started
+              </p>
+            </div>
+
+            <!-- Register Form -->
+            <v-form ref="form" v-model="valid" @submit.prevent="handleSubmit">
+              <v-row>
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="firstName"
+                    :rules="nameRules"
+                    label="First Name"
+                    prepend-inner-icon="mdi-account"
+                    variant="outlined"
+                    required
+                  />
+                </v-col>
+
+                <v-col cols="12" sm="6">
+                  <v-text-field
+                    v-model="lastName"
+                    :rules="nameRules"
+                    label="Last Name"
+                    prepend-inner-icon="mdi-account"
+                    variant="outlined"
+                    required
+                  />
+                </v-col>
+              </v-row>
+
+              <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="Email"
+                prepend-inner-icon="mdi-email"
+                variant="outlined"
+                required
+              />
+
+              <v-text-field
+                v-model="password"
+                :rules="passwordRules"
+                label="Password"
+                prepend-inner-icon="mdi-lock"
+                :type="showPassword ? 'text' : 'password'"
+                :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="showPassword = !showPassword"
+                variant="outlined"
+                required
+              />
+
+              <v-text-field
+                v-model="confirmPassword"
+                :rules="confirmPasswordRules"
+                label="Confirm Password"
+                prepend-inner-icon="mdi-lock-check"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                :append-inner-icon="
+                  showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'
+                "
+                @click:append-inner="showConfirmPassword = !showConfirmPassword"
+                variant="outlined"
+                required
+              />
+
+              <v-btn
+                type="submit"
+                color="primary"
+                size="large"
+                block
+                :loading="loading"
+                :disabled="!valid"
+                class="mt-6"
+              >
+                Create Account
+              </v-btn>
+            </v-form>
+
+            <div class="text-center mt-6">
+              <p class="text-body-2 text-medium-emphasis">
+                Already have an account?
+                <v-btn
+                  variant="text"
+                  to="/auth/login"
+                  color="primary"
+                  class="px-2"
+                >
+                  Sign in
+                </v-btn>
+              </p>
+            </div>
+          </v-card-text>
+        </v-card>
+
+        <div class="text-center mt-4">
+          <v-btn
+            to="/"
+            variant="text"
+            color="primary"
+            prepend-icon="mdi-arrow-left"
+            class="text-body-1"
+          >
+            Back to Home
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="Email Address / Username"
-      class="mt-4 mb-4"
-      required
-      density="comfortable"
-      hide-details="auto"
-      variant="outlined"
-      color="primary"
-    ></v-text-field>
-    <v-text-field
-      v-model="password"
-      :rules="passwordRules"
-      label="Password"
-      required
-      density="comfortable"
-      variant="outlined"
-      color="primary"
-      hide-details="auto"
-      :append-icon="show1 ? '$eye' : '$eyeOff'"
-      :type="show1 ? 'text' : 'password'"
-      @click:append="show1 = !show1"
-      class="pwdInput"
-    ></v-text-field>
-
-    <div class="d-sm-inline-flex align-center mt-2 mb-7 mb-sm-0 font-weight-bold">
-      <v-checkbox
-        v-model="checkbox"
-        :rules="[(v: any) => !!v || 'You must agree to continue!']"
-        label="Agree with?"
-        required
-        color="primary"
-        class="ms-n2"
-        hide-details
-      ></v-checkbox>
-      <a href="#" class="ml-1 text-lightText">Terms and Condition</a>
-    </div>
-    <v-btn color="secondary" block class="mt-2" variant="flat" size="large" @click="validate()">Sign Up</v-btn>
-  </v-form>
-  <div class="mt-5 text-right">
-    <v-divider />
-    <v-btn variant="plain" to="/auth/login" class="mt-2 text-capitalize mr-n2">Already have an account?</v-btn>
-  </div>
+  </v-container>
 </template>
-<style lang="scss">
-.custom-devider {
-  border-color: rgba(0, 0, 0, 0.08) !important;
-}
-.googleBtn {
-  border-color: rgba(0, 0, 0, 0.08);
-  margin: 30px 0 20px 0;
-}
-.outlinedInput .v-field {
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: none;
-}
-.orbtn {
-  padding: 2px 40px;
-  border-color: rgba(0, 0, 0, 0.08);
-  margin: 20px 15px;
-}
-.pwdInput {
-  position: relative;
-  .v-input__append {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+
+<style scoped>
+.v-card {
+  max-width: 100%;
 }
 </style>

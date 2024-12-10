@@ -117,7 +117,7 @@ onMounted(() => {
       <v-btn
         icon
         variant="text"
-        to="/account"
+        to="/auth/login"
         class="ms-2"
         :text-color="theme.global.current.value.dark ? 'white' : 'black'"
       >
