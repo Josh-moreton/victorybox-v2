@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useTheme } from "vuetify";
-import { PhShoppingCart, PhUser, PhSun, PhMoon } from "@phosphor-icons/vue";
 
 // Define the paths for the logos
 const logoLight = "/images/logos/black.png";
@@ -110,8 +109,13 @@ onMounted(() => {
         class="ms-2"
         :text-color="theme.global.current.value.dark ? 'white' : 'black'"
       >
-        <PhMoon v-if="theme.global.current.value.dark" size="24" />
-        <PhSun v-else size="24" />
+        <v-icon
+          :icon="
+            theme.global.current.value.dark
+              ? 'mdi-white-balance-sunny'
+              : 'mdi-moon-waning-crescent'
+          "
+        ></v-icon>
       </v-btn>
 
       <v-btn
@@ -121,7 +125,7 @@ onMounted(() => {
         class="ms-2"
         :text-color="theme.global.current.value.dark ? 'white' : 'black'"
       >
-        <PhUser size="24" />
+        <v-icon icon="mdi-account"></v-icon>
       </v-btn>
 
       <!-- Shopping Cart -->
@@ -134,7 +138,7 @@ onMounted(() => {
         "
         @click.prevent="toggleCart"
       >
-        <PhShoppingCart size="24" />
+        <v-icon icon="mdi-cart"></v-icon>
         <v-badge
           :content="cartCount"
           color="teal"

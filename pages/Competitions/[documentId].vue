@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useStrapi, useRoute, useRuntimeConfig, useAsyncData } from "#imports";
-import { PhStar, PhStarHalf } from "@phosphor-icons/vue";
 import { ref, computed } from "vue";
 import { useCompetitionChipStyle } from "~/composables/useCompetitionChipStyle";
 import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
@@ -153,11 +152,26 @@ const quantity = ref(1);
     <v-row class="equal-height-row">
       <!-- Left Column -->
       <v-col cols="12" md="6">
-        <v-carousel v-if="product?.images?.length" cycle height="400" hide-delimiter-background show-arrows="hover">
-          <v-carousel-item v-for="(image, i) in product.images" :key="i" :src="image.url" :alt="image.alt" cover>
+        <v-carousel
+          v-if="product?.images?.length"
+          cycle
+          height="400"
+          hide-delimiter-background
+          show-arrows="hover"
+        >
+          <v-carousel-item
+            v-for="(image, i) in product.images"
+            :key="i"
+            :src="image.url"
+            :alt="image.alt"
+            cover
+          >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
               </v-row>
             </template>
           </v-carousel-item>
@@ -188,40 +202,79 @@ const quantity = ref(1);
           <div class="text-left text-caption mb-2">
             Sold: {{ product?.soldPercentage }}%
           </div>
-          <v-progress-linear :model-value="product?.soldPercentage" :color="product?.soldPercentage > 75
-            ? 'deep-orange'
-            : product?.soldPercentage > 50
-              ? 'lime'
-              : product?.soldPercentage > 25
+          <v-progress-linear
+            :model-value="product?.soldPercentage"
+            :color="
+              product?.soldPercentage > 75
+                ? 'deep-orange'
+                : product?.soldPercentage > 50
+                ? 'lime'
+                : product?.soldPercentage > 25
                 ? 'light-green-darken-4'
                 : 'light-blue'
-            " height="10" class="mb-6" striped rounded></v-progress-linear>
+            "
+            height="10"
+            class="mb-6"
+            striped
+            rounded
+          ></v-progress-linear>
         </div>
 
-        <v-card :disabled="loading" :loading="loading" class="h-100 mx-auto font-parkinsans" elevation="2">
+        <v-card
+          :disabled="loading"
+          :loading="loading"
+          class="h-100 mx-auto font-parkinsans"
+          elevation="2"
+        >
           <template v-slot:loader="{ isActive }">
-            <v-progress-linear :active="isActive" height="4" indeterminate></v-progress-linear>
+            <v-progress-linear
+              :active="isActive"
+              height="4"
+              indeterminate
+            ></v-progress-linear>
           </template>
 
-          <v-card-title class="text-center mt-4">Answer the question</v-card-title>
+          <v-card-title class="text-center mt-4"
+            >Answer the question</v-card-title
+          >
 
-          <v-card-subtitle class="text-center mt-4 mb-4">{{
-            product.question
-          }}<br></v-card-subtitle>
+          <v-card-subtitle class="text-center mt-4 mb-4"
+            >{{ product.question }}<br
+          /></v-card-subtitle>
           <div class="div-answers">
-            <v-chip-group selected-class="text-primary" v-model="selection" column class="chip-container">
-              <v-chip v-for="answer in answers" :key="answer" :value="answer" v-bind="useCompetitionChipStyle()"
-                class="equal-width-chip">
+            <v-chip-group
+              selected-class="text-primary"
+              v-model="selection"
+              column
+              class="chip-container"
+            >
+              <v-chip
+                v-for="answer in answers"
+                :key="answer"
+                :value="answer"
+                v-bind="useCompetitionChipStyle()"
+                class="equal-width-chip"
+              >
                 {{ answer }}
               </v-chip>
             </v-chip-group>
           </div>
 
           <!-- Add quantity slider -->
-          <v-card-title class="text-center mt-4 mb-10">How many tickets?</v-card-title>
+          <v-card-title class="text-center mt-4 mb-10"
+            >How many tickets?</v-card-title
+          >
 
-          <div class="px-8"> <!-- Added padding container -->
-            <v-slider v-model="quantity" class="mx-4" :min="1" :max="1000" :step="1" thumb-label="always">
+          <div class="px-8">
+            <!-- Added padding container -->
+            <v-slider
+              v-model="quantity"
+              class="mx-4"
+              :min="1"
+              :max="1000"
+              :step="1"
+              thumb-label="always"
+            >
               <template v-slot:thumb-label="{ modelValue }">
                 {{ modelValue }}
               </template>
@@ -229,11 +282,23 @@ const quantity = ref(1);
           </div>
 
           <v-card-actions class="px-20 pb-4">
-            <v-btn v-bind="useCompetitionButtonStyle()" block class="snipcart-add-item" :disabled="!selection"
-              :data-item-id="product.documentId" :data-item-name="product.title" :data-item-price="product.price"
-              :data-item-url="productUrl" :data-item-description="product.Description" :data-item-image="product.image"
-              :data-item-custom1-name="product.question" :data-item-custom1-value="selection"
-              :data-item-custom1-options="product.answer" :data-item-quantity="quantity" @click="reserve">
+            <v-btn
+              v-bind="useCompetitionButtonStyle()"
+              block
+              class="snipcart-add-item"
+              :disabled="!selection"
+              :data-item-id="product.documentId"
+              :data-item-name="product.title"
+              :data-item-price="product.price"
+              :data-item-url="productUrl"
+              :data-item-description="product.Description"
+              :data-item-image="product.image"
+              :data-item-custom1-name="product.question"
+              :data-item-custom1-value="selection"
+              :data-item-custom1-options="product.answer"
+              :data-item-quantity="quantity"
+              @click="reserve"
+            >
               <v-icon start icon="mdi-ticket"></v-icon>
               Buy {{ quantity }} Now
             </v-btn>

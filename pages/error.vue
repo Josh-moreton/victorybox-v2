@@ -2,8 +2,8 @@
 import errorImage from "/images/error/error.png";
 
 useHead({
-  title: "Error - Lottery & Giveaway NuxtJs Template",
-  meta: [{ name: "description", content: "Lottery & Giveaway NuxtJs Template" }],
+  title: "Error - Victorybox",
+  meta: [{ name: "description", content: "Victorybox" }],
 });
 </script>
 <template>
@@ -17,9 +17,16 @@ useHead({
             </div>
             <div class="cont text-center">
               <h2 class="n4-clr mb-xxl-6 mb-xl-4 mb-3">Page Not Found</h2>
-              <p class="fs18 fw_600 mb-xxl-10 mb-xl-7 mb-5">The page you are looking for doesn exist or has been moved</p>
-              <NuxtLink to="/" class="kewta-btn d-inline-flex align-items-center">
-                <span class="kew-text s1-bg s1-border n0-clr">Back To Home</span>
+              <p class="fs18 fw_600 mb-xxl-10 mb-xl-7 mb-5">
+                The page you are looking for doesnt exist or has been moved
+              </p>
+              <NuxtLink
+                to="/"
+                class="kewta-btn d-inline-flex align-items-center"
+              >
+                <span class="kew-text s1-bg s1-border n0-clr"
+                  >Back To Home</span
+                >
               </NuxtLink>
             </div>
           </div>
