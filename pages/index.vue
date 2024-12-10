@@ -9,7 +9,7 @@ definePageMeta({
 });
 </script>
 <template>
-  <Navbar />
+  <Header />
   <Competitioncarousel />
   <Charities />
   <CompetitionsComponent />
