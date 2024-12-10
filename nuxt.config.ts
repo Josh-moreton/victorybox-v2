@@ -3,15 +3,14 @@ export default defineNuxtConfig({
   css: ["~/assets/scss/style.scss", "vuetify/lib/styles/main.sass"],
   compatibilityDate: "2024-04-03",
   modules: [
-    "@nuxt/ui",
     "vuetify-nuxt-module",
     "nuxt-swiper",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
     "@vueuse/nuxt",
-    "@oku-ui/motion-nuxt",
-    "nuxt-aos",
-    "floating-vue/nuxt",
+    // "@oku-ui/motion-nuxt",
+    // "nuxt-aos",
+    // "floating-vue/nuxt",
     "@nuxtjs/strapi",
     "@nuxtjs/snipcart",
   ],
@@ -47,9 +46,6 @@ export default defineNuxtConfig({
   },
   alias: {
     "@": "public",
-  },
-  ui: {
-    global: true,
   },
   snipcart: {
     publicApiKey:
