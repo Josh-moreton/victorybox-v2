@@ -44,11 +44,22 @@ async function handleSubmit() {
   if (valid) {
     loading.value = true;
     try {
+      // You're currently calling login instead of register
+      // Change this to register first:
+      await authStore.register({
+        username: email.value, // Strapi requires username
+        email: email.value,
+        password: password.value,
+      });
+
+      // After successful registration, login
       await authStore.login(email.value, password.value);
-      // Redirect to account page after successful login
+
+      // Then redirect
       navigateTo("/account");
     } catch (error) {
-      // Show error message
+      console.error("Registration error:", error);
+      // Add error handling here
     } finally {
       loading.value = false;
     }
@@ -113,6 +124,11 @@ async function handleSubmit() {
                 variant="outlined"
                 required
               />
+
+              <!-- Add error alert -->
+              <v-alert v-if="authStore.error" type="error" class="mb-4">
+                {{ authStore.error }}
+              </v-alert>
 
               <v-btn
                 type="submit"

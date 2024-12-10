@@ -1,46 +1,98 @@
+// stores/auth.ts
 import { defineStore } from "pinia";
-import { useStrapi } from "#imports";
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
+interface AuthResponse {
+  user: User;
+  jwt: string;
+}
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: null,
+    user: null as User | null,
     loading: false,
-    error: null,
+    error: null as string | null,
     isAuthenticated: false,
+    token: null as string | null,
   }),
 
   actions: {
-    async login(identifier: string, password: string) {
-      const strapi = useStrapi();
+    async register(data: {
+      username: string;
+      email: string;
+      password: string;
+    }) {
       this.loading = true;
       this.error = null;
+      const config = useRuntimeConfig();
 
       try {
-        const response = await strapi.login({
-          identifier,
-          password,
-        });
-        this.user = response.user;
+        const { data: response, error } = await useFetch<AuthResponse>(
+          "/api/auth/local/register",
+          {
+            baseURL: config.public.strapiUrl,
+            method: "POST",
+            body: {
+              username: data.username,
+              email: data.email,
+              password: data.password,
+            },
+          }
+        );
+
+        if (error.value) throw error.value;
+        if (!response.value) throw new Error("No response from server");
+
+        this.user = response.value.user;
+        this.token = response.value.jwt;
         this.isAuthenticated = true;
-        return response;
-      } catch (error) {
-        this.error = error.message;
+
+        // Store JWT in localStorage
+        localStorage.setItem("jwt", response.value.jwt);
+
+        return response.value;
+      } catch (error: any) {
+        this.error = error?.data?.error?.message || "Registration failed";
         throw error;
       } finally {
         this.loading = false;
       }
     },
 
-    async register(data: { email: string; password: string }) {
-      const strapi = useStrapi();
+    async login(identifier: string, password: string) {
       this.loading = true;
       this.error = null;
+      const config = useRuntimeConfig();
 
       try {
-        const response = await strapi.register(data);
-        return response;
-      } catch (error) {
-        this.error = error.message;
+        const { data: response, error } = await useFetch<AuthResponse>(
+          "/api/auth/local",
+          {
+            baseURL: config.public.strapiUrl,
+            method: "POST",
+            body: {
+              identifier,
+              password,
+            },
+          }
+        );
+
+        if (error.value) throw error.value;
+        if (!response.value) throw new Error("No response from server");
+
+        this.user = response.value.user;
+        this.token = response.value.jwt;
+        this.isAuthenticated = true;
+        localStorage.setItem("jwt", response.value.jwt);
+
+        return response.value;
+      } catch (error: any) {
+        this.error = error?.data?.error?.message || "Login failed";
         throw error;
       } finally {
         this.loading = false;
@@ -48,23 +100,39 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async logout() {
-      const strapi = useStrapi();
-      await strapi.logout();
+      localStorage.removeItem("jwt");
       this.user = null;
+      this.token = null;
       this.isAuthenticated = false;
       navigateTo("/auth/login");
     },
 
     async checkAuth() {
-      const strapi = useStrapi();
+      const token = localStorage.getItem("jwt");
+      if (!token) {
+        this.isAuthenticated = false;
+        return null;
+      }
+
       try {
-        const user = await strapi.fetchUser();
-        this.user = user;
-        this.isAuthenticated = !!user;
-        return user;
+        const { data: user } = await useFetch("/api/users/me", {
+          baseURL: useRuntimeConfig().public.strapiUrl,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (user.value) {
+          this.user = user.value;
+          this.isAuthenticated = true;
+          return user.value;
+        }
+
+        return null;
       } catch {
         this.user = null;
         this.isAuthenticated = false;
+        return null;
       }
     },
   },
