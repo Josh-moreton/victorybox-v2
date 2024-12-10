@@ -1,163 +1,154 @@
 <template>
   <v-container
     fluid
-    class="pa-8 font-parkinsans font-weight-black"
+    class="py-16 px-16"
     :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']"
   >
-    <v-container
-      fluid
-      class="py-16 px-16"
-      :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']"
-      style="max-width: 1200px"
-    >
-      <v-row>
-        <v-col cols="12">
-          <h2
-            class="text-h4 mb-6 text-center text-teal font-parkinsans"
-            :class="
-              $vuetify.theme.current.dark ? 'text-primary' : 'text-primary'
-            "
-          >
-            {{ title }}
-          </h2>
-        </v-col>
-      </v-row>
-
-      <v-sheet rounded="lg" elevation="3">
-        <v-tabs
-          v-model="tab"
-          :items="tabs"
-          align-tabs="center"
-          color="primary"
-          height="60"
+    <v-row>
+      <v-col cols="12">
+        <h2
+          class="text-h4 mb-6 text-center text-teal font-parkinsans"
+          :class="$vuetify.theme.current.dark ? 'text-primary' : 'text-primary'"
         >
-          <template v-slot:tab="{ item }">
-            <v-tab
-              :prepend-icon="item.icon"
-              :text="item.text"
-              :value="item.value"
-              class="text-none"
-            ></v-tab>
-          </template>
-        </v-tabs>
+          {{ title }}
+        </h2>
+      </v-col>
+    </v-row>
 
-        <v-window v-model="tab">
-          <v-window-item value="all">
-            <v-row class="pa-12">
-              <v-col
-                v-for="product in products"
-                :key="product.id"
-                cols="12"
-                sm="6"
-                md="4"
-                lg="4"
+    <v-sheet rounded="lg" elevation="3">
+      <v-tabs
+        v-model="tab"
+        :items="tabs"
+        align-tabs="center"
+        color="primary"
+        height="60"
+      >
+        <template v-slot:tab="{ item }">
+          <v-tab
+            :prepend-icon="item.icon"
+            :text="item.text"
+            :value="item.value"
+            class="text-none"
+          ></v-tab>
+        </template>
+      </v-tabs>
+
+      <v-window v-model="tab">
+        <v-window-item value="all">
+          <v-row class="pa-12">
+            <v-col
+              v-for="product in products"
+              :key="product.id"
+              cols="12"
+              sm="6"
+              md="4"
+              lg="4"
+            >
+              <NuxtLink
+                :to="`/competitions/${product.documentId}`"
+                class="text-decoration-none"
               >
-                <NuxtLink
-                  :to="`/competitions/${product.documentId}`"
-                  class="text-decoration-none"
+                <v-card
+                  class="mx-auto d-flex flex-column font-parkinsans"
+                  height="100%"
+                  max-width="300px"
+                  hover
+                  rounded="l"
+                  :color="
+                    $vuetify.theme.current.dark ? 'grey-darken-3' : 'white'
+                  "
                 >
-                  <v-card
-                    class="mx-auto d-flex flex-column font-parkinsans"
-                    height="100%"
-                    max-width="300px"
-                    hover
-                    rounded="l"
-                    :color="
-                      $vuetify.theme.current.dark ? 'grey-darken-3' : 'white'
-                    "
-                  >
-                    <div class="image-container">
-                      <v-img
-                        :src="product.image"
-                        :alt="product.title"
-                        class="product-image"
-                        width="100%"
-                        height="250"
-                        cover
-                      ></v-img>
-                    </div>
+                  <div class="image-container">
+                    <v-img
+                      :src="product.image"
+                      :alt="product.title"
+                      class="product-image"
+                      width="100%"
+                      height="250"
+                      cover
+                    ></v-img>
+                  </div>
 
-                    <v-card-item>
-                      <div class="d-flex flex-column align-center">
-                        <v-card-title>
-                          <NuxtLink
-                            :to="`/competitions/${product.documentId}`"
-                            class="text-decoration-none font-parkinsans"
+                  <v-card-item>
+                    <div class="d-flex flex-column align-center">
+                      <v-card-title>
+                        <NuxtLink
+                          :to="`/competitions/${product.documentId}`"
+                          class="text-decoration-none font-parkinsans"
+                        >
+                          <span
+                            class="text-center text-h5 font-weight-bold text-wrap font-parkinsans"
                           >
-                            <span
-                              class="text-center text-h5 font-weight-bold text-wrap font-parkinsans"
-                            >
-                              {{ product.title }}
-                            </span>
-                          </NuxtLink>
-                        </v-card-title>
-                        <v-chip color="primary" class="mt-2 font-parkinsans">
-                          Draw {{ product.closingDate || "TBA" }}
-                        </v-chip>
-                      </div>
-                    </v-card-item>
+                            {{ product.title }}
+                          </span>
+                        </NuxtLink>
+                      </v-card-title>
+                      <v-chip color="primary" class="mt-2 font-parkinsans">
+                        Draw {{ product.closingDate || "TBA" }}
+                      </v-chip>
+                    </div>
+                  </v-card-item>
 
-                    <!-- Centered Price -->
-                    <div class="text-center my-4">
-                      <span class="text-h4 font-weight-black"
-                        >£{{ product.price }}</span
-                      >
+                  <!-- Centered Price -->
+                  <div class="text-center my-4">
+                    <span class="text-h4 font-weight-black"
+                      >£{{ product.price }}</span
+                    >
+                  </div>
+
+                  <v-card-actions class="mt-auto flex-column">
+                    <div class="text-caption text-grey text-left w-100">
+                      {{ Math.ceil(product.soldPercentage) }}% Sold
                     </div>
 
-                    <v-card-actions class="mt-auto flex-column">
-                      <div class="text-caption text-grey text-left w-100">
-                        {{ Math.ceil(product.soldPercentage) }}% Sold
-                      </div>
+                    <v-progress-linear
+                      :model-value="product.soldPercentage"
+                      :color="
+                        product.soldPercentage > 75
+                          ? 'deep-orange'
+                          : product.soldPercentage > 50
+                          ? 'lime'
+                          : product.soldPercentage > 25
+                          ? 'light-green-darken-4'
+                          : 'light-blue'
+                      "
+                      height="10"
+                      class="w-100 mb-4"
+                      striped
+                      rounded
+                    >
+                    </v-progress-linear>
 
-                      <v-progress-linear
-                        :model-value="product.soldPercentage"
-                        :color="
-                          product.soldPercentage > 75
-                            ? 'deep-orange'
-                            : product.soldPercentage > 50
-                            ? 'lime'
-                            : product.soldPercentage > 25
-                            ? 'light-green-darken-4'
-                            : 'light-blue'
-                        "
-                        height="10"
-                        class="w-100 mb-4"
-                        striped
-                        rounded
-                      >
-                      </v-progress-linear>
+                    <v-btn
+                      v-bind="useCompetitionButtonStyle()"
+                      block
+                      :to="`/competitions/${product.documentId}`"
+                      prepend-icon="mdi-ticket"
+                    >
+                      <template v-slot:prepend>
+                        <v-icon color="white"></v-icon>
+                      </template>
+                      <span class="font-weight-bold">Enter now!</span>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </NuxtLink>
+            </v-col>
+          </v-row>
+        </v-window-item>
 
-                      <v-btn
-                        v-bind="useCompetitionButtonStyle()"
-                        block
-                        :to="`/competitions/${product.documentId}`"
-                        prepend-icon="mdi-ticket"
-                      >
-                        <template v-slot:prepend>
-                          <v-icon color="white"></v-icon>
-                        </template>
-                        <span class="font-weight-bold">Enter now!</span>
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </NuxtLink>
-              </v-col>
-            </v-row>
-          </v-window-item>
-
-          <!-- Add other tab content as needed -->
-          <v-window-item value="featured">
-            <!-- Featured competitions -->
-          </v-window-item>
-          <v-window-item value="ending-soon">
-            <!-- Ending soon competitions -->
-          </v-window-item>
-          <v-window-item value="new">
-            <!-- New competitions -->
-          </v-window-item>
-        </v-window>
-      </v-sheet>
-    </v-container>
+        <!-- Add other tab content as needed -->
+        <v-window-item value="featured">
+          <!-- Featured competitions -->
+        </v-window-item>
+        <v-window-item value="ending-soon">
+          <!-- Ending soon competitions -->
+        </v-window-item>
+        <v-window-item value="new">
+          <!-- New competitions -->
+        </v-window-item>
+      </v-window>
+    </v-sheet>
   </v-container>
 </template>
 
