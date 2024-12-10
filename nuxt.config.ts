@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   css: ["~/assets/scss/style.scss", "vuetify/lib/styles/main.sass"],
   compatibilityDate: "2024-04-03",
   modules: [
+    "@nuxt/ui",
     "vuetify-nuxt-module",
     "nuxt-swiper",
     "@nuxt/image",
@@ -12,7 +13,6 @@ export default defineNuxtConfig({
     "nuxt-aos",
     "floating-vue/nuxt",
     "@nuxtjs/strapi",
-    "@nuxt/ui",
     "@nuxtjs/snipcart",
   ],
   vuetify: {

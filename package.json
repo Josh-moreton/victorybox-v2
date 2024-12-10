@@ -12,7 +12,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@nuxt/image": "^1.7.0",
-    "@nuxt/ui": "^2.19.2",
+    "@nuxt/ui": "^2.20.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/snipcart": "^3.0.0",
     "@nuxtjs/strapi": "^2.0.0",
