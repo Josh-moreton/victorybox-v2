@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   css: ["~/assets/scss/style.scss", "vuetify/lib/styles/main.sass"],
   compatibilityDate: "2024-04-03",
   modules: [
+    "vuetify-nuxt-module",
     "nuxt-swiper",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
@@ -12,9 +13,16 @@ export default defineNuxtConfig({
     "floating-vue/nuxt",
     "@nuxtjs/strapi",
     "@nuxt/ui",
-    "vuetify-nuxt-module",
     "@nuxtjs/snipcart",
   ],
+  vuetify: {
+    vuetifyOptions: "./vuetify.config.ts",
+    moduleOptions: {
+      /* module specific options */
+      styles: true,
+      autoImport: true,
+    },
+  },
   swiper: {
     prefix: "Swiper",
     styleLang: "css",
@@ -134,8 +142,5 @@ export default defineNuxtConfig({
   ssr: true,
   experimental: {
     payloadExtraction: false,
-  },
-  vuetify: {
-    vuetifyOptions: "./vuetify.config.ts",
   },
 });
