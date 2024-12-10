@@ -40,10 +40,10 @@ async function handleSubmit() {
     loading.value = true;
     try {
       await authStore.login(email.value, password.value);
-      // Redirect after successful login
-      navigateTo("/");
+      // Redirect to account page after successful login
+      navigateTo("/account");
     } catch (error) {
-      // Handle error
+      // Show error message
     } finally {
       loading.value = false;
     }

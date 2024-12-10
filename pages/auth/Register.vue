@@ -44,10 +44,11 @@ async function handleSubmit() {
   if (valid) {
     loading.value = true;
     try {
-      await authStore.register(email.value, password.value);
-      navigateTo("/auth/login");
+      await authStore.login(email.value, password.value);
+      // Redirect to account page after successful login
+      navigateTo("/account");
     } catch (error) {
-      // Handle error
+      // Show error message
     } finally {
       loading.value = false;
     }

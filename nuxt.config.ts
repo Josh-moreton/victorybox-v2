@@ -10,6 +10,9 @@ export default defineNuxtConfig({
     "@nuxtjs/strapi",
     "@nuxtjs/snipcart",
   ],
+  imports: {
+    dirs: ["stores"],
+  },
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
     moduleOptions: {
