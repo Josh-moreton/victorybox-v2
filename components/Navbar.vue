@@ -44,6 +44,19 @@ onUnmounted(() => {
 });
 
 const drawer = ref(false);
+
+const cartCount = ref(0);
+
+// Add watcher for Snipcart events
+onMounted(() => {
+  if (process.client) {
+    document.addEventListener('snipcart.ready', () => {
+      window.Snipcart.events.on('cart:updated', (cart) => {
+        cartCount.value = cart.items.count;
+      });
+    });
+  }
+});
 </script>
 
 <template>
@@ -92,12 +105,11 @@ const drawer = ref(false);
       </v-btn>
 
       <!-- Shopping Cart -->
-      <v-btn icon variant="text" class="snipcart-checkout ms-2 me-2" :color="theme.global.current.value.dark ? 'on-surface' : 'on-background'
-        " @click.prevent="toggleCart">
+      <v-btn icon variant="text" class="snipcart-checkout ms-2 me-2"
+        :color="theme.global.current.value.dark ? 'on-surface' : 'on-background'" @click.prevent="toggleCart">
         <PhShoppingCart size="24" />
-        <v-badge :content="0" color="teal" floating>
-          <span class="snipcart-items-count hidden">0</span>
-          <span class="snipcart-total-price hidden">£0.00</span>
+        <v-badge :content="cartCount" color="teal" floating v-show="cartCount > 0">
+          <span class="snipcart-items-count"></span>
         </v-badge>
       </v-btn>
     </template>
