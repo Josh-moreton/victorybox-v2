@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  css: ["~/assets/scss/style.scss"],
   compatibilityDate: "2024-04-03",
   modules: [
     "vuetify-nuxt-module",
@@ -9,10 +8,6 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@nuxtjs/strapi",
     "@nuxtjs/snipcart",
-    // "@vueuse/nuxt",
-    // "@oku-ui/motion-nuxt",
-    // "nuxt-aos",
-    // "floating-vue/nuxt",
   ],
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
