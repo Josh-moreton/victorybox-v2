@@ -1,11 +1,11 @@
 <template>
   <v-container
     fluid
-    class="py-16 px-16"
+    class="pa-0"
     :class="[$vuetify.theme.current.dark ? 'bg-surface' : 'bg-background']"
   >
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" class="px-2 px-sm-4 px-md-6">
         <h2
           class="text-h4 mb-6 text-center text-teal font-parkinsans"
           :class="$vuetify.theme.current.dark ? 'text-primary' : 'text-primary'"
