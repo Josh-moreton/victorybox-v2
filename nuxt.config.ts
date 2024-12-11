@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   modules: [
     "vuetify-nuxt-module",
-    "nuxt-swiper",
+    //  "nuxt-swiper",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
     "@nuxtjs/strapi",
@@ -20,11 +20,11 @@ export default defineNuxtConfig({
       autoImport: true,
     },
   },
-  swiper: {
+  /*   swiper: {
     prefix: "Swiper",
     styleLang: "css",
     modules: ["autoplay", "navigation", "pagination", "thumbs"],
-  },
+  }, */
   strapi: {
     url: process.env.STRAPI_URL || "https://strapi.medstack.duckdns.org",
     prefix: "/api",
