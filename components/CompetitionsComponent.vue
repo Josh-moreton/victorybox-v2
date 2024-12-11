@@ -1,3 +1,4 @@
+<!-- components/CompetitionsComponent.vue -->
 <template>
   <v-container
     fluid
@@ -29,7 +30,7 @@
             :text="item.text"
             :value="item.value"
             class="text-none"
-          ></v-tab>
+          />
         </template>
       </v-tabs>
 
@@ -44,150 +45,26 @@
               md="4"
               lg="4"
             >
-              <NuxtLink
-                :to="`/competitions/${product.documentId}`"
-                class="text-decoration-none"
-              >
-                <v-card
-                  class="mx-auto d-flex flex-column font-parkinsans"
-                  height="100%"
-                  max-width="300px"
-                  hover
-                  rounded="l"
-                  :color="
-                    $vuetify.theme.current.dark ? 'grey-darken-3' : 'white'
-                  "
-                >
-                  <div class="image-container">
-                    <v-img
-                      :src="product.image"
-                      :alt="product.title"
-                      class="product-image"
-                      width="100%"
-                      height="250"
-                      cover
-                    ></v-img>
-                  </div>
-
-                  <v-card-item>
-                    <div class="d-flex flex-column align-center">
-                      <v-card-title>
-                        <NuxtLink
-                          :to="`/competitions/${product.documentId}`"
-                          class="text-decoration-none font-parkinsans"
-                        >
-                          <span
-                            class="text-center text-h5 font-weight-bold text-wrap font-parkinsans"
-                          >
-                            {{ product.title }}
-                          </span>
-                        </NuxtLink>
-                      </v-card-title>
-                      <v-chip color="primary" class="mt-2 font-parkinsans">
-                        Draw {{ product.closingDate || "TBA" }}
-                      </v-chip>
-                    </div>
-                  </v-card-item>
-
-                  <!-- Centered Price -->
-                  <div class="text-center my-4">
-                    <span class="text-h4 font-weight-black"
-                      >£{{ product.price }}</span
-                    >
-                  </div>
-
-                  <v-card-actions class="mt-auto flex-column">
-                    <div class="text-caption text-grey text-left w-100">
-                      {{ Math.ceil(product.soldPercentage) }}% Sold
-                    </div>
-
-                    <v-progress-linear
-                      :model-value="product.soldPercentage"
-                      :color="
-                        product.soldPercentage > 75
-                          ? 'deep-orange'
-                          : product.soldPercentage > 50
-                          ? 'lime'
-                          : product.soldPercentage > 25
-                          ? 'light-green-darken-4'
-                          : 'light-blue'
-                      "
-                      height="10"
-                      class="w-100 mb-4"
-                      striped
-                      rounded
-                    >
-                    </v-progress-linear>
-
-                    <v-btn
-                      v-bind="useCompetitionButtonStyle()"
-                      block
-                      :to="`/competitions/${product.documentId}`"
-                      prepend-icon="mdi-ticket"
-                    >
-                      <template v-slot:prepend>
-                        <v-icon color="white"></v-icon>
-                      </template>
-                      <span class="font-weight-bold">Enter now!</span>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </NuxtLink>
+              <ProductCard :product="product" />
             </v-col>
           </v-row>
         </v-window-item>
-
         <!-- Add other tab content as needed -->
-        <v-window-item value="featured">
-          <!-- Featured competitions -->
-        </v-window-item>
-        <v-window-item value="ending-soon">
-          <!-- Ending soon competitions -->
-        </v-window-item>
-        <v-window-item value="new">
-          <!-- New competitions -->
-        </v-window-item>
       </v-window>
     </v-sheet>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRuntimeConfig } from "#imports";
+import { onMounted } from "vue";
 import { useTheme } from "vuetify";
-import { NuxtLink } from "#components";
+import { useCompetitionTabs } from "~/composables/useCompetitionTabs";
+import { useProducts } from "~/composables/useProducts";
 
-const config = useRuntimeConfig();
 const theme = useTheme();
-const products = ref([]);
-const tab = ref("all");
+const { tab, tabs } = useCompetitionTabs();
+const { products, loading, error, fetchProducts } = useProducts();
 
-// Define tab items
-const tabs = [
-  {
-    icon: "mdi-view-grid",
-    text: "All Competitions",
-    value: "all",
-  },
-  {
-    icon: "mdi-trophy",
-    text: "Featured",
-    value: "featured",
-  },
-  {
-    icon: "mdi-clock-outline",
-    text: "Ending Soon",
-    value: "ending-soon",
-  },
-  {
-    icon: "mdi-new-box",
-    text: "New",
-    value: "new",
-  },
-];
-
-// Make these props if they need to be configurable by parent
 defineProps({
   title: {
     type: String,
@@ -195,77 +72,14 @@ defineProps({
   },
 });
 
-// Emit events that the parent might need to handle
 const emit = defineEmits(["product-loaded", "error"]);
 
-// Function to generate proper product URLs for Snipcart validation
-const productUrl = (id: string) => {
-  const baseUrl =
-    config.public.siteUrl?.replace(/\/$/, "") || "https://victoryboxes.org";
-  return `${baseUrl}/competitions/${id}`;
-};
-
 onMounted(async () => {
-  try {
-    const response = await fetch(
-      `${config.public.strapiUrl}/api/products?populate=*`
-    );
-    const data = await response.json();
-
-    products.value = data.data.map((product) => ({
-      id: product.id,
-      documentId: product.documentId,
-      title: product.Title,
-      Description: product.Description,
-      price: parseFloat(product.Price).toFixed(2),
-      image: product.Image?.formats?.medium?.url
-        ? `${config.public.strapiUrl}${product.Image.formats.medium.url}`
-        : product.Image?.url
-        ? `${config.public.strapiUrl}${product.Image.url}`
-        : "/images/placeholder.jpg",
-      soldPercentage: product.soldPercentage?.toString() || "0",
-      rating: product.rating?.toString() || "0",
-      days: product.days?.toString() || "0",
-      remaining: product.remaining?.toString() || "0",
-      closingDate: product.closingDate || "TBA",
-    }));
-
+  await fetchProducts();
+  if (error.value) {
+    emit("error", error.value);
+  } else {
     emit("product-loaded", products.value);
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    emit("error", error);
   }
 });
 </script>
-
-<style scoped>
-.image-container {
-  width: 100%;
-  height: 250px;
-  overflow: hidden;
-}
-
-.product-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.v-card {
-  transition: transform 0.2s;
-}
-
-.v-card:hover {
-  transform: translateY(-4px);
-}
-
-.text-decoration-none {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Add global font class */
-:deep(.font-parkinsans) {
-  font-family: "Parkinsans", sans-serif !important;
-}
-</style>
