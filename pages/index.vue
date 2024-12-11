@@ -10,7 +10,7 @@ definePageMeta({
 </script>
 <template>
   <Header />
-  <Competitioncarousel />
+  <CompetitionsCarousel />
   <Charities />
   <CompetitionsComponent />
   <Footer />

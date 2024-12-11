@@ -1,6 +1,21 @@
 // composables/useProducts.ts
+interface Product {
+  id: number;
+  documentId: string;
+  title: string;
+  Description: string;
+  price: string;
+  image: string;
+  soldPercentage: string;
+  rating: string;
+  days: string;
+  remaining: string;
+  closingDate: string;
+  carousel?: boolean; // Add carousel property
+}
+
 export const useProducts = () => {
-  const products = ref([]);
+  const products = ref<Product[]>([]);
   const config = useRuntimeConfig();
   const loading = ref(false);
   const error = ref(null);
@@ -28,6 +43,7 @@ export const useProducts = () => {
         days: product.days?.toString() || "0",
         remaining: product.remaining?.toString() || "0",
         closingDate: product.closingDate || "TBA",
+        carousel: product.carousel || false, // Map carousel property
       }));
     } catch (err) {
       error.value = err;

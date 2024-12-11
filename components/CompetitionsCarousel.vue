@@ -1,72 +1,62 @@
 <template>
   <div class="carousel-wrapper">
-    <template v-if="products.length > 0">
+    <template v-if="!loading && !error">
       <v-carousel
+        v-if="carouselProducts.length"
         cycle
         interval="5000"
         height="500"
         hide-delimiter-background
         :show-arrows="false"
-        class="carousel-override">
+        class="carousel-override"
+      >
         <v-carousel-item
-          v-for="product in products"
+          v-for="product in carouselProducts"
           :key="product.id"
-          class="carousel-item-override">
+          class="carousel-item-override"
+        >
           <NuxtLink
-            :to="`/Competitions/${product.documentId}`"
-            class="carousel-link">
+            :to="`/competitions/${product.documentId}`"
+            class="carousel-link"
+          >
             <div class="carousel-content">
               <h2 class="text-h3 font-weight-bold mb-4">{{ product.title }}</h2>
-              <p class="text-h6 description">{{ product.description }}</p>
+              <p class="text-h6 description">{{ product.Description }}</p>
             </div>
           </NuxtLink>
           <div class="image-container">
             <img
               :src="product.image"
-              alt="Product Image"
-              class="carousel-image" />
+              :alt="product.title"
+              class="carousel-image"
+            />
           </div>
         </v-carousel-item>
       </v-carousel>
     </template>
 
-    <div v-else class="loading-placeholder" style="height: 600px">
-      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    <div v-else-if="loading" class="loading-placeholder" style="height: 600px">
+      <v-progress-circular indeterminate color="primary" />
+    </div>
+
+    <div v-else-if="error" class="error-message">
+      <v-alert type="error">Failed to load featured competitions</v-alert>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { useRuntimeConfig } from "#imports";
+import { computed, onMounted } from "vue";
+import { useProducts } from "~/composables/useProducts";
 
-const config = useRuntimeConfig();
-const products = ref([]);
+const { products, loading, error, fetchProducts } = useProducts();
+
+const carouselProducts = computed(() =>
+  products.value.filter((product) => product.carousel === true)
+);
 
 onMounted(async () => {
-  try {
-    const response = await fetch(
-      `${config.public.strapiUrl}/api/products?populate=*`
-    );
-    const data = await response.json();
-
-    // Filter for carousel:true before mapping
-    products.value = data.data
-      .filter((product) => product.carousel === true)
-      .map((product) => ({
-        id: product.id,
-        documentId: product.documentId,
-        title: product.Title,
-        description: product.Description,
-        image: product.Image?.formats?.large?.url
-          ? `${config.public.strapiUrl}${product.Image.formats.large.url}`
-          : product.Image?.url
-          ? `${config.public.strapiUrl}${product.Image.url}`
-          : "/images/placeholder.jpg",
-      }));
-  } catch (error) {
-    console.error("Error fetching products:", error);
-  }
+  await fetchProducts();
 });
 </script>
 
