@@ -1,4 +1,3 @@
-// composables/useProducts.ts
 interface Product {
   id: number;
   documentId: string;
@@ -11,7 +10,9 @@ interface Product {
   days: string;
   remaining: string;
   closingDate: string;
-  carousel?: boolean; // Add carousel property
+  carousel?: boolean;
+  featured?: boolean; // Add featured property
+  category?: string; // Add category property
 }
 
 export const useProducts = () => {
@@ -43,7 +44,9 @@ export const useProducts = () => {
         days: product.days?.toString() || "0",
         remaining: product.remaining?.toString() || "0",
         closingDate: product.closingDate || "TBA",
-        carousel: product.carousel || false, // Map carousel property
+        carousel: product.carousel || false,
+        featured: product.featured || false, // Map featured property
+        category: product.category || "", // Map category property
       }));
     } catch (err) {
       error.value = err;

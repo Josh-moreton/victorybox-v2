@@ -15,13 +15,13 @@ export const useCompetitionTabs = () => {
     },
     {
       icon: "mdi-clock-outline",
-      text: "Ending Soon",
-      value: "ending-soon",
+      text: "Cars",
+      value: "cars",
     },
     {
       icon: "mdi-new-box",
-      text: "New",
-      value: "new",
+      text: "Tech",
+      value: "tech",
     },
   ];
 
