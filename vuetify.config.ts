@@ -10,10 +10,10 @@ export default defineVuetifyConfiguration({
         colors: {
           background: "#F5F5F5",
           surface: "#FFFFFF",
-          primary: "#6200EE",
-          "primary-darken-1": "#3700B3",
-          secondary: "#03DAC6",
-          "secondary-darken-1": "#018786",
+          primary: "#009688", // Teal
+          "primary-darken-1": "#00796B", // Darker Teal
+          secondary: "#6200EE", // Previous primary as secondary
+          "secondary-darken-1": "#3700B3",
           error: "#B00020",
           info: "#2196F3",
           success: "#4CAF50",
@@ -25,10 +25,10 @@ export default defineVuetifyConfiguration({
         colors: {
           background: "#121212",
           surface: "#212121",
-          primary: "#BB86FC",
-          "primary-darken-1": "#3700B3",
-          secondary: "#03DAC6",
-          "secondary-darken-1": "#018786",
+          primary: "#80CBC4", // Lighter Teal for dark theme
+          "primary-darken-1": "#00796B",
+          secondary: "#BB86FC", // Previous dark theme primary
+          "secondary-darken-1": "#3700B3",
           error: "#CF6679",
           info: "#2196F3",
           success: "#4CAF50",
@@ -40,21 +40,8 @@ export default defineVuetifyConfiguration({
   defaults: {
     global: {
       font: {
-        family: "Parkinsans, Roboto, sans-serif", // Add Roboto as fallback
+        family: "Parkinsans, Roboto, sans-serif",
       },
-    },
-    VCardSubtitle: {
-      // Add specific component overrides
-      class: "font-roboto",
-    },
-    VCardText: {
-      class: "font-roboto",
-    },
-    VCard: {
-      class: "font-parkinsans",
-    },
-    VBtn: {
-      class: "font-roboto",
     },
   },
 });
