@@ -6,7 +6,7 @@
         <v-card>
           <v-card-text>
             <p>Welcome, {{ user?.email }}</p>
-            <v-btn color="primary" @click="authStore.logout"> Logout </v-btn>
+            <v-btn color="primary" @click="logout"> Logout </v-btn>
           </v-card-text>
         </v-card>
       </v-col>
@@ -15,13 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "~/stores/auth";
-
 definePageMeta({
   middleware: ["auth"],
   layout: "inner-pages",
 });
 
-const authStore = useAuthStore();
-const user = computed(() => authStore.user);
+const { login, logout } = useStrapiAuth();
+const user = useStrapiUser();
 </script>

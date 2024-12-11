@@ -1,27 +1,19 @@
 <script setup lang="ts">
-import AuthLogin from "../authForms/AuthLogin.vue";
-import { ref, computed } from "vue";
-import { useAuthStore } from "~/stores/auth";
+import { ref } from "vue";
 import { useTheme } from "vuetify";
 
-// Use Vuetify's theme detection
-const theme = useTheme();
-const authStore = useAuthStore();
+// Strapi auth composable
+const { login } = useStrapiAuth();
+const router = useRouter();
 
 // Form refs
 const form = ref();
-const loading = ref(false);
 const email = ref("");
 const password = ref("");
-const showPassword = ref(false);
+const loading = ref(false);
+const error = ref("");
 const valid = ref(false);
-
-// Logo paths
-const logoLight = "/images/logos/black.png";
-const logoDark = "/images/logos/white.png";
-const currentLogo = computed(() =>
-  theme.global.current.value.dark ? logoDark : logoLight
-);
+const showPassword = ref(false);
 
 // Validation rules
 const emailRules = [
@@ -38,12 +30,16 @@ async function handleSubmit() {
   const { valid } = await form.value.validate();
   if (valid) {
     loading.value = true;
+    error.value = "";
+
     try {
-      await authStore.login(email.value, password.value);
-      // Redirect to account page after successful login
-      navigateTo("/account");
-    } catch (error) {
-      // Show error message
+      await login({
+        identifier: email.value,
+        password: password.value,
+      });
+      router.push("/account");
+    } catch (e: any) {
+      error.value = e?.response?.data?.error?.message || "Login failed";
     } finally {
       loading.value = false;
     }
@@ -57,6 +53,11 @@ async function handleSubmit() {
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card class="elevation-2 rounded-lg">
           <v-card-text class="pa-6">
+            <!-- Error Alert -->
+            <v-alert v-if="error" type="error" class="mb-4" closable>
+              {{ error }}
+            </v-alert>
+
             <!-- Logo -->
             <div class="text-center mb-6">
               <v-img

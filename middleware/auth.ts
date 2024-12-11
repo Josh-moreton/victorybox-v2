@@ -1,12 +1,8 @@
-export default defineNuxtRouteMiddleware(async (to) => {
-  const authStore = useAuthStore();
-  const user = await authStore.checkAuth();
+// middleware/auth.ts
+export default defineNuxtRouteMiddleware(() => {
+  const user = useStrapiUser();
 
-  if (!user && to.path !== "/auth/login" && to.path !== "/auth/register") {
-    return navigateTo("/auth/login");
-  }
-
-  if (user && (to.path === "/auth/login" || to.path === "/auth/register")) {
-    return navigateTo("/account");
+  if (!user.value) {
+    return navigateTo("/login");
   }
 });

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useAuthStore } from "~/stores/auth";
 import { useTheme } from "vuetify";
 
-const theme = useTheme();
-const authStore = useAuthStore();
+// Strapi auth composable
+const { register } = useStrapiAuth();
+const router = useRouter();
 
 // Form refs
 const form = ref();
@@ -15,8 +15,10 @@ const confirmPassword = ref("");
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const valid = ref(false);
+const error = ref("");
 
-// Logo paths
+// Logo and theme
+const theme = useTheme();
 const logoLight = "/images/logos/black.png";
 const logoDark = "/images/logos/white.png";
 const currentLogo = computed(() =>
@@ -43,23 +45,17 @@ async function handleSubmit() {
   const { valid } = await form.value.validate();
   if (valid) {
     loading.value = true;
+    error.value = "";
+
     try {
-      // You're currently calling login instead of register
-      // Change this to register first:
-      await authStore.register({
-        username: email.value, // Strapi requires username
+      await register({
+        username: email.value,
         email: email.value,
         password: password.value,
       });
-
-      // After successful registration, login
-      await authStore.login(email.value, password.value);
-
-      // Then redirect
-      navigateTo("/account");
-    } catch (error) {
-      console.error("Registration error:", error);
-      // Add error handling here
+      router.push("/account");
+    } catch (e: any) {
+      error.value = e?.response?.data?.error?.message || "Registration failed";
     } finally {
       loading.value = false;
     }
@@ -67,12 +63,19 @@ async function handleSubmit() {
 }
 </script>
 
+<!-- Keep your existing template code unchanged -->
+
 <template>
   <v-container fluid class="fill-height bg-surface">
     <v-row align="center" justify="center">
       <v-col cols="12" sm="8" md="6" lg="4">
         <v-card class="elevation-2 rounded-lg">
           <v-card-text class="pa-6">
+            <!-- Error Alert -->
+            <v-alert v-if="error" type="error" class="mb-4" closable>
+              {{ error }}
+            </v-alert>
+
             <!-- Logo -->
             <div class="text-center mb-6">
               <v-img
@@ -88,7 +91,7 @@ async function handleSubmit() {
               </p>
             </div>
 
-            <!-- Register Form -->
+            <!-- Registration Form -->
             <v-form ref="form" v-model="valid" @submit.prevent="handleSubmit">
               <v-text-field
                 v-model="email"
@@ -115,7 +118,7 @@ async function handleSubmit() {
                 v-model="confirmPassword"
                 :rules="confirmPasswordRules"
                 label="Confirm Password"
-                prepend-inner-icon="mdi-lock-check"
+                prepend-inner-icon="mdi-lock"
                 :type="showConfirmPassword ? 'text' : 'password'"
                 :append-inner-icon="
                   showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'
@@ -124,11 +127,6 @@ async function handleSubmit() {
                 variant="outlined"
                 required
               />
-
-              <!-- Add error alert -->
-              <v-alert v-if="authStore.error" type="error" class="mb-4">
-                {{ authStore.error }}
-              </v-alert>
 
               <v-btn
                 type="submit"
@@ -139,7 +137,7 @@ async function handleSubmit() {
                 :disabled="!valid"
                 class="mt-6"
               >
-                Create Account
+                Sign Up
               </v-btn>
             </v-form>
 
