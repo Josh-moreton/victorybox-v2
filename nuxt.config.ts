@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     "@nuxtjs/snipcart",
   ],
   imports: {
-    dirs: ["stores"],
+    dirs: ["stores", "composables"],
   },
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
@@ -55,7 +55,6 @@ export default defineNuxtConfig({
     currency: "GBP", // Add this
     domain: process.env.SITE_URL || "https://victoryboxes.org",
   },
-
   devtools: {
     enabled: true,
 
