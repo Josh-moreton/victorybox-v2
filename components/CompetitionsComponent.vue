@@ -119,22 +119,27 @@ const tabs = [
 
 // Computed properties for filtered products
 const featuredProducts = computed(() =>
-  products.value.filter((p) => p.featured)
+  products.value.filter((p) => p.featured === true)
 );
+
 const warhammerProducts = computed(() =>
-  products.value.filter((p) => p.category === "warhammer")
+  products.value.filter((p) => p.category?.toLowerCase() === "warhammer")
 );
+
 const legoProducts = computed(() =>
-  products.value.filter((p) => p.category === "lego")
+  products.value.filter((p) => p.category?.toLowerCase() === "lego")
 );
+
 const techProducts = computed(() =>
-  products.value.filter((p) => p.category === "tech")
+  products.value.filter((p) => p.category?.toLowerCase() === "tech")
 );
+
 const collectiblesProducts = computed(() =>
-  products.value.filter((p) => p.category === "collectibles")
+  products.value.filter((p) => p.category?.toLowerCase() === "collectibles")
 );
+
 const magicProducts = computed(() =>
-  products.value.filter((p) => p.category === "magic")
+  products.value.filter((p) => p.category?.toLowerCase() === "magic")
 );
 
 const tab = ref(tabs[0].value); // Default to first category

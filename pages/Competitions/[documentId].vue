@@ -20,21 +20,34 @@ const route = useRoute();
 const strapi = useStrapi();
 const tab = ref(1);
 
-// Add interface for product data
+// Update Product interface to match API structure
+interface Image {
+  id: number;
+  documentId: string;
+  url: string;
+  alternativeText: string | null;
+  formats: {
+    large: {
+      url: string;
+    };
+  };
+}
+
 interface Product {
   id: string;
   documentId: string;
   title: string;
   Description: string;
   price: string;
-  images: Array<{ url: string; alt: string }>;
+  Image: Image;
+  galleryImages: Image[];
   question: string;
-  answer: string;
+  answer: string[];
   soldPercentage: number;
   closingDate?: string;
 }
 
-// Update API response processing in [documentId].vue
+// Update API response processing
 const {
   data: product,
   pending,
@@ -43,8 +56,6 @@ const {
   `product-${route.params.documentId}`,
   async () => {
     try {
-      console.log("Fetching product with documentId:", route.params.documentId);
-
       const response = await strapi.findOne(
         "products",
         route.params.documentId,
@@ -53,41 +64,27 @@ const {
         }
       );
 
-      console.log("API response:", response);
+      if (!response?.data) return null;
 
-      if (!response?.data) {
-        console.log("No product found");
-        return null;
-      }
+      // Process main image
+      const mainImage = response.data.Image
+        ? {
+            url: `${config.public.strapiUrl}${response.data.Image.formats.large.url}`,
+            alt: response.data.Image.alternativeText || "Main product image",
+          }
+        : null;
 
-      // Process multiple images from the API
-      const images =
-        response.data.Images?.map((img) => ({
-          url: img.url
-            ? `${config.public.strapiUrl}${img.url}`
-            : "/images/placeholder.jpg",
-          alt: img.alternativeText || "Product image",
+      // Process gallery images
+      const galleryImages =
+        response.data.galleryImages?.map((img) => ({
+          url: `${config.public.strapiUrl}${img.formats.large.url}`,
+          alt: img.alternativeText || "Gallery image",
         })) || [];
 
-      // Add main image to images array if it exists
-      if (response.data.Image?.url) {
-        images.unshift({
-          url: `${config.public.strapiUrl}${response.data.Image.url}`,
-          alt: response.data.Image.alternativeText || "Main product image",
-        });
-      }
-
       return {
-        id: response.data.id,
-        documentId: response.data.documentId,
-        title: response.data.Title,
-        Description: response.data.Description,
-        price: parseFloat(response.data.Price).toFixed(2),
-        images: images,
-        question: response.data.question || "A question",
-        answer: response.data.answer || "Question responses",
-        soldPercentage: Math.ceil(Number(response.data.soldPercentage) || 0),
-        closingDate: response.data.closingDate || "TBA",
+        ...response.data,
+        image: mainImage,
+        galleryImages,
       };
     } catch (err) {
       console.error("Error fetching product:", err);
@@ -122,6 +119,15 @@ const toggleTab = (index: number) => {
   }
 };
 
+// Update computed for all images
+const allImages = computed(() => {
+  if (!product.value) return [];
+  return [
+    ...(product.value.image ? [product.value.image] : []),
+    ...product.value.galleryImages,
+  ];
+});
+
 // Add computed property for breadcrumb name
 const breadcrumbName = computed(() => {
   return product.value?.title || "Loading Product...";
@@ -152,33 +158,38 @@ const quantity = ref(1);
     <v-row class="equal-height-row">
       <!-- Left Column -->
       <v-col cols="12" md="6">
-        <v-carousel
-          v-if="product?.images?.length"
-          cycle
-          height="400"
-          hide-delimiter-background
-          show-arrows="hover"
-        >
-          <v-carousel-item
-            v-for="(image, i) in product.images"
-            :key="i"
-            :src="image.url"
-            :alt="image.alt"
-            cover
+        <v-card rounded="lg" elevation="2" class="overflow-hidden">
+          <v-carousel
+            v-if="allImages?.length"
+            cycle
+            height="400"
+            hide-delimiter-background
+            show-arrows="hover"
           >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="primary"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-          </v-carousel-item>
-        </v-carousel>
-
-        <!-- Fallback for no images -->
-        <v-img v-else src="/images/placeholder.jpg" height="400" cover></v-img>
+            <v-carousel-item
+              v-for="(image, i) in allImages"
+              :key="i"
+              :src="image.url"
+              :alt="image.alt"
+              cover
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="primary"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+            </v-carousel-item>
+          </v-carousel>
+          <v-img
+            v-else
+            src="/images/placeholder.jpg"
+            height="400"
+            cover
+          ></v-img>
+        </v-card>
       </v-col>
 
       <!-- Right Column -->

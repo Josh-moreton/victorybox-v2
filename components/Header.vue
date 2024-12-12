@@ -101,12 +101,13 @@ onMounted(() => {
 
     <!-- Theme and User Controls -->
     <template #append>
+      <!-- Theme Switcher -->
       <v-btn
         icon
         variant="text"
         @click="toggleTheme"
         class="ms-2"
-        :text-color="theme.global.current.value.dark ? 'white' : 'black'"
+        :color="$vuetify.theme.current.dark ? 'on-surface' : 'on-background'"
       >
         <v-icon
           :icon="
@@ -114,17 +115,18 @@ onMounted(() => {
               ? 'mdi-white-balance-sunny'
               : 'mdi-moon-waning-crescent'
           "
-        ></v-icon>
+        />
       </v-btn>
 
+      <!-- User Account -->
       <v-btn
         icon
         variant="text"
         to="/auth/login"
         class="ms-2"
-        :text-color="theme.global.current.value.dark ? 'white' : 'black'"
+        :color="$vuetify.theme.current.dark ? 'on-surface' : 'on-background'"
       >
-        <v-icon icon="mdi-account"></v-icon>
+        <v-icon icon="mdi-account" />
       </v-btn>
 
       <!-- Shopping Cart -->
