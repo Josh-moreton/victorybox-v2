@@ -11,12 +11,12 @@
     <v-row justify="center">
       <v-col cols="12" class="text-center">
         <v-card-title
-          class="text-h2 font-parkinsans text-center d-flex align-center justify-center"
+          class="text-h4 font-parkinsans text-center d-flex align-center justify-center my-6"
           :class="[
             $vuetify.theme.current.dark ? 'text-primary' : 'text-primary',
           ]"
         >
-          <v-icon start color="primary" size="large" class="mr-2">
+          <v-icon start color="primary" size="small" class="mr-3">
             mdi-trophy
           </v-icon>
           {{ title }}
