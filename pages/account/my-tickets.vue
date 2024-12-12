@@ -4,7 +4,7 @@ import { ref, onMounted, computed } from "vue";
 
 definePageMeta({
   middleware: ["auth"],
-  layout: "inner-pages",
+  layout: "dashboard",
 });
 
 interface Ticket {

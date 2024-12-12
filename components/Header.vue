@@ -94,9 +94,6 @@ onMounted(() => {
     <template v-if="$vuetify.display.mdAndUp">
       <v-btn to="/" class="me-2 text-none" slim>Home</v-btn>
       <v-btn to="/Competitions" class="me-2 text-none" slim>Competitions</v-btn>
-      <v-btn to="/account/my-tickets" class="me-2 text-none" slim
-        >My Tickets</v-btn
-      >
       <v-btn to="/About" class="me-2 text-none" slim>About</v-btn>
     </template>
 

@@ -37,7 +37,7 @@ async function handleSubmit() {
         identifier: email.value,
         password: password.value,
       });
-      router.push("/account");
+      router.push("/account/dashboard"); // Updated redirect path
     } catch (e: any) {
       error.value = e?.response?.data?.error?.message || "Login failed";
     } finally {

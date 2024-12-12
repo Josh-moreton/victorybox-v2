@@ -1,29 +1,28 @@
 <template>
   <v-footer
     class="bg-teal-lighten-1 text-center d-flex flex-column"
-    color="surface">
+    color="surface"
+  >
     <!-- Social Icons -->
-    <div class="social-icons">
+    <div class="social-icons pt-4 pb-2">
       <v-btn
         v-for="icon in icons"
         :key="icon"
         :icon="icon"
         class="mx-4"
-        variant="text"></v-btn>
+        variant="text"
+      ></v-btn>
     </div>
 
     <!-- Copyright Text -->
-    <div class="pt-0 font-parkinsans">© All rights reserved</div>
+    <div class="font-parkinsans">© All rights reserved</div>
 
-    <v-divider></v-divider>
+    <v-divider class="my-2"></v-divider>
 
     <!-- Footer Credits -->
-    <div class="font-parkinsans">
-      {{ new Date().getFullYear() }} —
-      <strong>
-        Victorybox - Platform by
-        <a href="https://www.rwxt.org" target="_blank">rwxt.org</a>
-      </strong>
+    <div class="py-2 pb-6 font-parkinsans">
+      {{ new Date().getFullYear() }} — Victorybox - Platform by
+      <a href="https://www.rwxt.org">rwxt.org</a>
     </div>
   </v-footer>
 </template>
