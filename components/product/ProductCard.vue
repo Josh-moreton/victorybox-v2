@@ -4,14 +4,7 @@
     :to="`/competitions/${product.documentId}`"
     class="text-decoration-none"
   >
-    <v-card
-      class="mx-auto d-flex flex-column font-parkinsans"
-      height="100%"
-      max-width="300px"
-      hover
-      rounded="l"
-      :color="$vuetify.theme.current.dark ? 'grey-darken-3' : 'white'"
-    >
+    <v-card>
       <div class="image-container">
         <v-img
           :src="product.image"

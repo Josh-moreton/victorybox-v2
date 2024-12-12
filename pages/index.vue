@@ -13,6 +13,7 @@ definePageMeta({
   <CompetitionsCarousel />
   <Charities />
   <CompetitionsComponent />
+  <Newsletter />
   <Footer />
 </template>
 
