@@ -92,9 +92,9 @@ onMounted(() => {
 
     <!-- Desktop Navigation -->
     <template v-if="$vuetify.display.mdAndUp">
-      <v-btn to="/" class="me-2 text-none" slim>Home</v-btn>
-      <v-btn to="/Competitions" class="me-2 text-none" slim>Competitions</v-btn>
-      <v-btn to="/About" class="me-2 text-none" slim>About</v-btn>
+      <v-btn variant="nav" to="/" class="me-2">Home</v-btn>
+      <v-btn variant="nav" to="/Competitions" class="me-2">Competitions</v-btn>
+      <v-btn variant="nav" to="/About" class="me-2">About</v-btn>
     </template>
 
     <v-spacer />
