@@ -3,7 +3,7 @@ interface Product {
   documentId: string;
   title: string;
   Description: string;
-  price: string;
+  price: number; // Keep as number
   image: string;
   soldPercentage: string;
   rating: string;
@@ -33,7 +33,7 @@ export const useProducts = () => {
         documentId: product.documentId,
         title: product.Title,
         Description: product.Description,
-        price: parseFloat(product.Price).toFixed(2),
+        price: product.Price, // Map price property
         image: product.Image?.formats?.medium?.url
           ? `${config.public.strapiUrl}${product.Image.formats.medium.url}`
           : product.Image?.url

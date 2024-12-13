@@ -38,7 +38,7 @@ interface Product {
   documentId: string;
   title: string;
   Description: string;
-  price: string;
+  Price: number; // Changed from price to Price
   Image: Image;
   galleryImages: Image[];
   question: string;
@@ -63,6 +63,7 @@ const {
           populate: "*",
         }
       );
+      console.log("Raw API response:", response); // Add this debug line
 
       if (!response?.data) return null;
 
@@ -206,7 +207,7 @@ const quantity = ref(1);
             Draw {{ product?.closingDate || "TBA" }}
           </v-chip>
           <div class="text-h4 font-weight-bold primary--text mb-6 mt-6">
-            £{{ product?.price }}
+            £ {{ product.Price }}
           </div>
 
           <!-- Add percentage sold section -->
@@ -301,7 +302,7 @@ const quantity = ref(1);
               :disabled="!selection"
               :data-item-id="product.documentId"
               :data-item-name="product.title"
-              :data-item-price="product.price"
+              :data-item-price="product.Price"
               :data-item-url="productUrl"
               :data-item-description="product.Description"
               :data-item-image="product.image"
