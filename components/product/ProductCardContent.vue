@@ -16,15 +16,13 @@ import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonSty
 <template>
   <div>
     <v-card-item>
-      <div class="d-flex flex-column align-center">
-        <v-card-title>
+      <div class="text-center w-100">
+        <v-card-title class="justify-center">
           <NuxtLink
             :to="`/competitions/${product.documentId}`"
-            class="text-decoration-none font-parkinsans"
+            class="text-decoration-none font-parkinsans text-center d-block w-100"
           >
-            <span
-              class="text-center text-h5 font-weight-bold text-wrap font-parkinsans"
-            >
+            <span class="text-h5 font-weight-bold text-wrap font-parkinsans">
               {{ product.title }}
             </span>
           </NuxtLink>

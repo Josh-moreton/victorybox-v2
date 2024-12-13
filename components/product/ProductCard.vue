@@ -2,16 +2,15 @@
 <template>
   <NuxtLink
     :to="`/competitions/${product.documentId}`"
-    class="text-decoration-none"
+    class="text-decoration-none d-block h-100"
   >
-    <v-card>
-      <div class="image-container">
+    <v-card class="d-flex flex-column h-100">
+      <div class="card-media-wrapper">
         <v-img
           :src="product.image"
           :alt="product.title"
-          class="product-image"
-          width="100%"
-          height="250"
+          class="bg-grey-lighten-2"
+          :aspect-ratio="16 / 9"
           cover
         />
       </div>
@@ -30,15 +29,15 @@ defineProps({
 </script>
 
 <style scoped>
-.image-container {
+.card-media-wrapper {
+  position: relative;
   width: 100%;
-  height: 250px;
-  overflow: hidden;
 }
 
-.product-image {
-  width: 100%;
+/* Ensure card takes full height of grid cell */
+:deep(.v-card) {
   height: 100%;
-  object-fit: cover;
+  display: flex;
+  flex-direction: column;
 }
 </style>

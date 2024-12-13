@@ -78,8 +78,9 @@
                 sm="6"
                 md="4"
                 lg="4"
+                class="d-flex"
               >
-                <ProductCard :product="product" />
+                <ProductCard :product="product" class="flex-grow-1" />
               </v-col>
             </v-row>
           </v-window-item>
