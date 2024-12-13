@@ -172,6 +172,10 @@ export default defineVuetifyConfiguration({
       height: 60,
       class: "text-none",
     },
+    VSlider: {
+      thumbLabelColor: "black",
+      // or use any color from your theme
+    },
   },
   display: {
     // Display options

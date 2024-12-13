@@ -36,7 +36,7 @@ interface Image {
 interface Product {
   id: string;
   documentId: string;
-  title: string;
+  Title: string;
   Description: string;
   Price: number; // Changed from price to Price
   Image: Image;
@@ -95,8 +95,8 @@ const {
 );
 
 useHead({
-  title: computed(
-    () => `${product.value?.title || "Contest Details"} - Victory Boxes`
+  Title: computed(
+    () => `${product.value?.Title || "Contest Details"} - Victory Boxes`
   ),
   meta: [
     {
@@ -131,7 +131,7 @@ const allImages = computed(() => {
 
 // Add computed property for breadcrumb name
 const breadcrumbName = computed(() => {
-  return product.value?.title || "Loading Product...";
+  return product.value?.Title || "Loading Product...";
 });
 
 const loading = ref(false);
@@ -198,7 +198,7 @@ const quantity = ref(1);
         <!-- Product info section -->
         <div class="text-center mb-6">
           <h1 class="text-h3 font-weight-bold mb-6 mt-6">
-            {{ product?.title }}
+            {{ product?.Title }}
           </h1>
           <p class="text-body-1 mb-6 mt-6">
             {{ product?.Description }}
@@ -247,13 +247,13 @@ const quantity = ref(1);
             ></v-progress-linear>
           </template>
 
-          <v-card-title class="text-center mt-4"
-            >Answer the question</v-card-title
+          <v-card-Title class="text-center mt-4"
+            >Answer the question</v-card-Title
           >
 
-          <v-card-subtitle class="text-center mt-4 mb-4"
+          <v-card-subTitle class="text-center mt-4 mb-4"
             >{{ product.question }}<br
-          /></v-card-subtitle>
+          /></v-card-subTitle>
           <div class="div-answers">
             <v-chip-group
               selected-class="text-primary"
@@ -274,8 +274,8 @@ const quantity = ref(1);
           </div>
 
           <!-- Add quantity slider -->
-          <v-card-title class="text-center mt-4 mb-10"
-            >How many tickets?</v-card-title
+          <v-card-Title class="text-center mt-4 mb-10"
+            >How many tickets?</v-card-Title
           >
 
           <div class="px-8">
@@ -287,9 +287,12 @@ const quantity = ref(1);
               :max="1000"
               :step="1"
               thumb-label="always"
+              color="secondary"
+              :track-color="'secondary-lighten-1'"
+              thumb-color="secondary-darken-1"
             >
               <template v-slot:thumb-label="{ modelValue }">
-                {{ modelValue }}
+                <span class="text-black">{{ modelValue }}</span>
               </template>
             </v-slider>
           </div>
@@ -301,16 +304,11 @@ const quantity = ref(1);
               class="snipcart-add-item"
               :disabled="!selection"
               :data-item-id="product.documentId"
-              :data-item-name="product.title"
+              :data-item-name="product.Title"
               :data-item-price="product.Price"
               :data-item-url="productUrl"
               :data-item-description="product.Description"
               :data-item-image="product.image"
-              :data-item-custom1-name="product.question"
-              :data-item-custom1-value="selection"
-              :data-item-custom1-options="product.answer"
-              :data-item-quantity="quantity"
-              @click="reserve"
             >
               <v-icon start icon="mdi-ticket"></v-icon>
               Buy {{ quantity }} Now
