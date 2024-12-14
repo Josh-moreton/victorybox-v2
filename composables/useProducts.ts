@@ -5,7 +5,6 @@ interface Product {
   Description: string;
   price: number; // Keep as number
   image: string;
-  soldPercentage: string;
   rating: string;
   days: string;
   remaining: string;
@@ -13,6 +12,8 @@ interface Product {
   carousel?: boolean;
   featured?: boolean; // Add featured property
   category?: string; // Add category property
+  tickets_available: number;
+  total_tickets: number;
 }
 
 export const useProducts = () => {
@@ -39,7 +40,6 @@ export const useProducts = () => {
           : product.Image?.url
           ? `${config.public.strapiUrl}${product.Image.url}`
           : "/images/placeholder.jpg",
-        soldPercentage: product.soldPercentage?.toString() || "0",
         rating: product.rating?.toString() || "0",
         days: product.days?.toString() || "0",
         remaining: product.remaining?.toString() || "0",
@@ -47,6 +47,8 @@ export const useProducts = () => {
         carousel: product.carousel || false,
         featured: product.featured || false, // Map featured property
         category: product.category || "", // Map category property
+        total_tickets: product.attributes?.total_tickets || 0,
+        tickets_available: product.attributes?.tickets_available || 0,
       }));
     } catch (err) {
       error.value = err;

@@ -3,6 +3,7 @@ import { useStrapi, useRoute, useRuntimeConfig, useAsyncData } from "#imports";
 import { ref, computed } from "vue";
 import { useCompetitionChipStyle } from "~/composables/useCompetitionChipStyle";
 import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
+import SoldPercentageBar from "~/components/product/SoldPercentageBar.vue";
 
 const config = useRuntimeConfig(); // Move this here, at the top of setup
 
@@ -211,25 +212,11 @@ const quantity = ref(1);
           </div>
 
           <!-- Add percentage sold section -->
-          <div class="text-left text-caption mb-2">
-            Sold: {{ product?.soldPercentage }}%
-          </div>
-          <v-progress-linear
-            :model-value="product?.soldPercentage"
-            :color="
-              product?.soldPercentage > 75
-                ? 'deep-orange'
-                : product?.soldPercentage > 50
-                ? 'lime'
-                : product?.soldPercentage > 25
-                ? 'light-green-darken-4'
-                : 'light-blue'
-            "
-            height="10"
-            class="mb-6"
-            striped
-            rounded
-          ></v-progress-linear>
+          <div class="text-left text-caption mb-2"></div>
+          <SoldPercentageBar
+            :total-tickets="product.total_tickets"
+            :available-tickets="product.tickets_available"
+          />
         </div>
 
         <!-- Question card with fixed height -->
@@ -251,9 +238,9 @@ const quantity = ref(1);
             >Answer the question</v-card-Title
           >
 
-          <v-card-subTitle class="text-center mt-4 mb-4"
+          <v-card-subtitle class="text-center mt-4 mb-4"
             >{{ product.question }}<br
-          /></v-card-subTitle>
+          /></v-card-subtitle>
           <div class="div-answers">
             <v-chip-group
               selected-class="text-primary"
