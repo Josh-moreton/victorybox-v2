@@ -100,6 +100,7 @@ async function handleSubmit() {
                 prepend-inner-icon="mdi-email"
                 variant="outlined"
                 required
+                class="mb-4"
               />
 
               <v-text-field
@@ -112,6 +113,7 @@ async function handleSubmit() {
                 @click:append-inner="showPassword = !showPassword"
                 variant="outlined"
                 required
+                class="mb-4"
               />
 
               <v-text-field
@@ -126,6 +128,7 @@ async function handleSubmit() {
                 @click:append-inner="showConfirmPassword = !showConfirmPassword"
                 variant="outlined"
                 required
+                class="mb-4"
               />
 
               <v-btn
