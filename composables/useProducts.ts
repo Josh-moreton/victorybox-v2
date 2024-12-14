@@ -47,8 +47,8 @@ export const useProducts = () => {
         carousel: product.carousel || false,
         featured: product.featured || false, // Map featured property
         category: product.category || "", // Map category property
-        total_tickets: product.attributes?.total_tickets || 0,
-        tickets_available: product.attributes?.tickets_available || 0,
+        total_tickets: product.total_tickets || 0,
+        tickets_available: product.tickets_available || 0,
       }));
     } catch (err) {
       error.value = err;

@@ -1,16 +1,21 @@
 <!-- components/ProductCardContent.vue -->
 <script setup lang="ts">
+import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
+import { useProducts } from "~/composables/useProducts";
+import SoldPercentageBar from "./SoldPercentageBar.vue";
+
 interface Product {
   price: number;
-  soldPercentage: number;
   documentId: string;
+  title: string;
+  closingDate: string;
+  total_tickets: number;
+  tickets_available: number;
 }
 
 const props = defineProps<{
   product: Product;
 }>();
-
-import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
 </script>
 
 <template>
@@ -39,25 +44,13 @@ import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonSty
       </div>
 
       <v-card-actions class="mt-auto flex-column align-center">
-        <div class="text-caption text-grey text-left w-100">
-          {{ Math.ceil(product.soldPercentage) }}% Sold
+        <div class="w-100">
+          <SoldPercentageBar
+            :total-tickets="product.total_tickets"
+            :available-tickets="product.tickets_available"
+            :show-label="true"
+          />
         </div>
-        <v-progress-linear
-          :model-value="product.soldPercentage"
-          :color="
-            product.soldPercentage > 75
-              ? 'deep-orange'
-              : product.soldPercentage > 50
-              ? 'lime'
-              : product.soldPercentage > 25
-              ? 'light-green-darken-4'
-              : 'light-blue'
-          "
-          height="10"
-          class="w-100 mb-4"
-          striped
-          rounded
-        />
         <v-btn
           v-bind="useCompetitionButtonStyle()"
           :to="`/competitions/${product.documentId}`"
