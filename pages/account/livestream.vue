@@ -9,8 +9,8 @@
         width="100%"
       >
         <!-- Your dashboard-specific content here -->
-        <h1>Welcome to the Account Dashboard!</h1>
-        <p>Here you can manage your account settings and view reports.</p>
+        <h1>Welcome to the Live Raffle Stream!</h1>
+        <p>Nothing here yet, come back on Friday for prizes.</p>
       </v-sheet>
     </div>
   </DashboardLayout>

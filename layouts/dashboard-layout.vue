@@ -38,7 +38,7 @@ const items = ref([
     to: "/account/account-dashboard",
   },
   {
-    title: "My Tickets",
+    title: "My Raffle Tickets",
     prependIcon: "mdi-account-group",
     to: "/account/tickets",
   },
