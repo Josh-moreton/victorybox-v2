@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     "@nuxtjs/snipcart",
   ],
   imports: {
-    dirs: ["stores", "composables"],
+    dirs: ["stores", "composables", "types"],
   },
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",

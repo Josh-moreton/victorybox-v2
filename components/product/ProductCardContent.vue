@@ -4,6 +4,7 @@ import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonSty
 import { useProducts } from "~/composables/useProducts";
 import SoldPercentageBar from "./SoldPercentageBar.vue";
 
+// Update interface to match API structure
 interface Product {
   price: number;
   documentId: string;
