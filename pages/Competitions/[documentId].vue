@@ -5,6 +5,7 @@ import { useCompetitionChipStyle } from "~/composables/useCompetitionChipStyle";
 import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
 import { useProducts } from "~/composables/useProducts";
 import SoldPercentageBar from "~/components/product/SoldPercentageBar.vue";
+import DrawDateChip from "~/components/DrawDateChip.vue";
 
 const config = useRuntimeConfig();
 const route = useRoute();
@@ -127,9 +128,8 @@ useHead({
           <p class="text-body-1 mb-6 mt-6">
             {{ product?.description }}
           </p>
-          <v-chip color="green" variant="flat" rounded="pill" class="mb-6 mt-6">
-            Draw {{ product?.closingDate || "TBA" }}
-          </v-chip>
+          <DrawDateChip :product="product" v-if="product" />
+
           <div class="text-h4 font-weight-bold primary--text mb-6 mt-6">
             £{{ product?.price }}
           </div>
