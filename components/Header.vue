@@ -151,6 +151,10 @@ onMounted(() => {
       </v-btn>
     </template>
   </v-app-bar>
+
+  <v-main>
+    <slot></slot>
+  </v-main>
 </template>
 
 <style scoped>

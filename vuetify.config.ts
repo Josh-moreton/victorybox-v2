@@ -153,7 +153,7 @@ export default defineVuetifyConfiguration({
     },
     VNavigationDrawer: {
       elevation: 2,
-      color: "primary", // Updated to use primary color
+      color: "surface",
     },
     VPagination: {
       activeColor: "primary",
