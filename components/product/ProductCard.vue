@@ -20,12 +20,19 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  product: {
-    type: Object,
-    required: true,
-  },
-});
+interface Product {
+  documentId: string;
+  title: string;
+  image: string;
+  price: number;
+  closingDate: string;
+  total_tickets: number;
+  tickets_available: number;
+}
+
+defineProps<{
+  product: Product;
+}>();
 </script>
 
 <style scoped>
@@ -34,7 +41,6 @@ defineProps({
   width: 100%;
 }
 
-/* Ensure card takes full height of grid cell */
 :deep(.v-card) {
   height: 100%;
   display: flex;

@@ -1,112 +1,44 @@
 <script setup lang="ts">
-import { useStrapi, useRoute, useRuntimeConfig, useAsyncData } from "#imports";
-import { ref, computed } from "vue";
+import { useRoute, useRuntimeConfig } from "#imports";
+import { ref, computed, onMounted } from "vue";
 import { useCompetitionChipStyle } from "~/composables/useCompetitionChipStyle";
 import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
+import { useProducts } from "~/composables/useProducts";
 import SoldPercentageBar from "~/components/product/SoldPercentageBar.vue";
+import DrawDateChip from "~/components/DrawDateChip.vue";
 
-const config = useRuntimeConfig(); // Move this here, at the top of setup
+const config = useRuntimeConfig();
+const route = useRoute();
+const tab = ref(1);
+const selection = ref(null);
+const quantity = ref(1);
 
 definePageMeta({
   layout: "inner-pages",
-  static: true,
-  async getStaticPaths() {
-    // Define your static paths here
-    // For example, if you want to pre-generate specific documentIds:
-    return [{ params: { documentId: "default" } }];
-  },
 });
 
-const route = useRoute();
-const strapi = useStrapi();
-const tab = ref(1);
+// Use products composable
+const { products, loading, error, fetchProducts } = useProducts();
 
-// Update Product interface to match API structure
-interface Image {
-  id: number;
-  documentId: string;
-  url: string;
-  alternativeText: string | null;
-  formats: {
-    large: {
-      url: string;
-    };
-  };
-}
+// Get current product with null check
+const product = computed(() => {
+  return (
+    products.value?.find((p) => p.documentId === route.params.documentId) ||
+    null
+  );
+});
 
-interface Product {
-  id: string;
-  documentId: string;
-  Title: string;
-  Description: string;
-  Price: number; // Changed from price to Price
-  Image: Image;
-  galleryImages: Image[];
-  question: string;
-  answer: string[];
-  soldPercentage: number;
-  closingDate?: string;
-}
+// Computed properties
+const allImages = computed(() => {
+  if (!product.value?.image) return [];
+  return [{ url: product.value.image, alt: product.value.title }];
+});
 
-// Update API response processing
-const {
-  data: product,
-  pending,
-  error,
-} = await useAsyncData<Product>(
-  `product-${route.params.documentId}`,
-  async () => {
-    try {
-      const response = await strapi.findOne(
-        "products",
-        route.params.documentId,
-        {
-          populate: "*",
-        }
-      );
-      console.log("Raw API response:", response); // Add this debug line
+const breadcrumbName = computed(() => product.value?.title || "Loading...");
 
-      if (!response?.data) return null;
-
-      // Process main image
-      const mainImage = response.data.Image
-        ? {
-            url: `${config.public.strapiUrl}${response.data.Image.formats.large.url}`,
-            alt: response.data.Image.alternativeText || "Main product image",
-          }
-        : null;
-
-      // Process gallery images
-      const galleryImages =
-        response.data.galleryImages?.map((img) => ({
-          url: `${config.public.strapiUrl}${img.formats.large.url}`,
-          alt: img.alternativeText || "Gallery image",
-        })) || [];
-
-      return {
-        ...response.data,
-        image: mainImage,
-        galleryImages,
-      };
-    } catch (err) {
-      console.error("Error fetching product:", err);
-      throw new Error("Failed to load product");
-    }
-  }
-);
-
-useHead({
-  Title: computed(
-    () => `${product.value?.Title || "Contest Details"} - Victory Boxes`
-  ),
-  meta: [
-    {
-      name: "description",
-      content: computed(
-        () => product.value?.Description || "Loading contest details..."
-      ),
-    },
-  ],
+const answers = computed(() => {
+  if (!product.value?.answer) return [];
+  return Array.isArray(product.value.answer) ? product.value.answer : [];
 });
 
 const productUrl = computed(() => {
@@ -115,54 +47,46 @@ const productUrl = computed(() => {
   return `${baseUrl}/competitions/${route.params.documentId}`;
 });
 
-const toggleTab = (index: number) => {
-  if (tab.value !== index) {
-    tab.value = index;
-  }
-};
-
-// Update computed for all images
-const allImages = computed(() => {
-  if (!product.value) return [];
-  return [
-    ...(product.value.image ? [product.value.image] : []),
-    ...product.value.galleryImages,
-  ];
+// Fetch data on mount
+onMounted(async () => {
+  await fetchProducts();
 });
 
-// Add computed property for breadcrumb name
-const breadcrumbName = computed(() => {
-  return product.value?.Title || "Loading Product...";
+// Update meta
+useHead({
+  title: computed(() => `${product.value?.title || "Contest"} - Victory Boxes`),
+  meta: [
+    {
+      name: "description",
+      content: computed(() => product.value?.description || "Loading..."),
+    },
+  ],
 });
-
-const loading = ref(false);
-const selection = ref(null); // Add ref for selected answer
-
-// Split answers string into array if needed
-const answers = computed(() => {
-  if (!product.value?.answer) return [];
-  return typeof product.value.answer === "string"
-    ? product.value.answer.split("|")
-    : product.value.answer;
-});
-
-const reserve = () => {
-  loading.value = true;
-  setTimeout(() => (loading.value = false), 2000);
-};
-
-// Add quantity ref
-const quantity = ref(1);
 </script>
 
 <template>
   <v-container class="font-parkinsans py-8">
-    <v-row class="equal-height-row">
+    <!-- Loading State -->
+    <div
+      v-if="loading"
+      class="d-flex justify-center align-center"
+      style="height: 400px"
+    >
+      <v-progress-circular indeterminate color="primary" />
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="text-center">
+      <v-alert type="error">Failed to load product</v-alert>
+    </div>
+
+    <!-- Product Content -->
+    <v-row v-else-if="product" class="equal-height-row">
       <!-- Left Column -->
       <v-col cols="12" md="6">
         <v-card rounded="lg" elevation="2" class="overflow-hidden">
           <v-carousel
-            v-if="allImages?.length"
+            v-if="allImages.length"
             cycle
             height="400"
             hide-delimiter-background
@@ -199,16 +123,15 @@ const quantity = ref(1);
         <!-- Product info section -->
         <div class="text-center mb-6">
           <h1 class="text-h3 font-weight-bold mb-6 mt-6">
-            {{ product?.Title }}
+            {{ product?.title }}
           </h1>
           <p class="text-body-1 mb-6 mt-6">
-            {{ product?.Description }}
+            {{ product?.description }}
           </p>
-          <v-chip color="green" variant="flat" rounded="pill" class="mb-6 mt-6">
-            Draw {{ product?.closingDate || "TBA" }}
-          </v-chip>
+          <DrawDateChip :product="product" v-if="product" />
+
           <div class="text-h4 font-weight-bold primary--text mb-6 mt-6">
-            £ {{ product.Price }}
+            £{{ product?.price }}
           </div>
 
           <!-- Add percentage sold section -->
@@ -290,12 +213,12 @@ const quantity = ref(1);
               block
               class="snipcart-add-item"
               :disabled="!selection"
-              :data-item-id="product.documentId"
-              :data-item-name="product.Title"
-              :data-item-price="product.Price"
+              :data-item-id="product?.documentId"
+              :data-item-name="product?.title"
+              :data-item-price="product?.price"
               :data-item-url="productUrl"
-              :data-item-description="product.Description"
-              :data-item-image="product.image"
+              :data-item-description="product?.description"
+              :data-item-image="product?.image"
             >
               <v-icon start icon="mdi-ticket"></v-icon>
               Buy {{ quantity }} Now
@@ -304,6 +227,11 @@ const quantity = ref(1);
         </v-card>
       </v-col>
     </v-row>
+
+    <!-- Not Found State -->
+    <div v-else class="text-center">
+      <v-alert type="warning">Product not found</v-alert>
+    </div>
   </v-container>
 </template>
 

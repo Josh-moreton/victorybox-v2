@@ -3,7 +3,10 @@
 import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
 import { useProducts } from "~/composables/useProducts";
 import SoldPercentageBar from "./SoldPercentageBar.vue";
+import DrawDateChip from "~/components/DrawDateChip.vue";
+import { computed } from "vue";
 
+// Update interface to match API structure
 interface Product {
   price: number;
   documentId: string;
@@ -32,9 +35,7 @@ const props = defineProps<{
             </span>
           </NuxtLink>
         </v-card-title>
-        <v-chip color="primary" class="mt-2 font-parkinsans">
-          Draw {{ product.closingDate || "TBA" }}
-        </v-chip>
+        <DrawDateChip :product="product" />
       </div>
     </v-card-item>
 
