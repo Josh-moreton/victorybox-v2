@@ -12,6 +12,20 @@
           prepend-icon="mdi-cog-outline"
           title="Settings"
         />
+        <!-- Chat Controls -->
+        <v-list-item class="ma-2">
+          <v-btn
+            block
+            @click="toggle('open')"
+            color="primary"
+            v-if="!isModalVisible"
+          >
+            Open Chat
+          </v-btn>
+          <v-btn block @click="toggle('close')" color="error" v-else>
+            Close Chat
+          </v-btn>
+        </v-list-item>
       </template>
     </v-navigation-drawer>
 
@@ -28,6 +42,8 @@
 <script setup>
 import { ref } from "vue";
 import Header from "~/components/Header.vue";
+const { isModalVisible, toggle, toggleBubbleVisibility, popoutChatWindow } =
+  useChatWoot(); // Add Chatwoot integration
 
 const drawer = ref(true);
 
