@@ -1,30 +1,37 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  // Basic Nuxt configuration
   compatibilityDate: "2024-04-03",
+  ssr: true,
+  experimental: {
+    payloadExtraction: false,
+  },
+
+  // Module imports and configuration
   modules: [
     "vuetify-nuxt-module",
-    //  "nuxt-swiper",
     "@nuxt/image",
     "@nuxtjs/google-fonts",
     "@nuxtjs/strapi",
     "@nuxtjs/snipcart",
+    "@productdevbook/chatwoot",
   ],
+
+  // Auto-import configuration
   imports: {
     dirs: ["stores", "composables", "types"],
   },
+
+  // UI Framework configuration
   vuetify: {
     vuetifyOptions: "./vuetify.config.ts",
     moduleOptions: {
-      /* module specific options */
       styles: true,
       autoImport: true,
     },
   },
-  /*   swiper: {
-    prefix: "Swiper",
-    styleLang: "css",
-    modules: ["autoplay", "navigation", "pagination", "thumbs"],
-  }, */
+
+  // CMS configuration
   strapi: {
     url: process.env.STRAPI_URL || "https://strapi.medstack.duckdns.org",
     prefix: "/api",
@@ -33,34 +40,56 @@ export default defineNuxtConfig({
     cookie: {},
     cookieName: "strapi_jwt",
   },
+
+  // Font configuration
   googleFonts: {
     families: {
       Parkinsans: [400, 500, 600, 700, 800],
-      Roboto: [100, 300, 400, 500, 700, 900], // Add Roboto with desired weights
+      Roboto: [100, 300, 400, 500, 700, 900],
     },
   },
+
+  // Build configuration
   build: {
     transpile: ["vue-countup-v3", "vuetify"],
   },
   alias: {
     "@": "public",
   },
+
+  // E-commerce configuration
   snipcart: {
     publicApiKey:
       process.env.SNIP_PUBLIC_KEY ||
       "ZTVmZDI0ZWQtMDZjNy00Y2IyLWJlMzMtMzhhY2Q5ZjFjMzk5NjM4Njg4MjA1ODI2NzE1MDEw",
-    loadStrategy: "on:visible", // Add this
+    loadStrategy: "on:visible",
     version: "3.0",
-    currency: "GBP", // Add this
+    currency: "GBP",
     domain: process.env.SITE_URL || "https://victoryboxes.org",
   },
+
+  // Chat widget configuration
+  chatwoot: {
+    init: {
+      websiteToken: "hbak7AA86P1AhGxnMSHEwiLn",
+    },
+    settings: {
+      locale: "en",
+      position: "right",
+      launcherTitle: "Hello Chat",
+    },
+    partytown: false,
+  },
+
+  // Development tools
   devtools: {
     enabled: true,
-
     timeline: {
       enabled: true,
     },
   },
+
+  // Server and deployment configuration
   nitro: {
     preset: "cloudflare-pages",
     routeRules: {
@@ -81,18 +110,18 @@ export default defineNuxtConfig({
       },
       "/competitions/**": {
         static: true,
-        swr: false, // Disable stale-while-revalidate
+        swr: false,
       },
     },
     serveStatic: true,
     prerender: {
       routes: ["/", "/competitions"],
-      ignore: [
-        "/competitions/[documentId]", // Ignore dynamic route during prerendering
-      ],
-      crawlLinks: false, // Disable automatic crawling
+      ignore: ["/competitions/[documentId]"],
+      crawlLinks: false,
     },
   },
+
+  // Lifecycle hooks
   hooks: {
     "nitro:config": (nitroConfig) => {
       if (nitroConfig.prerender?.routes) {
@@ -100,6 +129,8 @@ export default defineNuxtConfig({
       }
     },
   },
+
+  // App-wide configuration
   app: {
     head: {
       link: [
@@ -118,6 +149,8 @@ export default defineNuxtConfig({
     baseURL: "/",
     buildAssetsDir: "_nuxt/",
   },
+
+  // Runtime configuration and environment variables
   runtimeConfig: {
     strapiUrl: process.env.STRAPI_URL || "https://strapi.medstack.duckdns.org",
     public: {
@@ -130,9 +163,5 @@ export default defineNuxtConfig({
           "ZTVmZDI0ZWQtMDZjNy00Y2IyLWJlMzMtMzhhY2Q5ZjFjMzk5NjM4Njg4MjA1ODI2NzE1MDEw",
       },
     },
-  },
-  ssr: true,
-  experimental: {
-    payloadExtraction: false,
   },
 });

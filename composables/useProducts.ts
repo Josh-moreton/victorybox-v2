@@ -2,22 +2,22 @@ interface Product {
   id: number;
   documentId: string;
   title: string;
-  description: string; // Changed from Description
+  description: string;
   price: number;
   image: string;
-  createdAt: string; // Added
-  updatedAt: string; // Added
-  publishedAt: string; // Added
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
   closingDate: string;
   carousel: boolean;
-  question: string; // Added
-  answer: string[]; // Added
+  question: string;
+  answer: string[];
   tickets_available: number;
-  contest_id: string; // Added
+  contest_id: string;
   featured: boolean;
   category: string;
   total_tickets: number;
-  galleryImages: any; // Added
+  galleryImages: any;
 }
 
 export const useProducts = () => {
@@ -36,9 +36,9 @@ export const useProducts = () => {
       products.value = data.data.map((product: any) => ({
         id: product.id,
         documentId: product.documentId,
-        title: product.title, // Fixed casing
-        description: product.description, // Fixed casing
-        price: product.price, // Fixed casing
+        title: product.title,
+        description: product.description,
+        price: product.price,
         image: product.image?.formats?.medium?.url
           ? `${config.public.strapiUrl}${product.image.formats.medium.url}`
           : product.image?.url
