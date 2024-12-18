@@ -12,9 +12,9 @@ export default defineVuetifyConfiguration({
           primary: "#009688",
           "primary-darken-1": "#00796B",
           "primary-lighten-1": "#4DB6AC",
-          secondary: "#6200EE",
-          "secondary-darken-1": "#3700B3",
-          "secondary-lighten-1": "#BB86FC",
+          secondary: "#FF6F61", // Coral
+          "secondary-darken-1": "#FF4F3D", // Darker Coral for hover states
+          "secondary-lighten-1": "#FFB4AC", // Lighter Coral for highlights
 
           // Semantic colors
           error: "#B00020",
@@ -29,7 +29,7 @@ export default defineVuetifyConfiguration({
 
           // On-colors for contrast
           "on-primary": "#FFFFFF",
-          "on-secondary": "#FFFFFF",
+          "on-secondary": "#FFFFFF", // White text on Coral background
           "on-surface": "#000000",
           "on-background": "#000000",
         },
@@ -41,9 +41,9 @@ export default defineVuetifyConfiguration({
           primary: "#80CBC4",
           "primary-darken-1": "#00796B",
           "primary-lighten-1": "#B2DFDB",
-          secondary: "#BB86FC",
-          "secondary-darken-1": "#3700B3",
-          "secondary-lighten-1": "#D1C4E9",
+          secondary: "#FF6F61", // Coral
+          "secondary-darken-1": "#FF4F3D", // Darker Coral for hover states
+          "secondary-lighten-1": "#FFB4AC", // Lighter Coral for highlights
 
           // Semantic colors
           error: "#CF6679",
@@ -58,7 +58,7 @@ export default defineVuetifyConfiguration({
 
           // On-colors for contrast
           "on-primary": "#000000",
-          "on-secondary": "#000000",
+          "on-secondary": "#000000", // Black text on Coral background
           "on-surface": "#FFFFFF",
           "on-background": "#FFFFFF",
         },
