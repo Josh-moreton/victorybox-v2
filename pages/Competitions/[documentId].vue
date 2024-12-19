@@ -42,9 +42,12 @@ const answers = computed(() => {
 });
 
 const productUrl = computed(() => {
-  const baseUrl =
-    config.public.siteUrl?.replace(/\/$/, "") || "https://victoryboxes.org";
-  return `${baseUrl}/competitions/${route.params.documentId}`;
+  return `/api/products/${route.params.documentId}`;
+});
+
+// Add computed property for custom field options
+const customFieldOptions = computed(() => {
+  return answers.value.join("|");
 });
 
 // Fetch data on mount
@@ -216,9 +219,14 @@ useHead({
               :data-item-id="product?.documentId"
               :data-item-name="product?.title"
               :data-item-price="product?.price"
+              :data-item-quantity="quantity"
               :data-item-url="productUrl"
               :data-item-description="product?.description"
               :data-item-image="product?.image"
+              :data-item-custom1-name="product?.question"
+              :data-item-custom1-value="selection"
+              :data-item-custom1-options="customFieldOptions"
+              :data-item-custom1-required="true"
             >
               <v-icon start icon="mdi-ticket"></v-icon>
               Buy {{ quantity }} Now
