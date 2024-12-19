@@ -249,12 +249,16 @@ useHead(() => ({
               block
               class="snipcart-add-item"
               :disabled="!selection"
-              :data-item-id="product?.documentId"
-              :data-item-name="product?.title"
-              :data-item-price="product?.price"
+              :data-item-id="product.documentId"
+              :data-item-name="product.title"
+              :data-item-price="product.price"
               :data-item-url="productUrl"
               :data-item-description="product?.description"
               :data-item-image="product?.image"
+              :data-item-quantity="quantity"
+              :data-item-custom1-name="product?.question"
+              :data-item-custom1-options="product?.answer?.join('|')"
+              :data-item-custom1-required="true"
             >
               <v-icon start icon="mdi-ticket"></v-icon>
               Buy {{ quantity }} Now
