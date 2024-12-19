@@ -15,6 +15,9 @@ const quantity = ref(1);
 
 definePageMeta({
   layout: "inner-pages",
+  keepalive: false,
+  key: (route) => route.fullPath,
+  ssr: true,
 });
 
 // Use products composable
@@ -47,21 +50,54 @@ const productUrl = computed(() => {
   return `${baseUrl}/competitions/${route.params.documentId}`;
 });
 
-// Fetch data on mount
-onMounted(async () => {
+// Move fetchProducts to top level for SSR
+if (process.server) {
   await fetchProducts();
+}
+
+// Keep client-side fetch for reactivity
+onMounted(async () => {
+  if (!products.value?.length) {
+    await fetchProducts();
+  }
 });
 
-// Update meta
-useHead({
-  title: computed(() => `${product.value?.title || "Contest"} - Victory Boxes`),
+// Enhance meta tags for better SEO
+useHead(() => ({
+  title: `${product.value?.title || "Contest"} - Victory Boxes`,
   meta: [
     {
       name: "description",
-      content: computed(() => product.value?.description || "Loading..."),
+      content: product.value?.description || "Loading...",
+    },
+    {
+      property: "og:title",
+      content: `${product.value?.title || "Contest"} - Victory Boxes`,
+    },
+    {
+      property: "og:description",
+      content: product.value?.description || "Loading...",
+    },
+    {
+      property: "og:image",
+      content: product.value?.image || "",
+    },
+    {
+      property: "og:url",
+      content: productUrl.value,
+    },
+    {
+      name: "twitter:card",
+      content: "summary_large_image",
     },
   ],
-});
+  link: [
+    {
+      rel: "canonical",
+      href: productUrl.value,
+    },
+  ],
+}));
 </script>
 
 <template>

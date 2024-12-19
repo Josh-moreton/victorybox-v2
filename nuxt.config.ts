@@ -94,7 +94,6 @@ export default defineNuxtConfig({
     preset: "cloudflare-pages",
     routeRules: {
       "/**": { cors: true },
-      "/products/**": { static: true },
       "/api/**": {
         cors: true,
         headers: {
@@ -111,13 +110,14 @@ export default defineNuxtConfig({
       "/competitions/**": {
         static: true,
         swr: false,
+        prerender: true,
       },
     },
     serveStatic: true,
     prerender: {
       routes: ["/", "/competitions"],
-      ignore: ["/competitions/[documentId]"],
-      crawlLinks: false,
+      crawlLinks: true,
+      ignore: ["/api"],
     },
   },
 
@@ -125,7 +125,7 @@ export default defineNuxtConfig({
   hooks: {
     "nitro:config": (nitroConfig) => {
       if (nitroConfig.prerender?.routes) {
-        nitroConfig.prerender.routes.push("/competitions");
+        nitroConfig.prerender.routes.push("/competitions", "/competitions/*");
       }
     },
   },
