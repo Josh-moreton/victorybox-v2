@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   ssr: true,
   experimental: {
-    payloadExtraction: false,
+    payloadExtraction: true, // Change to true
   },
 
   // Module imports and configuration
@@ -94,6 +94,7 @@ export default defineNuxtConfig({
     preset: "cloudflare-pages",
     routeRules: {
       "/**": { cors: true },
+      // API routes
       "/api/**": {
         cors: true,
         headers: {
@@ -107,9 +108,13 @@ export default defineNuxtConfig({
           },
         },
       },
-      "/competitions/**": {
+      // Static competition pages - make this more specific
+      "/competitions": {
         static: true,
-        swr: false,
+        prerender: true,
+      },
+      "/competitions/:id": {
+        static: true,
         prerender: true,
       },
     },
@@ -117,15 +122,47 @@ export default defineNuxtConfig({
     prerender: {
       routes: ["/", "/competitions"],
       crawlLinks: true,
-      ignore: ["/api"],
+      ignore: ["/api/**"],
     },
   },
 
   // Lifecycle hooks
   hooks: {
-    "nitro:config": (nitroConfig) => {
+    "nitro:config": async (nitroConfig) => {
       if (nitroConfig.prerender?.routes) {
-        nitroConfig.prerender.routes.push("/competitions", "/competitions/*");
+        try {
+          // Fetch products directly from your API
+          const response = await fetch(
+            "https://strapi.medstack.duckdns.org/api/products"
+          );
+          const products = await response.json();
+
+          // Add base routes
+          nitroConfig.prerender.routes.push("/", "/competitions");
+
+          // Add individual competition routes
+          products.data?.forEach((product) => {
+            nitroConfig.prerender.routes.push(
+              `/competitions/${product.documentId}`
+            );
+          });
+        } catch (error) {
+          console.error("Failed to fetch competition routes:", error);
+        }
+      }
+    },
+    "build:before": async () => {
+      // Fetch and add specific competition routes
+      try {
+        const { products } = useProducts();
+        if (products.value) {
+          const competitionRoutes = products.value.map(
+            (p) => `/competitions/${p.documentId}`
+          );
+          nitroConfig.prerender.routes.push(...competitionRoutes);
+        }
+      } catch (error) {
+        console.warn("Failed to fetch competition routes:", error);
       }
     },
   },

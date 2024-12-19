@@ -18,10 +18,12 @@ definePageMeta({
   keepalive: false,
   key: (route) => route.fullPath,
   ssr: true,
+  static: true, // Add this
 });
 
 // Use products composable
 const { products, loading, error, fetchProducts } = useProducts();
+await fetchProducts(); // Make this blocking
 
 // Get current product with null check
 const product = computed(() => {
@@ -49,11 +51,6 @@ const productUrl = computed(() => {
     config.public.siteUrl?.replace(/\/$/, "") || "https://victoryboxes.org";
   return `${baseUrl}/competitions/${route.params.documentId}`;
 });
-
-// Move fetchProducts to top level for SSR
-if (process.server) {
-  await fetchProducts();
-}
 
 // Keep client-side fetch for reactivity
 onMounted(async () => {
