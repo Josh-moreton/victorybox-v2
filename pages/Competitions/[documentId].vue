@@ -49,7 +49,7 @@ const answers = computed(() => {
 const productUrl = computed(() => {
   const baseUrl =
     config.public.siteUrl?.replace(/\/$/, "") || "https://victoryboxes.org";
-  return `${baseUrl}/competitions/${route.params.documentId}`;
+  return `${baseUrl}/competitions/${route.params.documentId}/`; // trailing slash is required by Snipcart otherwise 308 redirect occurs and snipcart does not support 308 redirects
 });
 
 // Keep client-side fetch for reactivity

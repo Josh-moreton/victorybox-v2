@@ -1,15 +1,20 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useProducts } from "~/composables/useProducts";
 
 interface Ticket {
   id: number;
+  documentId: string;
   ticket_number: string;
   customer_email: string;
-  status: string;
-  product?: {
-    Title: string;
-  };
+  createdAt: string;
+}
+
+interface Product {
+  documentId: string;
+  title: string;
+  contest_id: string;
+  tickets: Ticket[];
 }
 
 const {
@@ -17,21 +22,22 @@ const {
   loading: productsLoading,
   error: productsError,
 } = useProducts();
-const selectedProduct = ref(null);
+
+const selectedProduct = ref<Product | null>(null);
 const tickets = ref<Ticket[]>([]);
-const winnningTicket = ref<Ticket | null>(null);
+const winningTicket = ref<Ticket | null>(null);
 const loading = ref(false);
 const client = useStrapiClient();
 
 // Fetch tickets for selected product
-async function fetchTickets(product: any) {
+async function fetchTickets(product: Product) {
   loading.value = true;
-  winnningTicket.value = null;
+  winningTicket.value = null;
   try {
-    const response = await client<{ data: Ticket[] }>(
-      `/tickets/contest/${product.contest_id}`
+    const response = await client<any>(
+      `/products/${product.documentId}?populate[0]=tickets`
     );
-    tickets.value = response.data;
+    tickets.value = response.data.tickets || [];
   } catch (error) {
     console.error("Failed to fetch tickets:", error);
   } finally {
@@ -39,30 +45,25 @@ async function fetchTickets(product: any) {
   }
 }
 
-// Pick random winner
+// Pick random winner using crypto
 function pickWinner() {
   if (!tickets.value.length) return;
 
-  // Get truly random index
   const array = new Uint32Array(1);
   crypto.getRandomValues(array);
   const randomIndex = array[0] % tickets.value.length;
 
-  winnningTicket.value = tickets.value[randomIndex];
+  winningTicket.value = tickets.value[randomIndex];
 }
 
-// Watch for product selection
 watch(selectedProduct, async (newProduct) => {
-  if (newProduct && newProduct.contest_id) {
+  if (newProduct?.documentId) {
     await fetchTickets(newProduct);
   }
 });
 
-// Add debug logging
 onMounted(async () => {
-  console.log("Fetching products...");
   await useProducts().fetchProducts();
-  console.log("Products loaded:", products.value);
 });
 </script>
 
@@ -84,7 +85,7 @@ onMounted(async () => {
       <v-col cols="12">
         <h1 class="text-h3 mb-6">Raffle Picker</h1>
 
-        <v-card>
+        <v-card class="mb-6">
           <v-card-text>
             <!-- Product Selection -->
             <v-select
@@ -95,17 +96,15 @@ onMounted(async () => {
               :loading="productsLoading"
               :disabled="productsLoading"
               return-object
-              hint="Select a competition to pick winners"
-              persistent-hint
             >
-              <template v-slot:item-title="{ item }">
+              <template v-slot:item="{ item }">
                 {{ item.title }} (ID: {{ item.contest_id }})
               </template>
             </v-select>
 
             <!-- Ticket Stats -->
-            <div v-if="tickets.length" class="my-4">
-              <p class="text-body 1">Total Tickets: {{ tickets.length }}</p>
+            <div v-if="tickets.length" class="mt-4">
+              <p class="text-body-1">Total Tickets: {{ tickets.length }}</p>
             </div>
 
             <!-- Winner Selection Button -->
@@ -114,26 +113,61 @@ onMounted(async () => {
               :disabled="!tickets.length || loading"
               :loading="loading"
               block
-              @click="pickWinner"
               class="mt-4"
+              @click="pickWinner"
             >
               Pick Winner
             </v-btn>
-
-            <!-- Winner Display -->
-            <v-card
-              v-if="winnningTicket"
-              class="mt-6 pa-4"
-              color="secondary"
-              variant="outlined"
-            >
-              <h2 class="text-h5 mb-2">Winner!</h2>
-              <p class="text-body-1">
-                Ticket #{{ winnningTicket.ticket_number }}
-              </p>
-              <p class="text-body-2">{{ winnningTicket.customer_email }}</p>
-            </v-card>
           </v-card-text>
+        </v-card>
+
+        <!-- Winner Display -->
+        <v-card
+          v-if="winningTicket"
+          class="mb-6"
+          color="success"
+          variant="outlined"
+        >
+          <v-card-text>
+            <h2 class="text-h5 mb-2">🎉 Winner Selected!</h2>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title>Ticket Number</v-list-item-title>
+                <v-list-item-subtitle>{{
+                  winningTicket.ticket_number
+                }}</v-list-item-subtitle>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>Customer Email</v-list-item-title>
+                <v-list-item-subtitle>{{
+                  winningTicket.customer_email
+                }}</v-list-item-subtitle>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-title>Purchase Date</v-list-item-title>
+                <v-list-item-subtitle>{{
+                  new Date(winningTicket.createdAt).toLocaleString()
+                }}</v-list-item-subtitle>
+              </v-list-item>
+            </v-list>
+          </v-card-text>
+        </v-card>
+
+        <!-- Tickets Table -->
+        <v-card v-if="tickets.length">
+          <v-data-table
+            :headers="[
+              { title: 'Ticket Number', key: 'ticket_number' },
+              { title: 'Customer', key: 'customer_email' },
+              { title: 'Purchase Date', key: 'createdAt' },
+            ]"
+            :items="tickets"
+            :loading="loading"
+          >
+            <template v-slot:item.createdAt="{ item }">
+              {{ new Date(item.createdAt).toLocaleString() }}
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
