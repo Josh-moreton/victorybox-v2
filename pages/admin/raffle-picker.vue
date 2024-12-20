@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import { useProducts } from "~/composables/useProducts";
+import { useCompetitionButtonStyle } from "~/composables/useCompetitionButtonStyle";
 
 interface Ticket {
   id: number;
@@ -21,6 +22,7 @@ const {
   products,
   loading: productsLoading,
   error: productsError,
+  fetchProducts,
 } = useProducts();
 
 const selectedProduct = ref<Product | null>(null);
@@ -45,15 +47,17 @@ async function fetchTickets(product: Product) {
   }
 }
 
-// Pick random winner using crypto
 function pickWinner() {
   if (!tickets.value.length) return;
 
-  const array = new Uint32Array(1);
-  crypto.getRandomValues(array);
-  const randomIndex = array[0] % tickets.value.length;
-
-  winningTicket.value = tickets.value[randomIndex];
+  try {
+    const array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    const randomIndex = array[0] % tickets.value.length;
+    winningTicket.value = tickets.value[randomIndex];
+  } catch (error) {
+    console.error("Error picking winner:", error);
+  }
 }
 
 watch(selectedProduct, async (newProduct) => {
@@ -63,20 +67,18 @@ watch(selectedProduct, async (newProduct) => {
 });
 
 onMounted(async () => {
-  await useProducts().fetchProducts();
+  await fetchProducts();
 });
 </script>
 
 <template>
   <v-container>
-    <!-- Show loading state -->
     <v-progress-linear
       v-if="productsLoading"
       indeterminate
       color="primary"
     ></v-progress-linear>
 
-    <!-- Show error state -->
     <v-alert v-if="productsError" type="error" class="mb-4">
       Failed to load competitions: {{ productsError }}
     </v-alert>
@@ -87,27 +89,32 @@ onMounted(async () => {
 
         <v-card class="mb-6">
           <v-card-text>
-            <!-- Product Selection -->
             <v-select
               v-model="selectedProduct"
               :items="products"
               item-title="title"
+              item-value="documentId"
               label="Select Competition"
               :loading="productsLoading"
               :disabled="productsLoading"
               return-object
             >
-              <template v-slot:item="{ item }">
-                {{ item.title }} (ID: {{ item.contest_id }})
+              <template v-slot:item="{ props, item }">
+                <v-list-item v-bind="props">
+                  <template v-slot:title>
+                    {{ item.raw.title }}
+                  </template>
+                  <template v-slot:subtitle>
+                    ID: {{ item.raw.contest_id }}
+                  </template>
+                </v-list-item>
               </template>
             </v-select>
 
-            <!-- Ticket Stats -->
             <div v-if="tickets.length" class="mt-4">
               <p class="text-body-1">Total Tickets: {{ tickets.length }}</p>
             </div>
 
-            <!-- Winner Selection Button -->
             <v-btn
               v-bind="useCompetitionButtonStyle()"
               :disabled="!tickets.length || loading"
@@ -121,7 +128,6 @@ onMounted(async () => {
           </v-card-text>
         </v-card>
 
-        <!-- Winner Display -->
         <v-card
           v-if="winningTicket"
           class="mb-6"
@@ -145,15 +151,14 @@ onMounted(async () => {
               </v-list-item>
               <v-list-item>
                 <v-list-item-title>Purchase Date</v-list-item-title>
-                <v-list-item-subtitle>{{
-                  new Date(winningTicket.createdAt).toLocaleString()
-                }}</v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  {{ new Date(winningTicket.createdAt).toLocaleString() }}
+                </v-list-item-subtitle>
               </v-list-item>
             </v-list>
           </v-card-text>
         </v-card>
 
-        <!-- Tickets Table -->
         <v-card v-if="tickets.length">
           <v-data-table
             :headers="[
